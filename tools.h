@@ -22,7 +22,7 @@ public:
 	StringBuilder & append(const std::string & str);
 	const std::string & str();
 };
-void findMatch(std::string regex);
+void findMatch(std::string rootPath, std::string expression);
 class FileSize {
 public:
   long double size;

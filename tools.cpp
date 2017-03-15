@@ -44,7 +44,7 @@ void printHelp() {
   print("- find", 1);
   print("- path=<PathName>", 2);
   print("- match=<Regex to search for>", 2);
-  print("- log=<true or false> (Default true)", 2);
+  //print("- log=<true or false> (Default true)", 2);
 }
 
 StringBuilder & StringBuilder::append(const string & str) {
@@ -74,6 +74,7 @@ void split(const string &s, char delim, Out result) {
   }
 }
 
+
 vector<string> split(const string &s, char delim) {
   vector<string> elems;
   split(s, delim, back_inserter(elems));
@@ -90,6 +91,7 @@ string getArg(int argc, char *argv[], string name, string defaultValue) {
   return defaultValue;
 }
 
+// Get the size of a folder in bytes. The value is stored into the f_size value, and assumes that the value passed in initially is 0
 void getFolderSize(string rootFolder, unsigned long long &f_size, bool log, int logIndent, int depth) {
   if (log) print(rootFolder, logIndent + depth);
   try {
@@ -163,8 +165,7 @@ vector<string> getAllFileSystemEntries(string rootPath) {
     if (exists(folderPath)) {
       recursive_directory_iterator end_itr;
       for (recursive_directory_iterator dirIte(rootPath); dirIte != end_itr; ++dirIte) {
-        string subPath_str = dirIte->path().string();
-        paths.push_back(subPath_str);
+        paths.push_back(dirIte->path().string());
       }
     }
   }
@@ -172,13 +173,28 @@ vector<string> getAllFileSystemEntries(string rootPath) {
   return paths;
 }
 
-void findMatch(string rootPath, string expression) {
+void _findMatch(string rootPath, string expression) {
   std::regex regular_expression(expression.c_str());
-  std::smatch base_match;
+  print("Scanning all files and folders:\n", 1);
   vector<string> paths = getAllFileSystemEntries(rootPath);
   for (string path : paths) {
     if (regex_match(path, regular_expression)) {
       print(path, 1);
+    }
+  }
+}
+
+void findMatch(string rootPath, string expression) {
+  std::regex regular_expression(expression.c_str());
+  print("Scanning all files and folders:\n", 1);
+  path folderPath(rootPath);
+  if (exists(folderPath)) {
+    recursive_directory_iterator end_itr;
+    for (recursive_directory_iterator dirIte(rootPath); dirIte != end_itr; ++dirIte) {
+      string path = dirIte->path().string();
+      if (regex_match(path, regular_expression)) {
+        print(path, 1);
+      }
     }
   }
 }
@@ -222,6 +238,16 @@ int main(int argc, char *argv[]) {
         sprintf(strArr_2, "Find a match for \"%s\" in \"%s\"", regex.c_str(), path.c_str());
         print(strArr_2);
         findMatch(path, regex);
+      }
+      else if (method.compare("find2") == 0) {
+        string path = getArg(argc, argv, "path", "");
+        string regex = getArg(argc, argv, "match", "*");
+        if (path.compare("") == 0)
+          print("Please Provide a path to find a match inside of with the 'path' parameter");
+        char* strArr_2 = new char[100 + path.length() + regex.length()];
+        sprintf(strArr_2, "Find a match for \"%s\" in \"%s\"", regex.c_str(), path.c_str());
+        print(strArr_2);
+        _findMatch(path, regex);
       }
       else {
         char* strArr_1 = new char[100 + method.length()];
