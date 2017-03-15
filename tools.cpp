@@ -12,6 +12,7 @@
 #include <iterator>
 #include <algorithm>
 #include <filesystem>
+#include <regex>
 
 using namespace std;
 using namespace std::tr2::sys;
@@ -33,10 +34,17 @@ void print(const string input, int indent) {
 }
 
 void printHelp() {
-  print("Options:");
+  print("The \"method\" is the first parameter after tools.exe\n");
+  print("Methods:");
+
   print("- filesize:", 1);
   print("- path=<PathName>", 2);
   print("- log=<true or false> (Default false)", 2);
+
+  print("- find", 1);
+  print("- path=<PathName>", 2);
+  print("- match=<Regex to search for>", 2);
+  print("- log=<true or false> (Default true)", 2);
 }
 
 StringBuilder & StringBuilder::append(const string & str) {
@@ -148,6 +156,33 @@ string FileSize::getUnitName(unsigned short unit) {
   }
 }
 
+vector<string> getAllFileSystemEntries(string rootPath) {
+  vector<string> paths;
+  try {
+    path folderPath(rootPath);
+    if (exists(folderPath)) {
+      recursive_directory_iterator end_itr;
+      for (recursive_directory_iterator dirIte(rootPath); dirIte != end_itr; ++dirIte) {
+        string subPath_str = dirIte->path().string();
+        paths.push_back(subPath_str);
+      }
+    }
+  }
+  catch (exception&) {}
+  return paths;
+}
+
+void findMatch(string rootPath, string expression) {
+  std::regex regular_expression(expression.c_str());
+  std::smatch base_match;
+  vector<string> paths = getAllFileSystemEntries(rootPath);
+  for (string path : paths) {
+    if (regex_match(path, regular_expression)) {
+      print(path, 1);
+    }
+  }
+}
+
 int main(int argc, char *argv[]) {
   const clock_t start_time = clock();
   print("--------------------------------------------------");
@@ -156,32 +191,51 @@ int main(int argc, char *argv[]) {
     goto end;
   }
   else {
-    string method(argv[1]);
-    if (toLower(method).compare("filesize") == 0) {
-      string path = getArg(argc, argv, "path", "");
-      if (path.compare("") == 0) {
-        print("Please Provide a path to find the size of with the 'path' parameter");
+    try {
+      string method(argv[1]);
+      method = toLower(method);
+      if (method.compare("filesize") == 0) {
+        string path = getArg(argc, argv, "path", "");
+        if (path.compare("") == 0)
+          print("Please Provide a path to find the size of with the 'path' parameter");
+        else {
+          char* strArr = new char[100 + path.length()];
+          std::sprintf(strArr, "Calulate the size of '%s'", path.c_str());
+          print(strArr);
+          string log_str = getArg(argc, argv, "log", "false");
+          bool log = toLower(log_str).compare("true") == 0;
+          unsigned long long  f_size = 0;
+          getFolderSize(path, f_size, log);
+          FileSize size = FileSize::convertByteCount(f_size);
+          char* strArr2 = new char[100];
+          std::sprintf(strArr2, "%0.5lF %s", size.size, FileSize::getUnitName(size.unit).c_str());
+          print(strArr2, 1);
+          goto end;
+        }
+      }
+      else if (method.compare("find") == 0) {
+        string path = getArg(argc, argv, "path", "");
+        string regex = getArg(argc, argv, "match", "*");
+        if (path.compare("") == 0)
+          print("Please Provide a path to find a match inside of with the 'path' parameter");
+        char* strArr_2 = new char[100 + path.length() + regex.length()];
+        sprintf(strArr_2, "Find a match for \"%s\" in \"%s\"", regex.c_str(), path.c_str());
+        print(strArr_2);
+        findMatch(path, regex);
       }
       else {
-        char* strArr = new char[100 + path.length()];
-        sprintf(strArr, "Calulate the size of '%s'", path.c_str());
-        print(strArr);
-        string log_str = getArg(argc, argv, "log", "false");
-        bool log = toLower(log_str).compare("true") == 0;
-        unsigned long long  f_size = 0;
-        getFolderSize(path, f_size, log);
-        FileSize size = FileSize::convertByteCount(f_size);
-        char* strArr2 = new char[100];
-        sprintf(strArr2, "%0.5lF %s", size.size, FileSize::getUnitName(size.unit).c_str());
-        print(strArr2, 1);
-        goto end;
+        char* strArr_1 = new char[100 + method.length()];
+        std::sprintf(strArr_1, "Unknown Method: \"%s\"\n", method.c_str());
+        print(strArr_1);
+        printHelp();
       }
     }
+    catch (exception& e) { print(e.what()); }
   }
 
 end:
   char* strArr_0 = new char[100];
-  sprintf(strArr_0, "\nProcessed in %f seconds", float(clock() - start_time) / CLOCKS_PER_SEC);
+  std::sprintf(strArr_0, "\nProcessed in %f seconds", float(clock() - start_time) / CLOCKS_PER_SEC);
   print(strArr_0, 1);
 
   return 0;

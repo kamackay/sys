@@ -1,0 +1,188 @@
+--------------------------------------------------
+Unknown Method: hello
+
+Options:
+    - filesize:
+        - path=<PathName>
+        - log=<true or false> (Default false)
+    
+Processed in 0.032000 seconds
+--------------------------------------------------
+Unknown Method: "hello"
+
+Options:
+    - filesize:
+        - path=<PathName>
+        - log=<true or false> (Default false)
+    
+Processed in 0.038000 seconds
+--------------------------------------------------
+Unknown Method: "hello"
+
+The "method" is the first parameter after tools.exe
+
+Methods:
+    - filesize:
+        - path=<PathName>
+        - log=<true or false> (Default false)
+    - find
+- Regex to look for (second parameter)
+        - log=<true or false> (Default false)
+    
+Processed in 0.059000 seconds
+--------------------------------------------------
+Unknown Method: "hello"
+
+The "method" is the first parameter after tools.exe
+
+Methods:
+    - filesize:
+        - path=<PathName>
+        - log=<true or false> (Default false)
+    - find
+        - Regex to look for (second parameter)
+        - log=<true or false> (Default false)
+    
+Processed in 0.050000 seconds
+--------------------------------------------------
+The "method" is the first parameter after tools.exe
+
+Methods:
+    - filesize:
+        - path=<PathName>
+        - log=<true or false> (Default false)
+    - find
+        - Regex to look for (second parameter)
+        - log=<true or false> (Default false)
+    
+Processed in 0.059000 seconds
+--------------------------------------------------
+Calulate the size of 'c:\firmwareverification\_local'
+    137.49414 KB
+    
+Processed in 0.031000 seconds
+--------------------------------------------------
+    c:\firmwareverification\_local\a3_sim_test.py
+    c:\firmwareverification\_local\dumb_udp.log
+    c:\firmwareverification\_local\dumb_udp.py
+    c:\firmwareverification\_local\dumb_udp.txt
+    c:\firmwareverification\_local\prices
+    c:\firmwareverification\_local\prices\partNumbers.parts
+    c:\firmwareverification\_local\prices\prices.py
+    c:\firmwareverification\_local\prices\registry.reg
+    c:\firmwareverification\_local\prices\response.json
+    c:\firmwareverification\_local\prices\results.csv
+    
+Processed in 0.090000 seconds
+--------------------------------------------------
+    c:\firmwareverification\_local\a3_sim_test.py
+    c:\firmwareverification\_local\dumb_udp.log
+    c:\firmwareverification\_local\dumb_udp.py
+    c:\firmwareverification\_local\dumb_udp.txt
+    c:\firmwareverification\_local\prices
+    c:\firmwareverification\_local\prices\partNumbers.parts
+    c:\firmwareverification\_local\prices\prices.py
+    c:\firmwareverification\_local\prices\registry.reg
+    c:\firmwareverification\_local\prices\response.json
+    c:\firmwareverification\_local\prices\results.csv
+    
+Processed in 0.082000 seconds
+--------------------------------------------------
+Find a match for "*" in "c:\firmwareverification\Firmware Planning"
+    c:\firmwareverification\Firmware Planning\.svn
+    c:\firmwareverification\Firmware Planning\.svn\entries
+    c:\firmwareverification\Firmware Planning\.svn\format
+    c:\firmwareverification\Firmware Planning\.svn\pristine
+    c:\firmwareverification\Firmware Planning\.svn\pristine\15
+    c:\firmwareverification\Firmware Planning\.svn\pristine\15\1508a3f34890b64399b766cfc68059bd21d4ed4c.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\27
+    c:\firmwareverification\Firmware Planning\.svn\pristine\27\27834613f60af1a21b08dc9a8f4eecbf2042dbc7.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\29
+    c:\firmwareverification\Firmware Planning\.svn\pristine\29\299dde30496f4a33ffcd8fe3cc1e6d4c21ddc806.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\39
+    c:\firmwareverification\Firmware Planning\.svn\pristine\39\390fd77d9ebcfeefbe9d81978003a5a35015159e.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\47
+    c:\firmwareverification\Firmware Planning\.svn\pristine\47\479b70a03a35f90f7fcabf1e32f73f3404253694.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\7d
+    c:\firmwareverification\Firmware Planning\.svn\pristine\7d\7db506ddb1b5264bff523d21f194ad710656476f.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\f0
+    c:\firmwareverification\Firmware Planning\.svn\pristine\f0\f0a2d946b7742a3e297df8326fd267b1f83033f4.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\tmp
+    c:\firmwareverification\Firmware Planning\.svn\wc.db
+    c:\firmwareverification\Firmware Planning\.svn\wc.db-journal
+    c:\firmwareverification\Firmware Planning\archive
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\Release 9.0 Backlog Stories Firmware Verification.xls
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\Release 9.0 Component Stories Firmware Verification.xls
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\SF_MR matrix check.xlsx
+    c:\firmwareverification\Firmware Planning\archive\Firmware Test Schedule.xls
+    c:\firmwareverification\Firmware Planning\archive\firmware_planning.xlsx
+    c:\firmwareverification\Firmware Planning\fwv-holiday-schedule.xlsx
+    c:\firmwareverification\Firmware Planning\fwv_status_chart.xlsx
+    
+Processed in 0.280000 seconds
+--------------------------------------------------
+Find a match for "*" in "c:\firmwareverification\Firmware Planning"
+    c:\firmwareverification\Firmware Planning\.svn
+    c:\firmwareverification\Firmware Planning\.svn\entries
+    c:\firmwareverification\Firmware Planning\.svn\format
+    c:\firmwareverification\Firmware Planning\.svn\pristine
+    c:\firmwareverification\Firmware Planning\.svn\pristine\15
+    c:\firmwareverification\Firmware Planning\.svn\pristine\15\1508a3f34890b64399b766cfc68059bd21d4ed4c.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\27
+    c:\firmwareverification\Firmware Planning\.svn\pristine\27\27834613f60af1a21b08dc9a8f4eecbf2042dbc7.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\29
+    c:\firmwareverification\Firmware Planning\.svn\pristine\29\299dde30496f4a33ffcd8fe3cc1e6d4c21ddc806.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\39
+    c:\firmwareverification\Firmware Planning\.svn\pristine\39\390fd77d9ebcfeefbe9d81978003a5a35015159e.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\47
+    c:\firmwareverification\Firmware Planning\.svn\pristine\47\479b70a03a35f90f7fcabf1e32f73f3404253694.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\7d
+    c:\firmwareverification\Firmware Planning\.svn\pristine\7d\7db506ddb1b5264bff523d21f194ad710656476f.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\pristine\f0
+    c:\firmwareverification\Firmware Planning\.svn\pristine\f0\f0a2d946b7742a3e297df8326fd267b1f83033f4.svn-base
+    c:\firmwareverification\Firmware Planning\.svn\tmp
+    c:\firmwareverification\Firmware Planning\.svn\wc.db
+    c:\firmwareverification\Firmware Planning\.svn\wc.db-journal
+    c:\firmwareverification\Firmware Planning\archive
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\Release 9.0 Backlog Stories Firmware Verification.xls
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\Release 9.0 Component Stories Firmware Verification.xls
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\SF_MR matrix check.xlsx
+    c:\firmwareverification\Firmware Planning\archive\Firmware Test Schedule.xls
+    c:\firmwareverification\Firmware Planning\archive\firmware_planning.xlsx
+    c:\firmwareverification\Firmware Planning\fwv-holiday-schedule.xlsx
+    c:\firmwareverification\Firmware Planning\fwv_status_chart.xlsx
+    
+Processed in 0.272000 seconds
+--------------------------------------------------
+Find a match for "\\.xls" in "c:\firmwareverification\Firmware Planning"
+    
+Processed in 0.039000 seconds
+--------------------------------------------------
+Find a match for "\.xls" in "c:\firmwareverification\Firmware Planning"
+    
+Processed in 0.036000 seconds
+--------------------------------------------------
+Find a match for "*\.xls" in "c:\firmwareverification\Firmware Planning"
+--------------------------------------------------
+Find a match for "*\.xls" in "c:\firmwareverification\Firmware Planning"
+Error
+    
+Processed in 0.028000 seconds
+--------------------------------------------------
+Find a match for "*\.xls" in "c:\firmwareverification\Firmware Planning"
+regex_error(error_badrepeat): One of *?+{ was not preceded by a valid regular expression.
+    
+Processed in 0.038000 seconds
+--------------------------------------------------
+Find a match for ".*\.xls" in "c:\firmwareverification\Firmware Planning"
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\Release 9.0 Backlog Stories Firmware Verification.xls
+    c:\firmwareverification\Firmware Planning\archive\EA 9.0 MR\Release 9.0 Component Stories Firmware Verification.xls
+    c:\firmwareverification\Firmware Planning\archive\Firmware Test Schedule.xls
+    
+Processed in 0.075000 seconds
+--------------------------------------------------
+Find a match for ".*\.xlscls" in "c:\firmwareverification\Firmware Planning"
+    
+Processed in 0.043000 seconds
