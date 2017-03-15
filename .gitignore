@@ -1,3 +1,4 @@
 tools.VC.VC.opendb
 ipch/
+*.db
 tools.VC.db
