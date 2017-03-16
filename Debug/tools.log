@@ -1,0 +1,59 @@
+﻿  tools.cpp
+c:\keith\tools\tools.h(26): error C2143: syntax error: missing ';' before '<'
+c:\keith\tools\tools.h(26): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\keith\tools\tools.h(27): error C2065: 'string': undeclared identifier
+c:\keith\tools\tools.h(27): error C2146: syntax error: missing ')' before identifier 'rootPath'
+c:\keith\tools\tools.cpp(79): error C2872: 'vector': ambiguous symbol
+  c:\keith\tools\tools.h(26): note: could be 'int vector'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: or       'std::vector'
+c:\keith\tools\tools.cpp(79): error C2143: syntax error: missing ';' before '<'
+c:\keith\tools\tools.cpp(79): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\keith\tools\tools.cpp(79): error C2086: 'int vector': redefinition
+  c:\keith\tools\tools.h(26): note: see declaration of 'vector'
+c:\keith\tools\tools.cpp(79): error C2143: syntax error: missing ';' before '{'
+c:\keith\tools\tools.cpp(79): error C2447: '{': missing function header (old-style formal list?)
+c:\keith\tools\tools.cpp(88): error C2872: 'vector': ambiguous symbol
+  c:\keith\tools\tools.h(26): note: could be 'int vector'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: or       'std::vector'
+c:\keith\tools\tools.cpp(88): error C2275: 'std::string': illegal use of this type as an expression
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2634): note: see declaration of 'std::string'
+c:\keith\tools\tools.cpp(88): error C2065: 'parts': undeclared identifier
+c:\keith\tools\tools.cpp(88): error C2672: 'split': no matching overloaded function found
+c:\keith\tools\tools.cpp(88): error C2780: 'void split(const std::string &,char,Out)': expects 3 arguments - 2 provided
+  c:\keith\tools\tools.cpp(69): note: see declaration of 'split'
+c:\keith\tools\tools.cpp(89): error C2065: 'parts': undeclared identifier
+c:\keith\tools\tools.cpp(89): error C2228: left of '.size' must have class/struct/union
+  c:\keith\tools\tools.cpp(89): note: type is 'unknown-type'
+c:\keith\tools\tools.cpp(90): error C2065: 'parts': undeclared identifier
+c:\keith\tools\tools.cpp(162): error C2872: 'vector': ambiguous symbol
+  c:\keith\tools\tools.h(26): note: could be 'int vector'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: or       'std::vector'
+c:\keith\tools\tools.cpp(162): error C2143: syntax error: missing ';' before '<'
+c:\keith\tools\tools.cpp(162): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\keith\tools\tools.cpp(162): error C2086: 'int vector': redefinition
+  c:\keith\tools\tools.h(26): note: see declaration of 'vector'
+c:\keith\tools\tools.cpp(162): error C2143: syntax error: missing ';' before '{'
+c:\keith\tools\tools.cpp(162): error C2447: '{': missing function header (old-style formal list?)
+c:\keith\tools\tools.cpp(166): error C2872: 'vector': ambiguous symbol
+  c:\keith\tools\tools.h(26): note: could be 'int vector'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: or       'std::vector'
+c:\keith\tools\tools.cpp(166): error C2143: syntax error: missing ';' before '<'
+c:\keith\tools\tools.cpp(166): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\keith\tools\tools.cpp(166): error C2086: 'int vector': redefinition
+  c:\keith\tools\tools.h(26): note: see declaration of 'vector'
+c:\keith\tools\tools.cpp(166): error C2143: syntax error: missing ';' before '{'
+c:\keith\tools\tools.cpp(166): error C2447: '{': missing function header (old-style formal list?)
+c:\keith\tools\tools.cpp(185): error C2872: 'vector': ambiguous symbol
+  c:\keith\tools\tools.h(26): note: could be 'int vector'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: or       'std::vector'
+c:\keith\tools\tools.cpp(185): error C2275: 'std::string': illegal use of this type as an expression
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(2634): note: see declaration of 'std::string'
+c:\keith\tools\tools.cpp(185): error C2065: 'paths': undeclared identifier
+c:\keith\tools\tools.cpp(185): error C3861: 'getAllFileSystemEntries': identifier not found
+c:\keith\tools\tools.cpp(186): error C2065: 'paths': undeclared identifier
+c:\keith\tools\tools.cpp(186): error C3312: no callable 'begin' function found for type 'unknown-type'
+c:\keith\tools\tools.cpp(186): error C3312: no callable 'end' function found for type 'unknown-type'
+c:\keith\tools\tools.cpp(187): error C2275: 'std::experimental::filesystem::v1::path': illegal use of this type as an expression
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\filesystem(846): note: see declaration of 'std::experimental::filesystem::v1::path'
+c:\keith\tools\tools.cpp(188): error C2275: 'std::experimental::filesystem::v1::path': illegal use of this type as an expression
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\filesystem(846): note: see declaration of 'std::experimental::filesystem::v1::path'

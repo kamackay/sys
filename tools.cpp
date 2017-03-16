@@ -44,6 +44,7 @@ void printHelp() {
   print("- find", 1);
   print("- path=<PathName>", 2);
   print("- match=<Regex to search for>", 2);
+  print("- filesOnly=<true or false> (Default false)", 2);
   //print("- log=<true or false> (Default true)", 2);
 }
 
@@ -158,14 +159,19 @@ string FileSize::getUnitName(unsigned short unit) {
   }
 }
 
-vector<string> getAllFileSystemEntries(string rootPath) {
+vector<string> getAllFiles(string rootPath) {
+  return getAllFileSystemEntries(rootPath, true);
+}
+
+vector<string> getAllFileSystemEntries(string rootPath, bool filesOnly) {
   vector<string> paths;
   try {
     path folderPath(rootPath);
     if (exists(folderPath)) {
       recursive_directory_iterator end_itr;
       for (recursive_directory_iterator dirIte(rootPath); dirIte != end_itr; ++dirIte) {
-        paths.push_back(dirIte->path().string());
+        if (!filesOnly || is_directory(dirIte->status()))
+          paths.push_back(dirIte->path().string());
       }
     }
   }
@@ -184,7 +190,7 @@ void _findMatch(string rootPath, string expression) {
   }
 }
 
-void findMatch(string rootPath, string expression) {
+void findMatch(string rootPath, string expression, bool filesOnly) {
   std::regex regular_expression(expression.c_str());
   print("Scanning all files and folders:\n", 1);
   path folderPath(rootPath);
@@ -192,9 +198,8 @@ void findMatch(string rootPath, string expression) {
     recursive_directory_iterator end_itr;
     for (recursive_directory_iterator dirIte(rootPath); dirIte != end_itr; ++dirIte) {
       string path = dirIte->path().string();
-      if (regex_match(path, regular_expression)) {
+      if (regex_match(path, regular_expression) && (!filesOnly || is_directory(dirIte->status())))
         print(path, 1);
-      }
     }
   }
 }
@@ -234,10 +239,12 @@ int main(int argc, char *argv[]) {
         string regex = getArg(argc, argv, "match", "*");
         if (path.compare("") == 0)
           print("Please Provide a path to find a match inside of with the 'path' parameter");
+        string filesOnlyStr = getArg(argc, argv, "log", "false");
+        bool filesOnly = toLower(filesOnlyStr).compare("true") == 0;
         char* strArr_2 = new char[100 + path.length() + regex.length()];
         sprintf(strArr_2, "Find a match for \"%s\" in \"%s\"", regex.c_str(), path.c_str());
         print(strArr_2);
-        findMatch(path, regex);
+        findMatch(path, regex, filesOnly);
       }
       else if (method.compare("find2") == 0) {
         string path = getArg(argc, argv, "path", "");

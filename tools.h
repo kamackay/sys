@@ -22,7 +22,11 @@ public:
 	StringBuilder & append(const std::string & str);
 	const std::string & str();
 };
-void findMatch(std::string rootPath, std::string expression);
+
+void _findMatch(std::string rootPath, std::string expression);
+vector<string> getAllFileSystemEntries(string rootPath, bool filesOnly = false);
+void findMatch(string rootPath, string expression, bool filesOnly = false);
+
 class FileSize {
 public:
   long double size;
