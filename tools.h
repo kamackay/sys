@@ -10,6 +10,7 @@
 void print(const char* input, int indent = 0);
 void print(std::string input = "", int indent = 0);
 void printHelp();
+long getFileSize(std::string filename);
 void getFolderSize(std::string rootFolder, unsigned long long &f_size, bool log = false, int logIndent = 1, int depth = 1);
 std::string getArg(int argc, char *argv[], std::string name, std::string defaultValue = "");
 int main(int argc, char *argv[]);
@@ -22,11 +23,9 @@ public:
 	StringBuilder & append(const std::string & str);
 	const std::string & str();
 };
-
 void _findMatch(std::string rootPath, std::string expression);
-vector<string> getAllFileSystemEntries(string rootPath, bool filesOnly = false);
-void findMatch(string rootPath, string expression, bool filesOnly = false);
-
+std::vector<std::string> getAllFileSystemEntries(std::string rootPath, bool filesOnly = false);
+void findMatch(std::string rootPath, std::string expression, bool filesOnly = true);
 class FileSize {
 public:
   long double size;

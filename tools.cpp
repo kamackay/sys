@@ -41,7 +41,7 @@ void printHelp() {
   print("- path=<PathName>", 2);
   print("- log=<true or false> (Default false)", 2);
 
-  print("- find", 1);
+  print("- find (or find2, which does the same thing, but may not be faster)", 1);
   print("- path=<PathName>", 2);
   print("- match=<Regex to search for>", 2);
   print("- filesOnly=<true or false> (Default false)", 2);
@@ -92,13 +92,20 @@ string getArg(int argc, char *argv[], string name, string defaultValue) {
   return defaultValue;
 }
 
+long getFileSize(string filename) {
+  struct stat stat_buf;
+  int rc = stat(filename.c_str(), &stat_buf);
+  return rc == 0 ? stat_buf.st_size : -1;
+}
+
 // Get the size of a folder in bytes. The value is stored into the f_size value, and assumes that the value passed in initially is 0
 void getFolderSize(string rootFolder, unsigned long long &f_size, bool log, int logIndent, int depth) {
   if (log) print(rootFolder, logIndent + depth);
   try {
     path folderPath(rootFolder);
     if (exists(folderPath)) {
-      directory_iterator end_itr;
+      // Another way to do this
+      /**directory_iterator end_itr;
       for (directory_iterator dirIte(rootFolder); dirIte != end_itr; ++dirIte) {
         if (is_directory(dirIte->status())) {
           string subPathString = dirIte->path().string();
@@ -110,7 +117,15 @@ void getFolderSize(string rootFolder, unsigned long long &f_size, bool log, int 
           path subPath(subPath_str);
           f_size += file_size(subPath);
         }
-      }
+      }/**/
+      recursive_directory_iterator end_itr;
+      for (recursive_directory_iterator dirIte(rootFolder); dirIte != end_itr; ++dirIte) {
+        if (!is_directory(dirIte->status())) {
+          string subPath_str = dirIte->path().string();
+          if (log) print(subPath_str, logIndent + depth + 1);
+          f_size += getFileSize(subPath_str);
+        }
+      }/**/
     }
   }
   catch (exception&) {}
@@ -140,23 +155,10 @@ FileSize FileSize::convertByteCount(unsigned long long bytes) {
 }
 
 string FileSize::getUnitName(unsigned short unit) {
-  switch (unit) {
-  case 0:
-  default:
-    return "bytes";
-  case 1:
-    return "KB";
-  case 2:
-    return "MB";
-  case 3:
-    return "GB";
-  case 4:
-    return "TB";
-  case 5:
-    return "PB";
-  case 6:
-    return "ZB";
-  }
+  string* names = new string[7]{ "bytes", "KB", "MB", "GB", "TB", "PB", "ZB" };
+  try { return names[unit]; }
+  catch (exception&) {}
+  return names[0];
 }
 
 vector<string> getAllFiles(string rootPath) {
@@ -229,14 +231,14 @@ int main(int argc, char *argv[]) {
           getFolderSize(path, f_size, log);
           FileSize size = FileSize::convertByteCount(f_size);
           char* strArr2 = new char[100];
-          std::sprintf(strArr2, "%0.5lF %s", size.size, FileSize::getUnitName(size.unit).c_str());
+          std::sprintf(strArr2, "%0.5lF %s -- %llu bytes", size.size, FileSize::getUnitName(size.unit).c_str(), f_size);
           print(strArr2, 1);
           goto end;
         }
       }
       else if (method.compare("find") == 0) {
         string path = getArg(argc, argv, "path", "");
-        string regex = getArg(argc, argv, "match", "*");
+        string regex = getArg(argc, argv, "match", ".*");
         if (path.compare("") == 0)
           print("Please Provide a path to find a match inside of with the 'path' parameter");
         string filesOnlyStr = getArg(argc, argv, "log", "false");
@@ -248,7 +250,7 @@ int main(int argc, char *argv[]) {
       }
       else if (method.compare("find2") == 0) {
         string path = getArg(argc, argv, "path", "");
-        string regex = getArg(argc, argv, "match", "*");
+        string regex = getArg(argc, argv, "match", ".*");
         if (path.compare("") == 0)
           print("Please Provide a path to find a match inside of with the 'path' parameter");
         char* strArr_2 = new char[100 + path.length() + regex.length()];
