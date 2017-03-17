@@ -7,13 +7,19 @@
 #include <vector>
 #include <iterator>
 
-void print(const char* input, int indent = 0);
-void print(std::string input = "", int indent = 0);
+using namespace std;
+
+void print(const char* input, int indent = 0, bool newLine = true);
+void print(std::string input = "", int indent = 0, bool newLine = true);
 void printHelp();
 long getFileSize(std::string filename);
 void getFolderSize(std::string rootFolder, unsigned long long &f_size, bool log = false, int logIndent = 1, int depth = 1);
 std::string getArg(int argc, char *argv[], std::string name, std::string defaultValue = "");
+bool getBoolArg(int argc, char *argv[], std::string name, bool defaultVal);
+int getIntArg(int argc, char *argv[], std::string name, int defaultVal);
 int main(int argc, char *argv[]);
+std::string toLower(std::string in);
+string query(string output, int indent = 1);
 class StringBuilder {
 private:
 	std::string main;
@@ -22,6 +28,13 @@ private:
 public:
 	StringBuilder & append(const std::string & str);
 	const std::string & str();
+};
+class ProcessInfo {
+public:
+  ProcessInfo(int pid, std::string name);
+  int pid;
+  std::string name;
+  bool known = false;
 };
 void _findMatch(std::string rootPath, std::string expression);
 std::vector<std::string> getAllFileSystemEntries(std::string rootPath, bool filesOnly = false);
