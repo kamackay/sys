@@ -1,5 +1,6 @@
-tools.VC.VC.opendb
-ipch/
-*.db
-tools.VC.db
-/Debug/tools.out.log
+src/tools.VC.VC.opendb
+src/ipch/
+src/*.db
+src/tools.VC.db
+src/Debug/tools.out.log
+svn.log
