@@ -3,4 +3,6 @@ src/ipch/
 src/*.db
 src/tools.VC.db
 src/Debug/tools.out.log
+tools.out.log
+*tools.out.log
 svn.log
