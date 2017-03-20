@@ -38,15 +38,15 @@ namespace sys {
         string logFilename = Path.Combine(getExePath(), "sys.log");
         Action<string> log = delegate (string s) {
           foreach (string line in s.splitToLines()) {
+            string finLine = string.Format("{0}: {1}", Time.timestamp(), line);
             Debug.WriteLine(line);
             Console.WriteLine(line);
-            toFile(logFilename, line);
+            toFile(logFilename, finLine);
           }
         };
+        log("--------------------------------------------------");
         try {
           string method = args[0];
-          log("Method = " + method);
-
           Func<string, string, string> getArg = delegate (string name, string defaultVal) {
             foreach (string arg in args) {
               try {
@@ -60,14 +60,12 @@ namespace sys {
           switch (method.ToLower()) {
             case "filesize":
               string path = getArg("path", null);
-              if (!string.IsNullOrEmpty(path) && Directory.Exists(path)) {
+              if (!string.IsNullOrEmpty(path) && (Directory.Exists(path) || File.Exists(path))) {
                 ulong size = 0;
-                log(string.Format("Get Size of \"{0}\"", path));
-                foreach (string subPath in Directory.EnumerateFileSystemEntries(path, "*", SearchOption.AllDirectories)) {
-                  // If this is a file
-                  if (File.Exists(subPath)) size += (ulong)new FileInfo(subPath).Length;
-                }
-                log(string.Format("\t{0} bytes", size));
+                log(string.Format("Calculate the size of \"{0}\"", path));
+                size = getFolderSize(path);
+                FileSize fs = FileSize.calculate(size);
+                log(string.Format("\t{0:N6} {1} -- {2} bytes", fs.size, FileSize.getUnitName(fs.unit), size));
               } else {
                 log("Please provide a path");
               }
@@ -78,9 +76,25 @@ namespace sys {
           log(e.Message);
         }
         TimeSpan processTime = DateTime.Now - startTime;
-        log(string.Format("\n\tProcessed in {0} seconds", processTime.TotalSeconds));
+        log(string.Format("\nProcessed in {0} seconds", processTime.TotalSeconds));
       }
     }
+
+    private static ulong getFolderSize(string path) {
+      ulong size = 0;
+      try {
+        if (File.Exists(path)) return (ulong)new FileInfo(path).Length;
+        foreach (string subPath in Directory.EnumerateFileSystemEntries(path, "*", SearchOption.TopDirectoryOnly)) {
+          // If this is a file
+          try {
+            if (File.Exists(subPath)) size += (ulong)new FileInfo(subPath).Length;
+            else if (Directory.Exists(subPath)) size += getFolderSize(subPath);
+          } catch { }
+        }
+      } catch { }
+      return size;
+    }
+
     private static void Run() {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
@@ -346,7 +360,7 @@ namespace sys {
     public static void toFile(string filename, string text, bool newLine = true) {
       try {
         using (StreamWriter w = File.AppendText(filename))
-          w.Write(string.Format("{0}: {1}{2}", Time.timestamp(), text, newLine ? "\n" : ""));
+          w.Write(string.Format("{1}{2}", text, newLine ? "\n" : ""));
       } catch { }
     }
 
@@ -469,6 +483,37 @@ namespace sys {
       public static string timestamp(DateTime? time = null) {
         DateTime t = time == null ? DateTime.Now : (DateTime)time;
         return t.ToString("yyyy/MM/dd HH:mm:ss:ffff");
+      }
+    }
+
+    public class FileSize {
+      public double size;
+      public ushort unit;
+      public FileSize(ulong size = 0) {
+        this.size = size;
+        unit = 0;
+      }
+
+      public void incUnit() {
+        if (size > 1024) {
+          unit++;
+          size /= 1024;
+        }
+      }
+
+      private static string[] unitNames = { "bytes", "KB", "MB", "GB", "TB", "PB", "ZB" };
+
+      public static FileSize calculate(ulong byteCount) {
+        FileSize fs = new FileSize(byteCount);
+        while (fs.size >= 1024) fs.incUnit();
+        return fs;
+      }
+
+      public static string getUnitName(ushort unit) {
+        try {
+          return unitNames[unit];
+        } catch { }
+        return unitNames[0];
       }
     }
   }
