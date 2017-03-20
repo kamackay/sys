@@ -35,15 +35,6 @@ namespace sys {
         }
       } else {
         DateTime startTime = DateTime.Now;
-        string logFilename = Path.Combine(getExePath(), "sys.log");
-        Action<string> log = delegate (string s) {
-          foreach (string line in s.splitToLines()) {
-            string finLine = string.Format("{0}: {1}", Time.timestamp(), line);
-            Debug.WriteLine(line);
-            Console.WriteLine(line);
-            toFile(logFilename, finLine);
-          }
-        };
         log("--------------------------------------------------");
         try {
           string method = args[0];
@@ -60,14 +51,16 @@ namespace sys {
           switch (method.ToLower()) {
             case "filesize":
               string path = getArg("path", null);
+              bool verbose = getArg("log", "false").Equals("true");
+              if (verbose) log("Verbose on");
               if (!string.IsNullOrEmpty(path) && (Directory.Exists(path) || File.Exists(path))) {
                 ulong size = 0;
                 log(string.Format("Calculate the size of \"{0}\"", path));
-                size = getFolderSize(path);
+                size = getFolderSize(path, verbose);
                 FileSize fs = FileSize.calculate(size);
                 log(string.Format("\t{0:N6} {1} -- {2} bytes", fs.size, FileSize.getUnitName(fs.unit), size));
               } else {
-                log("Please provide a path");
+                log("Please provide a valid path");
               }
               break;
           }
@@ -80,15 +73,28 @@ namespace sys {
       }
     }
 
-    private static ulong getFolderSize(string path) {
+    private static Action<string> log = delegate (string s) {
+      foreach (string line in s.splitToLines()) {
+        string finLine = string.Format("{0}: {1}", Time.timestamp(), line);
+        Debug.WriteLine(line);
+        Console.WriteLine(line);
+        toFile(logFilename, finLine);
+      }
+    };
+
+    static string logFilename = Path.Combine(getExePath(), "sys.log");
+
+    private static ulong getFolderSize(string path, bool verbose = false) {
+      if (verbose) log("\t -- " + path);
       ulong size = 0;
       try {
         if (File.Exists(path)) return (ulong)new FileInfo(path).Length;
         foreach (string subPath in Directory.EnumerateFileSystemEntries(path, "*", SearchOption.TopDirectoryOnly)) {
-          // If this is a file
           try {
-            if (File.Exists(subPath)) size += (ulong)new FileInfo(subPath).Length;
-            else if (Directory.Exists(subPath)) size += getFolderSize(subPath);
+            if (File.Exists(subPath)) {
+              size += (ulong)new FileInfo(subPath).Length;
+              if (verbose) log("\t\t" + subPath);
+            } else if (Directory.Exists(subPath)) size += getFolderSize(subPath, verbose);
           } catch { }
         }
       } catch { }
