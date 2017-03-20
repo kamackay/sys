@@ -6,3 +6,6 @@ c:\keith\sys\obj\Debug\sys.pdb
 C:\keith\sys\bin\sys.exe.config
 C:\keith\sys\bin\sys.exe
 C:\keith\sys\bin\sys.pdb
+C:\keith\tools\sys\bin\sys.exe.config
+C:\keith\tools\sys\obj\Debug\sys.exe
+C:\keith\tools\sys\obj\Debug\sys.pdb
