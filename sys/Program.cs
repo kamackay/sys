@@ -15,22 +15,70 @@ namespace sys {
     /// The main entry point for the application.
     /// </summary>
     [STAThread]
-    static void Main() {
-      bool createdNew = false;
-      using (System.Threading.Mutex mutex = new System.Threading.Mutex(true,
-        AppDomain.CurrentDomain.FriendlyName, out createdNew)) {
-        if (createdNew) Run();
-        else {
-          Process current = Process.GetCurrentProcess();
-          foreach (Process process in Process.GetProcessesByName(current.ProcessName)) {
-            if (process.Id != current.Id && process.ProcessName.Equals(current.ProcessName)) {
-              process.Kill();
-              process.WaitForExit();
-              Run();
-              break;
+    static void Main(string[] args) {
+      if (args.Length == 0) {
+        bool createdNew = false;
+        using (System.Threading.Mutex mutex = new System.Threading.Mutex(true,
+          AppDomain.CurrentDomain.FriendlyName, out createdNew)) {
+          if (createdNew) Run();
+          else {
+            Process current = Process.GetCurrentProcess();
+            foreach (Process process in Process.GetProcessesByName(current.ProcessName)) {
+              if (process.Id != current.Id && process.ProcessName.Equals(current.ProcessName)) {
+                process.Kill();
+                process.WaitForExit();
+                Run();
+                break;
+              }
             }
           }
         }
+      } else {
+        DateTime startTime = DateTime.Now;
+        string logFilename = Path.Combine(getExePath(), "sys.log");
+        Action<string> log = delegate (string s) {
+          foreach (string line in s.splitToLines()) {
+            Debug.WriteLine(line);
+            Console.WriteLine(line);
+            toFile(logFilename, line);
+          }
+        };
+        try {
+          string method = args[0];
+          log("Method = " + method);
+
+          Func<string, string, string> getArg = delegate (string name, string defaultVal) {
+            foreach (string arg in args) {
+              try {
+                string[] temp = arg.Split('=');
+                if (temp[0].ToLower().Equals(name)) return temp[1];
+              } catch { }
+            }
+            return defaultVal;
+          };
+
+          switch (method.ToLower()) {
+            case "filesize":
+              string path = getArg("path", null);
+              if (!string.IsNullOrEmpty(path) && Directory.Exists(path)) {
+                ulong size = 0;
+                log(string.Format("Get Size of \"{0}\"", path));
+                foreach (string subPath in Directory.EnumerateFileSystemEntries(path, "*", SearchOption.AllDirectories)) {
+                  // If this is a file
+                  if (File.Exists(subPath)) size += (ulong)new FileInfo(subPath).Length;
+                }
+                log(string.Format("\t{0} bytes", size));
+              } else {
+                log("Please provide a path");
+              }
+              break;
+          }
+        } catch (Exception e) {
+          Toast.show("Error. check log for more info.");
+          log(e.Message);
+        }
+        TimeSpan processTime = DateTime.Now - startTime;
+        log(string.Format("\n\tProcessed in {0} seconds", processTime.TotalSeconds));
       }
     }
     private static void Run() {
@@ -65,7 +113,7 @@ namespace sys {
         Process.Start("https://google.com");
       }));
       keyTracker.Add(Keys.RControlKey, new KeyTrackerHandler(delegate {
-        Toast.show("Stop pressing Control so much", 3500, Color.Red, animate:false);
+        Toast.show("Stop pressing Control so much", 3500, Color.Red, animate: false);
       }, 5, 10000));
       keyTracker.Add(Keys.RShiftKey, new KeyTrackerHandler(delegate {
         Toast.show("Stop pressing Shift so much", 3500, Color.Red);
@@ -295,6 +343,17 @@ namespace sys {
   }
 
   public static class Global {
+    public static void toFile(string filename, string text, bool newLine = true) {
+      try {
+        using (StreamWriter w = File.AppendText(filename))
+          w.Write(string.Format("{0}: {1}{2}", Time.timestamp(), text, newLine ? "\n" : ""));
+      } catch { }
+    }
+
+    public static string getExePath() {
+      return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+    }
+
     public static string toByteAmountStr(long bytes) {
       int i = 0;
       double val = bytes;
@@ -406,6 +465,10 @@ namespace sys {
     public static class Time {
       public static int minutes(double minutes) {
         return (int)TimeSpan.FromMinutes(minutes).TotalMilliseconds;
+      }
+      public static string timestamp(DateTime? time = null) {
+        DateTime t = time == null ? DateTime.Now : (DateTime)time;
+        return t.ToString("yyyy/MM/dd HH:mm:ss:ffff");
       }
     }
   }
