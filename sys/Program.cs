@@ -47,7 +47,6 @@ namespace sys {
             }
             return defaultVal;
           };
-
           switch (method.ToLower()) {
             case "filesize":
               string path = getArg("path", null);
@@ -92,8 +91,9 @@ namespace sys {
         foreach (string subPath in Directory.EnumerateFileSystemEntries(path, "*", SearchOption.TopDirectoryOnly)) {
           try {
             if (File.Exists(subPath)) {
-              size += (ulong)new FileInfo(subPath).Length;
-              if (verbose) log("\t\t" + subPath);
+              ulong s = (ulong)new FileInfo(subPath).Length;
+              size += s;
+              if (verbose) log(string.Format("\t\t{0} bytes: {1}", s, subPath));
             } else if (Directory.Exists(subPath)) size += getFolderSize(subPath, verbose);
           } catch { }
         }
@@ -366,8 +366,8 @@ namespace sys {
     public static void toFile(string filename, string text, bool newLine = true) {
       try {
         using (StreamWriter w = File.AppendText(filename))
-          w.Write(string.Format("{1}{2}", text, newLine ? "\n" : ""));
-      } catch { }
+          w.Write(string.Format("{0}{1}", text, newLine ? "\n" : ""));
+      } catch { Debug.WriteLine("Error!!!!!!!!!"); }
     }
 
     public static string getExePath() {
