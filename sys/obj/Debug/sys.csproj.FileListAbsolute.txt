@@ -1,0 +1,8 @@
+c:\keith\sys\obj\Debug\sys.csprojResolveAssemblyReference.cache
+c:\keith\sys\obj\Debug\sys.Properties.Resources.resources
+c:\keith\sys\obj\Debug\sys.csproj.GenerateResource.Cache
+c:\keith\sys\obj\Debug\sys.exe
+c:\keith\sys\obj\Debug\sys.pdb
+C:\keith\sys\bin\sys.exe.config
+C:\keith\sys\bin\sys.exe
+C:\keith\sys\bin\sys.pdb

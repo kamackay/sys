@@ -398,6 +398,7 @@ int main(int argc, char *argv[]) {
             }
             else print("Cancelling", 1);
           }
+          else print("No Matching Processes", 1);
         }
       }
       else {
