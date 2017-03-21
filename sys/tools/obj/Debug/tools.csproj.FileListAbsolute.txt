@@ -1,0 +1,8 @@
+C:\keith\tools\sys\tools\obj\Debug\tools.csprojResolveAssemblyReference.cache
+C:\keith\tools\sys\tools\obj\Debug\tools.exe
+C:\keith\tools\sys\tools\obj\Debug\tools.pdb
+C:\keith\tools\sys\tools\bin\tools.exe.config
+C:\keith\tools\sys\tools\bin\tools.exe
+C:\keith\tools\sys\tools\bin\tools.pdb
+C:\keith\tools\sys\tools\bin\sys.exe
+C:\keith\tools\sys\tools\bin\sys.pdb
