@@ -68,8 +68,17 @@ namespace sys {
         Process.Start("https://google.com");
       }));
       keyTracker.Add(Keys.RControlKey, new KeyTrackerHandler(delegate {
-        Toast.show("Stop pressing Control so much", 3500, Color.Red, animate: false);
-      }, 5, 10000));
+        string num = Microsoft.VisualBasic.Interaction.InputBox("Which VM?", "Which VM?", "1");
+        if (!string.IsNullOrEmpty(num) && num.Length == 1) {
+          try {
+            string cmd = string.Format("\\\\nc45lta3virt{0}\\c$\\", num);
+            if (Directory.Exists(cmd))
+              Process.Start("c:\\windows\\explorer.exe", cmd);
+          } catch (Exception e) {
+            Toast.show(e.Message);
+          }
+        }
+      }));
       keyTracker.Add(Keys.RShiftKey, new KeyTrackerHandler(delegate {
         Toast.show("Stop pressing Shift so much", 3500, Color.Red);
       }, 5, 10000));
