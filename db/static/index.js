@@ -45,7 +45,10 @@ app.controller('controller', function ($scope, $http) {
   };
   $scope.delete = function (machine) {
     for (var x = 0; x < $scope.machines.length; x++) {
-      if ($scope.machines[x].name == machine) $scope.machines.splice(x, 1);
+      if ($scope.machines[x].name == machine) {
+        $scope.machines.splice(x, 1);
+        return;
+      }
     }
   };
   $scope.edit = function (machine) {
@@ -75,6 +78,7 @@ app.controller('controller', function ($scope, $http) {
           console.log($scope.machines[x]);
           $scope.save();
           setTimeout($scope.update, 100);
+          break;
         }
       } /**/
       document.getElementById("editForm").removeAttribute("style");
