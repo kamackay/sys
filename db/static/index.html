@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="module" ng-controller="controller">
+
+<head>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+  <!---->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+  <!---->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+  <meta charset=utf-8 />
+  <title>Machines</title>
+  <script type="text/javascript" src="./index.js"></script>
+  <style>
+    .machine-row {
+      border: thin black solid;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body style="background-color:#ccc;">
+  <div class="container">
+    <h1>Machines</h1>
+    <form>
+      <table class="table table-striped table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>Machine Name</th>
+            <th>Machine Type</th>
+            <th>Claimed By</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="machine in machines" ng-class="{true:'success', false:'warning'}[machine.available]">
+            <td>{{machine.name}}</td>
+            <td>{{machine.type}}</td>
+            <td>{{machine.reservedBy}}</td>
+            <td>
+              <button ng-click="reserve(machine.name)" data-position="left" data-delay="50" class="btn tooltipped" data-tooltip="Claim"
+                title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
+              <button ng-click="release(machine.name)" class="btn tooltipped" data-tooltip="Release" ng-show="!machine.available" title="Release {{machine.name}}">Release</button>
+              <button class="btn btn-xs waves-effect waves-teal btn-flat tooltipped" data-tooltip="Edit" onclick="Materialize.toast('Not Implemented Yet', 5000, 'rounded')"
+                title="Edit"><i class="material-icons">mode_edit</i></button>
+              <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn-xs btn-danger tooltipped" data-tooltip="Delete Machine"
+                title="Delete Machine"><i class="material-icons">clear</i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row" style="text-align:center;">
+        <button class="btn waves-effect waves-teal btn-flat tooltipped" data-tooltip="Sync with Database" ng-click="update()"><i class="material-icons">sync</i></button>
+        <button class="btn btn-lg btn-primary tooltipped" style="width:80%;" ng-click="save()" data-tooltip="Save changes to Database">Save</button>
+      </div>
+    </form>
+  </div>
+  <div class="fixed-action-btn tooltipped" data-position="left" data-delay="50" data-tooltip="Add Machine">
+    <a class="btn-floating btn-large red" ng-click="add()">
+      <i class="large material-icons">add</i>
+    </a>
+    <ul>
+      <!--<li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>-->
+    </ul>
+  </div>
+</body>
+
+</html>

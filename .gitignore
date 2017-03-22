@@ -6,3 +6,5 @@ src/Debug/tools.out.log
 tools.out.log
 *tools.out.log
 svn.log
+db/node_modules/
+db/node_modules/*

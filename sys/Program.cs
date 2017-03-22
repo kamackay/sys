@@ -77,7 +77,7 @@ namespace sys {
           } catch (Exception e) {
             Toast.show(e.Message);
           }
-        }
+        } else Toast.show("Invalid");
       }));
       keyTracker.Add(Keys.RShiftKey, new KeyTrackerHandler(delegate {
         Toast.show("Stop pressing Shift so much", 3500, Color.Red);
