@@ -3,7 +3,6 @@ app.controller('controller', function ($scope, $http) {
   $scope.update = function () {
     $http.get('/get/').then(function (data) {
       $scope.machines = data.data;
-      $scope.msg = "Updated";
     });
   };
   //window.setInterval($scope.update, 1000 * 60); // Update once a minute
@@ -11,7 +10,7 @@ app.controller('controller', function ($scope, $http) {
   $scope.msg = "";
   $scope.save = function () {
     $http.post('/put/', $scope.machines).then(function (data) {
-      $scope.msg = 'Data saved';
+      Materialize.toast("Saved to database", 2500, "rounded");
     });
   };
   $scope.reserve = function (machine, name) {
