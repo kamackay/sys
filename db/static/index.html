@@ -13,6 +13,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
   <!---->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
   <meta charset=utf-8 />
   <title>Test Machines</title>
   <link rel="icon" href="./icon.ico">
@@ -32,7 +33,7 @@
             <th>Machine Type</th>
             <th>Location</th>
             <th>Claimed By</th>
-            <th></th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -42,13 +43,13 @@
             <td>{{machine.location}}</td>
             <td>{{machine.reservedBy}}</td>
             <td>
-              <button ng-click="reserve(machine.name)" data-position="left" data-delay="50" class="btn tooltipped" data-tooltip="Claim"
+              <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
                 title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
-              <button ng-click="release(machine.name)" class="btn tooltipped" data-tooltip="Release" ng-show="!machine.available" title="Release {{machine.name}}">Release</button>
-              <button class="btn btn-xs waves-effect waves-teal btn-flat tooltipped" data-tooltip="Edit" onclick="Materialize.toast('Not Implemented Yet', 5000, 'rounded')"
+              <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
+              <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" onclick="Materialize.toast('Not Implemented Yet', 5000, 'rounded')"
                 title="Edit"><i class="material-icons">mode_edit</i></button>
-              <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red tooltipped" data-tooltip="Delete {{machine.name}}"
-                title="Delete Machine"><i class="material-icons">clear</i></button>
+              <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red" tooltipped data-tooltip="Delete {{machine.name}}"
+                title="Delete {{machine.name}}"><i class="material-icons">clear</i></button>
             </td>
           </tr>
         </tbody>

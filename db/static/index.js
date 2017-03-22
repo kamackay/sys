@@ -1,4 +1,4 @@
-var app = angular.module('module', []);
+var app = angular.module('module', ["ui.materialize"]);
 app.controller('controller', function ($scope, $http) {
   $scope.update = function () {
     $http.get('/get/').then(function (data) {
