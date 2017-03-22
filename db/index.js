@@ -11,7 +11,7 @@ jsonfile.readFile("./data.json", function (err, obj) {
   if (err) console.log(err);
   else {
     data = obj;
-    console.log(obj);
+    console.log(JSON.stringify(obj, null, 4));
   }
 });
 app.use(bodyParser.json());
@@ -20,10 +20,10 @@ app.use("/get*", function (req, res, next) {
 })
 app.use("/put*", function (req, res, next) {
   data.machines = req.body;
-  console.log(data.machines);
   res.json({});
   jsonfile.writeFile("./data.json", data, function (err) {
-    console.log(err);
+    if (err) console.log(err);
+    else console.log("Saved successfully")
   });
 });
 var port = process.env.PORT || 5555;

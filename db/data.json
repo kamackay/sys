@@ -1,1 +1,53 @@
-{"machines":[{"name":"NC45LTA3VIRT1","available":true,"reservedBy":"","type":"A3 Sim"},{"name":"NC45LTA3VIRT2","available":true,"reservedBy":""},{"name":"NC45LTA3VIRT3","available":true,"reservedBy":""},{"name":"NC45LTA3VIRT4","available":true,"reservedBy":""},{"name":"NC45LTA3VIRT5","available":true,"reservedBy":""},{"name":"NC45LTA3VIRT6","available":true,"reservedBy":""},{"name":"NC45LTA3VIRT7","available":true,"reservedBy":""},{"name":"NC45LTA3VIRT8","available":false,"reservedBy":"Keith MacKay"},{"name":"Keith's Laptop","available":true,"reservedBy":""},{"name":"Mike's Laptop","available":false,"reservedBy":"Mikey Mike and the Funky Bunch"}]}
+{
+  "machines": [{
+    "name": "NC45LTA3VIRT1",
+    "available": true,
+    "reservedBy": "",
+    "type": "A3 Sim"
+  }, {
+    "name": "NC45LTA3VIRT2",
+    "available": true,
+    "reservedBy": "",
+    "type": "A3 Sim"
+  }, {
+    "name": "NC45LTA3VIRT3",
+    "available": true,
+    "reservedBy": "",
+    "type": "A3 NGC"
+  }, {
+    "name": "NC45LTA3VIRT4",
+    "available": false,
+    "reservedBy": "Kender",
+    "type": "A3 NGC"
+  }, {
+    "name": "NC45LTA3VIRT5",
+    "available": false,
+    "reservedBy": "Kender",
+    "type": "A3 Sim"
+  }, {
+    "name": "NC45LTA3VIRT6",
+    "available": true,
+    "reservedBy": "",
+    "type": "A3 Sim"
+  }, {
+    "name": "NC45LTA3VIRT7",
+    "available": true,
+    "reservedBy": "",
+    "type": "A3 NGC"
+  }, {
+    "name": "NC45LTA3VIRT8",
+    "available": false,
+    "reservedBy": "Keith MacKay",
+    "type": "A3 NGC"
+  }, {
+    "name": "NC45LTOEM2",
+    "available": true,
+    "reservedBy": "",
+    "type": "Host"
+  }, {
+    "name": "NC45LTOEM3",
+    "available": true,
+    "reservedBy": "",
+    "type": "Host"
+  }]
+}

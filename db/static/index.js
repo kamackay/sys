@@ -5,7 +5,12 @@ app.controller('controller', function ($scope, $http) {
       $scope.machines = data.data;
     });
   };
-  //window.setInterval($scope.update, 1000 * 60); // Update once a minute
+  window.setInterval(() => {
+    if (document.getElementById('autoUpdate').checked) {
+      $scope.update();
+      Materialize.toast("Updated from database", 2500);
+    }
+  }, 1000 * 30); // Update periodically
   $scope.update();
   $scope.msg = "";
   $scope.save = function () {
@@ -51,4 +56,18 @@ $(document).ready(function () {
     delay: 50
   });
   console.log("Page Ready");
+  if (getData("auto_update") === true) document.getElementById('autoUpdate').checked = true;
+  else document.getElementById("autoUpdate").checked = false;
 });
+
+function storeData(e, o) {
+  'undefined' != typeof Storage && localStorage.setItem(e, o)
+}
+
+function getData(e) {
+  return 'undefined' != typeof Storage ? localStorage.getItem(e) : null
+}
+
+function toggleUpdate() {
+  storeData("auto_update", document.getElementById("autoUpdate").checked);
+}
