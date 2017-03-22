@@ -16,6 +16,10 @@ button,
   -o-user-select: none;
 }
 
+.noselect, .noselect *{
+  cursor: default;
+}
+
 .switch {
   position: relative;
   display: inline-block;
@@ -88,4 +92,21 @@ input:checked+.slider:before {
 
 body#body {
   background-color: #ccc;
+}
+
+#editForm {
+  position: fixed;
+  height: 50vh;
+  width: 50vw;
+  top: -100vh;
+  left: 25vw;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+#body .btn {
+  text-transform: none;
 }
