@@ -15,6 +15,13 @@ jsonfile.readFile("./data.json", function (err, obj) {
   }
 });
 
+function handle(err, res) {
+  console.log(err);
+  res.status(500).json({
+    error: err.toString()
+  });
+}
+
 function saveData() {
   jsonfile.writeFile("./data.json", data, function (err) {
     if (err) console.log(err);
@@ -46,9 +53,8 @@ app.use("/machines/update*", function (req, res, next) {
             return;
           }
       } catch (err) {
-        res.status(500).json({
-          error: err.toString()
-        });
+        handle(err, res);
+        return;
       }
       break;
     case "release":
@@ -65,9 +71,26 @@ app.use("/machines/update*", function (req, res, next) {
             return;
           }
       } catch (err) {
-        res.status(500).json({
-          error: err.toString()
-        });
+        handle(err, res);
+        return;
+      }
+      break;
+    case "update":
+      try {
+        const machineName = body.machine.name;
+        for (var x = 0; x < data.machines.length; x++)
+          if (data.machines[x].name === machineName) {
+            data.machines[x].notes = body.machine.notes;
+            data.machines[x].location = body.machine.location;
+            data.machines[x].type = body.machine.type;
+            console.log("    " + machineName + " Successfully Updated");
+            res.json({});
+            saveData();
+            return;
+          }
+      } catch (err) {
+        handle(err, res);
+        return;
       }
       break;
   }
