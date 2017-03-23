@@ -15,9 +15,10 @@ app.controller('controller', function ($scope, $http) {
       $scope.update();
       Materialize.toast("Updated from database", 2500, "rounded");
     }
-  }, 1000 * 30); // Update periodically
+  }, 1000 * 60); // Update periodically
   $scope.update();
   $scope.msg = "";
+  // Push changes from the database
   $scope.save = function () {
     $scope.noEdit();
     $http.post('/put/', $scope.machines).then(function (data) {
@@ -31,6 +32,7 @@ app.controller('controller', function ($scope, $http) {
       if ($scope.machines[i].name === machine) {
         $scope.machines[i].available = false;
         $scope.machines[i].reservedBy = name;
+        $scope.machines[i].reservedAt = new Date().getTime();
       }
     }
   };
@@ -40,6 +42,8 @@ app.controller('controller', function ($scope, $http) {
       if ($scope.machines[i].name === machine) {
         $scope.machines[i].available = true;
         $scope.machines[i].reservedBy = "";
+        $scope.machines[i].reservedAt = undefined;
+        return;
       }
     }
   };
@@ -75,7 +79,7 @@ $(document).ready(function () {
     delay: 50
   });
   if (getData("auto_update") === "true") document.getElementById('autoUpdate').setAttribute("checked", true);
-  else document.getElementById("autoUpdate").removeAttribute("checked");
+  else if (getData("auto_update") === "false") document.getElementById("autoUpdate").removeAttribute("checked");
   const iEl = $("#searchbox").find("i").first();
   const animationLength = 1000;
   iEl.click(function (e) {

@@ -74,7 +74,7 @@
                 <input type="text" ng-show="machine.edit" ng-model="machine.location" />
               </td>
               <td>
-                <span ng-show="!machine.edit">{{machine.reservedBy}}</span>
+                <span ng-show="!machine.edit">{{machine.reservedBy}}</span><span ng-show="machine.reservedAt"> on {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span>
               </td>
               <td>
                 <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
@@ -90,8 +90,8 @@
       </div>
       <div class="row" style="text-align:center;">
         <label class="display-text">Autoupdate</label>
-        <label class="switch tooltipped" style="height:15px;" data-tooltip="Auto Update From Database every 30 seconds">
-          <input type="checkbox" id="autoUpdate" onclick="toggleUpdate()">
+        <label class="switch tooltipped" style="height:15px;" data-tooltip="Auto Update From Database once a minute">
+          <input type="checkbox" id="autoUpdate" checked onclick="toggleUpdate()">
           <div class="slider round"></div>
         </label>
         <button class="btn waves-effect waves-teal btn-flat tooltipped" style="padding-left:20px;padding-right:20px;" data-tooltip="Sync with Database"
