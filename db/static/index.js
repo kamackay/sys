@@ -4,6 +4,7 @@ app.controller('controller', function ($scope, $http) {
   $scope.update = function () {
     $http.get('/get/').then(function (data) {
       $scope.machines = data.data;
+      Materialize.toast("Updated from database", 2500, "rounded");
     });
   };
   // remove all of the edit flags from the data
@@ -13,7 +14,6 @@ app.controller('controller', function ($scope, $http) {
   window.setInterval(() => {
     if (document.getElementById('autoUpdate').checked) {
       $scope.update();
-      Materialize.toast("Updated from database", 2500, "rounded");
     }
   }, 1000 * 60); // Update periodically
   $scope.update();
@@ -73,6 +73,7 @@ app.controller('controller', function ($scope, $http) {
   };
 });
 
+// Stuff to do once the full page load is done
 $(document).ready(function () {
   $('[data-toggle="tooltip"]').tooltip();
   $('.tooltipped').tooltip({

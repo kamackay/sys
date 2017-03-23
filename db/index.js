@@ -17,13 +17,16 @@ jsonfile.readFile("./data.json", function (err, obj) {
 app.use(bodyParser.json());
 app.use("/get*", function (req, res, next) {
   res.json(data.machines);
+  console.log("Get Request");
 })
 app.use("/put*", function (req, res, next) {
   data.machines = req.body;
   res.json({});
   jsonfile.writeFile("./data.json", data, function (err) {
     if (err) console.log(err);
-    else console.log("Saved successfully")
+    else {
+      console.log("Saved successfully");
+    }
   });
 });
 var port = process.env.PORT || 5555;
