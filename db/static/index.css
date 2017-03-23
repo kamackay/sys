@@ -111,6 +111,7 @@ body#body {
 
 #body .btn {
   text-transform: none;
+  overflow: hidden;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -135,4 +136,14 @@ body#body {
   width: 0px;
   font-size: 20px;
   max-height: 25px;
+}
+
+table {
+  table-layout: fixed;
+}
+
+.table-container {
+  height: 65vh;
+  overflow-y: auto;
+  margin-bottom: 25px;
 }

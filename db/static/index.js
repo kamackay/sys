@@ -23,7 +23,7 @@ app.controller('controller', function ($scope, $http) {
     });
   };
   $scope.reserve = function (machine, name) {
-    if (name === undefined) name = prompt('What is your name?', 'Mikey Mike and the Funky Bunch')
+    if (name === undefined) name = prompt('What is your name?', 'Machine Name')
     for (var i = 0; i < $scope.machines.length; i++) {
       if ($scope.machines[i].name === machine) {
         $scope.machines[i].available = false;

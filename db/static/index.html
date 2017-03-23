@@ -36,51 +36,58 @@
   <div class="container">
     <div class="row"><span id="searchbox"><i class="material-icons" ng-click="search.$=''">search</i><input type="text" id="searchInput" ng-model="search.$" /></span></div>
     <form>
-      <table class="table table-striped table-hover table-bordered">
-        <thead class="noselect">
-          <tr>
-            <th>Machine Name</th>
-            <th>Machine Type</th>
-            <th>Location</th>
-            <th>Claimed By</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="machine in machines | filter:search:strict" ng-class="{true:'success', false:'warning'}[machine.available]">
-            <td>
-              <span ng-show="!machine.edit">{{machine.name}}</span>
-              <input type="text" ng-show="machine.edit" ng-model="machine.name" />
-            </td>
-            <td>
-              <span ng-show="!machine.edit">{{machine.type}}</span>
-              <input type="text" ng-show="machine.edit" ng-model="machine.type" />
-            </td>
-            <td>
-              <span ng-show="!machine.edit">{{machine.location}}</span>
-              <input type="text" ng-show="machine.edit" ng-model="machine.location" />
-            </td>
-            <td>
-              <span ng-show="!machine.edit">{{machine.reservedBy}}</span>
-            </td>
-            <td>
-              <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
-                title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
-              <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
-              <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
-              <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red" tooltipped data-tooltip="Delete {{machine.name}}"
-                title="Delete {{machine.name}}"><i class="material-icons">clear</i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="panel panel-default">
+        <table class="table table-condensed table-striped">
+          <thead class="noselect">
+            <tr>
+              <th>Machine Name</th>
+              <th>Machine Type</th>
+              <th>Location</th>
+              <th>Claimed By</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-container">
+        <table class="table table-striped table-hover table-bordered">
+          <tbody>
+            <tr ng-repeat="machine in machines | filter:search:strict" ng-class="{true:'success', false:'warning'}[machine.available]">
+              <td>
+                <span ng-show="!machine.edit">{{machine.name}}</span>
+                <input type="text" ng-show="machine.edit" ng-model="machine.name" />
+              </td>
+              <td>
+                <span ng-show="!machine.edit">{{machine.type}}</span>
+                <input type="text" ng-show="machine.edit" ng-model="machine.type" />
+              </td>
+              <td>
+                <span ng-show="!machine.edit">{{machine.location}}</span>
+                <input type="text" ng-show="machine.edit" ng-model="machine.location" />
+              </td>
+              <td>
+                <span ng-show="!machine.edit">{{machine.reservedBy}}</span>
+              </td>
+              <td>
+                <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
+                  title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
+                <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
+                <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
+                <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red" tooltipped data-tooltip="Delete {{machine.name}}"
+                  title="Delete {{machine.name}}"><i class="material-icons">clear</i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="row" style="text-align:center;">
         <label>Autoupdate</label>
         <label class="switch tooltipped" style="height:15px;" data-tooltip="Auto Update From Database every 30 seconds">
           <input type="checkbox" id="autoUpdate" onclick="toggleUpdate()">
           <div class="slider round"></div>
         </label>
-        <button class="btn waves-effect waves-teal btn-flat tooltipped" style="padding-left:20px;padding-right:20px;" data-tooltip="Sync with Database" ng-click="update()"><i class="material-icons">sync</i></button>
+        <button class="btn waves-effect waves-teal btn-flat tooltipped" style="padding-left:20px;padding-right:20px;" data-tooltip="Sync with Database"
+          ng-click="update()"><i class="material-icons">sync</i></button>
         <button class="btn btn-lg btn-primary tooltipped" style="width:50%;" ng-click="save()" data-tooltip="Save changes to Database">Save</button>
       </div>
     </form>
