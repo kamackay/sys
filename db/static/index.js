@@ -38,6 +38,7 @@ app.controller('controller', function ($scope, $http) {
   };
   // Release A Machine
   $scope.release = function (machine) {
+    // Find the machine by it's name and release it
     for (var i = 0; i < $scope.machines.length; i++) {
       if ($scope.machines[i].name === machine) {
         $scope.machines[i].available = true;
@@ -47,6 +48,7 @@ app.controller('controller', function ($scope, $http) {
       }
     }
   };
+  // Add a machine to the list
   $scope.add = function () {
     var machineName = prompt("Machine Name", "");
     // Check to see if that machine name exists already
@@ -81,7 +83,7 @@ $(document).ready(function () {
   });
   if (getData("auto_update") === "true") document.getElementById('autoUpdate').setAttribute("checked", true);
   else if (getData("auto_update") === "false") document.getElementById("autoUpdate").removeAttribute("checked");
-  const iEl = $("#searchbox").find("i").first();
+  /*const iEl = $("#searchbox").find("i").first();
   const animationLength = 1000;
   iEl.click(function (e) {
     const searchInput = $("#searchInput");
@@ -123,7 +125,7 @@ $(document).ready(function () {
       });
     }
   });
-  $("#searchInput").attr("state", "closed");
+  $("#searchInput").attr("state", "closed");/**/
   $(window).resize(function () {
     const reasonLabel = $("reasonLabel");
     if ($(window).width() < 900) {
