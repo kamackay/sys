@@ -8,7 +8,9 @@
 .noselect *,
 .btn,
 button,
-#toast-container * {
+#toast-container *,
+.display-text,
+.display-text * {
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -146,4 +148,8 @@ table {
   height: 65vh;
   overflow-y: auto;
   margin-bottom: 25px;
+}
+
+.display-text {
+  cursor: default;
 }

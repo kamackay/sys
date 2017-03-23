@@ -2,15 +2,22 @@
 <html ng-app="module" ng-controller="controller">
 
 <head>
+  <!-- Using jQuery, but in protest -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!-- Google Material Font stylesheet -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <!-- Default Bootstrap files -->
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
     crossorigin="anonymous"></script>
+  <!-- Google's Material Icons stuff -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Basic Angular js dependency -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+  <!-- Materialize UI files, to make things prettier -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+  <!-- Materialize Angular plugin -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
   <meta charset=utf-8 />
   <title>Test Machines</title>
@@ -20,10 +27,11 @@
 </head>
 
 <body id="body">
+  <!-- Navbar -->
   <nav class="navbar navbar-default navbar-fixed-top" style="background-color:#555555">
     <div class="container">
       <div class="navbar-header">
-        <p style="display:inline;font-size:30px;">Test Machines</p>
+        <p style="display:inline;font-size:30px;cursor:default;" class="display-text">Test Machines</p>
         <i style="display:inline;margin-left:15px;" id="reasonLabel">For while <a style="color:#26a69a;text-decoration:underline;" href="http://train7xp:8079/">train7xp</a> is down</i>
       </div>
       <form class="navbar-form navbar-right" id="navRight">
@@ -33,6 +41,7 @@
       </form>
     </div>
   </nav>
+  <!-- Actual Page Contents -->
   <div class="" style="padding-right:50px;padding-left:50px;">
     <form style="margin-top:100px;">
       <div class="panel panel-default" style="margin-bottom:0px;">
@@ -80,7 +89,7 @@
         </table>
       </div>
       <div class="row" style="text-align:center;">
-        <label>Autoupdate</label>
+        <label class="display-text">Autoupdate</label>
         <label class="switch tooltipped" style="height:15px;" data-tooltip="Auto Update From Database every 30 seconds">
           <input type="checkbox" id="autoUpdate" onclick="toggleUpdate()">
           <div class="slider round"></div>
@@ -91,7 +100,7 @@
       </div>
     </form>
     <br>
-    <h5><i>Do no evil (Don't steal machines)</i></h5>
+    <h5 class="display-text"><i>Do no evil (Don't steal machines)</i></h5>
   </div>
   <div class="fixed-action-btn tooltipped noselect" data-position="left" data-delay="50" data-tooltip="Add Machine">
     <a class="btn-floating btn-large red" ng-click="add()">
@@ -104,16 +113,6 @@
       <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>-->
     </ul>
   </div>
-  <form id="editForm">
-    <div class="row">
-      <h2 style="display:inline;">Edit <span class="machineName"></span></h2>
-      <button onclick="document.getElementById('editForm').removeAttribute('style')" style="display:inline;float:right;" class="btn btn-xs red"><i class="material-icons">clear</i></button>
-    </div>
-    <label>Name</label><input class="machineName" type="text" />
-    <label>Type</label><input class="machineType" type="text" />
-    <label>Location</label><input class="machineLocation" type="text" />
-    <button class="btn" id="editForm_submit">Submit</button>
-  </form>
 </body>
 
 </html>
