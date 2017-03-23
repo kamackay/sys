@@ -3,17 +3,13 @@
 
 <head>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.0-beta.1/jquery-ui.min.js" integrity="sha256-WyjlLy3rvVSitHOXMctYkMCOU6GAletPg+qniNKLCQM="
-    crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
     crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
-  <!---->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
-  <!---->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
   <meta charset=utf-8 />
@@ -24,9 +20,20 @@
 </head>
 
 <body id="body">
+  <nav class="navbar navbar-default navbar-fixed-top" style="background-color:#555555">
+    <div class="container">
+      <div class="navbar-header">
+        <p style="display:inline;font-size:30px;">Test Machines</p>
+        <i style="display:inline;margin-left:15px;">For while <a style="color:#26a69a;text-decoration:underline;" href="http://train7xp:8079/">train7xp</a> is down</i>
+      </div>
+      <form class="navbar-form navbar-right">
+        <div class="form-group">
+          <input type="text" style="color:white;" class="form-control" ng-model="search.$" placeholder="Search">
+        </div>
+      </form>
+    </div>
+  </nav>
   <div class="container">
-    <h1 style="display:inline-block;" class="noselect">Test Machines</h1>
-    <h5 style="display:inline-block;margin-left:15px;" class="noselect"><i>For while <a href="http://train7xp:8079/">train7xp</a> is down</i></h5>
     <div class="row"><span id="searchbox"><i class="material-icons" ng-click="search.$=''">search</i><input type="text" id="searchInput" ng-model="search.$" /></span></div>
     <form>
       <table class="table table-striped table-hover table-bordered">
@@ -73,7 +80,7 @@
           <input type="checkbox" id="autoUpdate" onclick="toggleUpdate()">
           <div class="slider round"></div>
         </label>
-        <button class="btn waves-effect waves-teal btn-flat tooltipped" data-tooltip="Sync with Database" ng-click="update()"><i class="material-icons">sync</i></button>
+        <button class="btn waves-effect waves-teal btn-flat tooltipped" style="padding-left:20px;padding-right:20px;" data-tooltip="Sync with Database" ng-click="update()"><i class="material-icons">sync</i></button>
         <button class="btn btn-lg btn-primary tooltipped" style="width:50%;" ng-click="save()" data-tooltip="Save changes to Database">Save</button>
       </div>
     </form>

@@ -42,6 +42,7 @@ button,
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 }
 
 .slider:before {
@@ -119,15 +120,16 @@ body#body {
   float: right;
   padding: 10px;
   border-radius: 10px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 }
 
-#searchbox>i{
+#searchbox>i {
   font-size: 30px;
   cursor: pointer;
   color: black;
 }
 
-#searchInput{
+#searchInput {
   margin-bottom: 0px;
   display: inline;
   width: 0px;
