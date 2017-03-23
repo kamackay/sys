@@ -38,15 +38,26 @@
         </thead>
         <tbody>
           <tr ng-repeat="machine in machines" ng-class="{true:'success', false:'warning'}[machine.available]">
-            <td>{{machine.name}}</td>
-            <td>{{machine.type}}</td>
-            <td>{{machine.location}}</td>
-            <td>{{machine.reservedBy}}</td>
+            <td>
+              <span ng-show="!machine.edit">{{machine.name}}</span>
+              <input type="text" ng-show="machine.edit" ng-model="machine.name" />
+            </td>
+            <td>
+              <span ng-show="!machine.edit">{{machine.type}}</span>
+              <input type="text" ng-show="machine.edit" ng-model="machine.type" />
+            </td>
+            <td>
+              <span ng-show="!machine.edit">{{machine.location}}</span>
+              <input type="text" ng-show="machine.edit" ng-model="machine.location" />
+            </td>
+            <td>
+              <span ng-show="!machine.edit">{{machine.reservedBy}}</span>
+            </td>
             <td>
               <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
                 title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
               <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
-              <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="edit(machine)"><i class="material-icons">mode_edit</i></button>
+              <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
               <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red" tooltipped data-tooltip="Delete {{machine.name}}"
                 title="Delete {{machine.name}}"><i class="material-icons">clear</i></button>
             </td>

@@ -5,15 +5,19 @@ app.controller('controller', function ($scope, $http) {
       $scope.machines = data.data;
     });
   };
+  $scope.noEdit = function () {
+    for (var x = 0; x < $scope.machines.length; x++) $scope.machines[x].edit = false;
+  };
   window.setInterval(() => {
     if (document.getElementById('autoUpdate').checked) {
       $scope.update();
-      Materialize.toast("Updated from database", 2500);
+      Materialize.toast("Updated from database", 2500, "rounded");
     }
   }, 1000 * 30); // Update periodically
   $scope.update();
   $scope.msg = "";
   $scope.save = function () {
+    $scope.noEdit();
     $http.post('/put/', $scope.machines).then(function (data) {
       Materialize.toast("Saved to database", 2500, "rounded");
     });
@@ -95,9 +99,8 @@ $(document).ready(function () {
   $('.tooltipped').tooltip({
     delay: 50
   });
-  console.log("Page Ready");
-  if (getData("auto_update") === true) document.getElementById('autoUpdate').checked = true;
-  else document.getElementById("autoUpdate").checked = false;
+  if (getData("auto_update") === "true") document.getElementById('autoUpdate').setAttribute("checked", true);
+  else document.getElementById("autoUpdate").removeAttribute("checked");
 });
 
 function storeData(e, o) {
@@ -109,5 +112,12 @@ function getData(e) {
 }
 
 function toggleUpdate() {
-  storeData("auto_update", document.getElementById("autoUpdate").checked);
+  const el = document.getElementById("autoUpdate");
+  if (el.hasAttribute("checked")) {
+    el.removeAttribute("checked")
+    storeData("auto_update", "false");
+  } else {
+    el.setAttribute("checked", "true")
+    storeData("auto_update", "true");
+  }
 }
