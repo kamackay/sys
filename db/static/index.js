@@ -149,6 +149,9 @@ $(document).ready(function () {
     if ($(window).width() < 900) {
       $("#navRight").hide();
       $("#reasonLabel").hide();
+    } else if ($(window).width() < 1100) {
+      $("#navRight").show();
+      $("#reasonLabel").hide();
     } else {
       $("#navRight").show();
       $("#reasonLabel").show();
