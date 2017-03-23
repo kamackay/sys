@@ -110,6 +110,8 @@ body#body {
 
 #body .btn {
   text-transform: none;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #searchbox {
@@ -120,14 +122,15 @@ body#body {
 }
 
 #searchbox>i{
-  font-size: 26px;
+  font-size: 30px;
   cursor: pointer;
-  background-color: rgba(244, 67, 54, 0);
+  color: black;
 }
 
 #searchInput{
   margin-bottom: 0px;
   display: inline;
   width: 0px;
+  font-size: 20px;
   max-height: 25px;
 }

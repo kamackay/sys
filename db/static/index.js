@@ -105,10 +105,9 @@ $(document).ready(function () {
   const animationLength = 1000;
   iEl.click(function (e) {
     const searchInput = $("#searchInput");
-    searchInput.val("")
     if (searchInput.attr("state") === "closed") {
       searchInput.animate({
-        width: "35vw"
+        width: "35vw", padding: "2px"
       }, {
         duration: animationLength,
         complete: function () {
@@ -116,7 +115,7 @@ $(document).ready(function () {
         }
       });
       iEl.animate({
-        backgroundColor: "rgba(244, 67, 54, 1)"
+        color: "#F44336"
       }, {
         duration: animationLength,
         complete: function () {
@@ -125,7 +124,7 @@ $(document).ready(function () {
       });
     } else {
       searchInput.animate({
-        width: '0px'
+        width: '0px', padding: "0px"
       }, {
         duration: animationLength,
         complete: function () {
@@ -133,7 +132,7 @@ $(document).ready(function () {
         }
       });
       iEl.animate({
-        backgroundColor: "white"
+        color: "black"
       }, {
         duration: animationLength,
         complete: function () {
