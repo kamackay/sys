@@ -52,6 +52,7 @@
               <th>Machine Type</th>
               <th>Location</th>
               <th>Claimed By</th>
+              <th>Notes</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -74,7 +75,11 @@
                 <input type="text" ng-show="machine.edit" ng-model="machine.location" />
               </td>
               <td>
-                <span ng-show="!machine.edit">{{machine.reservedBy}}</span><span ng-show="machine.reservedAt"> on {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                <span>{{machine.reservedBy}}<span ng-show="machine.reservedAt">&nbsp;- {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
+              </td>
+              <td>
+                <span ng-show="!machine.edit">{{machine.notes}}</span>
+                <input type="text" ng-show="machine.edit" ng-model="machine.notes" />
               </td>
               <td>
                 <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
