@@ -108,13 +108,14 @@
           <input type="checkbox" id="autoUpdate" checked onclick="toggleUpdate()">
           <div class="slider round"></div>
         </label>
+        <!-- Update Button -->
         <button class="btn waves-effect waves-teal btn-flat tooltipped" style="padding-left:20px;padding-right:20px;" data-tooltip="Sync with Database"
           ng-click="update()"><i class="material-icons">sync</i></button>
         <button class="btn btn-lg btn-primary tooltipped" style="width:50%;" ng-click="save()" data-tooltip="Save changes to Database">Save</button>
       </div>
     </form>
     <br>
-    <h5 class="display-text"><i>Do no evil (Don't steal machines)</i></h5>
+    <h5 class="display-text" tooltipped data-tooltip="Like Mike" data-position="top"><i>Do no evil (Don't steal machines)</i></h5>
   </div>
   <div class="fixed-action-btn tooltipped noselect" data-position="left" data-delay="50" data-tooltip="Add Machine">
     <a class="btn-floating btn-large red" ng-click="add()">

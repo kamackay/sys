@@ -2,7 +2,7 @@ var app = angular.module('module', ["ui.materialize"]);
 app.controller('controller', function ($scope, $http) {
   // Pull from the database
   $scope.update = function () {
-    $http.get('/get/').then(function (data) {
+    $http.get('/machines/get').then(function (data) {
       $scope.machines = data.data;
       Materialize.toast("Updated from database", 2500, "rounded");
     });
@@ -21,32 +21,30 @@ app.controller('controller', function ($scope, $http) {
   // Push changes from the database
   $scope.save = function () {
     $scope.noEdit();
-    $http.post('/put/', $scope.machines).then(function (data) {
+    $http.post('/machines/put', $scope.machines).then(function (data) {
       Materialize.toast("Saved to database", 2500, "rounded");
     });
   };
   // Reserve A Machine
   $scope.reserve = function (machine, name) {
-    if (name === undefined) name = prompt('What is your name?', 'Name')
-    for (var i = 0; i < $scope.machines.length; i++) {
-      if ($scope.machines[i].name === machine) {
-        $scope.machines[i].available = false;
-        $scope.machines[i].reservedBy = name;
-        $scope.machines[i].reservedAt = new Date().getTime();
-      }
-    }
+    $http.post("/machines/update", {
+      reservedBy: prompt('What is your name?', 'Name'),
+      action: "reserve",
+      machineName: machine
+    }).then(function (data) {
+      console.log(data);
+      $scope.update();
+    });
   };
   // Release A Machine
   $scope.release = function (machine) {
-    // Find the machine by it's name and release it
-    for (var i = 0; i < $scope.machines.length; i++) {
-      if ($scope.machines[i].name === machine) {
-        $scope.machines[i].available = true;
-        $scope.machines[i].reservedBy = "";
-        $scope.machines[i].reservedAt = undefined;
-        return;
-      }
-    }
+    $http.post("/machines/update", {
+      action: "release",
+      machineName: machine
+    }).then(function (data) {
+      console.log(data);
+      $scope.update();
+    });
   };
   // Add a machine to the list
   $scope.add = function () {
@@ -83,49 +81,6 @@ $(document).ready(function () {
   });
   if (getData("auto_update") === "true") document.getElementById('autoUpdate').setAttribute("checked", true);
   else if (getData("auto_update") === "false") document.getElementById("autoUpdate").removeAttribute("checked");
-  /*const iEl = $("#searchbox").find("i").first();
-  const animationLength = 1000;
-  iEl.click(function (e) {
-    const searchInput = $("#searchInput");
-    if (searchInput.attr("state") === "closed") {
-      searchInput.animate({
-        width: "35vw",
-        padding: "2px"
-      }, {
-        duration: animationLength,
-        complete: function () {
-          searchInput.attr("state", "open");
-        }
-      });
-      iEl.animate({
-        color: "#F44336"
-      }, {
-        duration: animationLength,
-        complete: function () {
-          iEl.html("clear");
-        }
-      });
-    } else {
-      searchInput.animate({
-        width: '0px',
-        padding: "0px"
-      }, {
-        duration: animationLength,
-        complete: function () {
-          searchInput.attr("state", "closed");
-        }
-      });
-      iEl.animate({
-        color: "black"
-      }, {
-        duration: animationLength,
-        complete: function () {
-          iEl.html("search");
-        }
-      });
-    }
-  });
-  $("#searchInput").attr("state", "closed");/**/
   $(window).resize(function () {
     const reasonLabel = $("reasonLabel");
     if ($(window).width() < 900) {
