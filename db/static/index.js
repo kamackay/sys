@@ -101,6 +101,48 @@ $(document).ready(function () {
   });
   if (getData("auto_update") === "true") document.getElementById('autoUpdate').setAttribute("checked", true);
   else document.getElementById("autoUpdate").removeAttribute("checked");
+  const iEl = $("#searchbox").find("i").first();
+  const animationLength = 1000;
+  iEl.click(function (e) {
+    const searchInput = $("#searchInput");
+    searchInput.val("")
+    if (searchInput.attr("state") === "closed") {
+      searchInput.animate({
+        width: "35vw"
+      }, {
+        duration: animationLength,
+        complete: function () {
+          searchInput.attr("state", "open");
+        }
+      });
+      iEl.animate({
+        backgroundColor: "rgba(244, 67, 54, 1)"
+      }, {
+        duration: animationLength,
+        complete: function () {
+          iEl.html("clear");
+        }
+      });
+    } else {
+      searchInput.animate({
+        width: '0px'
+      }, {
+        duration: animationLength,
+        complete: function () {
+          searchInput.attr("state", "closed");
+        }
+      });
+      iEl.animate({
+        backgroundColor: "white"
+      }, {
+        duration: animationLength,
+        complete: function () {
+          iEl.html("search");
+        }
+      });
+    }
+  });
+  $("#searchInput").attr("state", "closed");
 });
 
 function storeData(e, o) {

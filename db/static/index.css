@@ -16,7 +16,8 @@ button,
   -o-user-select: none;
 }
 
-.noselect, .noselect *{
+.noselect,
+.noselect * {
   cursor: default;
 }
 
@@ -109,4 +110,24 @@ body#body {
 
 #body .btn {
   text-transform: none;
+}
+
+#searchbox {
+  background-color: white;
+  float: right;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#searchbox>i{
+  font-size: 26px;
+  cursor: pointer;
+  background-color: rgba(244, 67, 54, 0);
+}
+
+#searchInput{
+  margin-bottom: 0px;
+  display: inline;
+  width: 0px;
+  max-height: 25px;
 }
