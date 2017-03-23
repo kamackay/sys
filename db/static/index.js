@@ -107,7 +107,8 @@ $(document).ready(function () {
     const searchInput = $("#searchInput");
     if (searchInput.attr("state") === "closed") {
       searchInput.animate({
-        width: "35vw", padding: "2px"
+        width: "35vw",
+        padding: "2px"
       }, {
         duration: animationLength,
         complete: function () {
@@ -124,7 +125,8 @@ $(document).ready(function () {
       });
     } else {
       searchInput.animate({
-        width: '0px', padding: "0px"
+        width: '0px',
+        padding: "0px"
       }, {
         duration: animationLength,
         complete: function () {
@@ -142,6 +144,17 @@ $(document).ready(function () {
     }
   });
   $("#searchInput").attr("state", "closed");
+  $(window).resize(function () {
+    const reasonLabel = $("reasonLabel");
+    if ($(window).width() < 900) {
+      $("#navRight").hide();
+      $("#reasonLabel").hide();
+    } else {
+      $("#navRight").show();
+      $("#reasonLabel").show();
+    }
+  });
+  $(window).resize();
 });
 
 function storeData(e, o) {

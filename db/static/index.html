@@ -24,9 +24,9 @@
     <div class="container">
       <div class="navbar-header">
         <p style="display:inline;font-size:30px;">Test Machines</p>
-        <i style="display:inline;margin-left:15px;">For while <a style="color:#26a69a;text-decoration:underline;" href="http://train7xp:8079/">train7xp</a> is down</i>
+        <i style="display:inline;margin-left:15px;" id="reasonLabel">For while <a style="color:#26a69a;text-decoration:underline;" href="http://train7xp:8079/">train7xp</a> is down</i>
       </div>
-      <form class="navbar-form navbar-right">
+      <form class="navbar-form navbar-right" id="navRight">
         <div class="form-group">
           <input type="text" style="color:white;" class="form-control" ng-model="search.$" placeholder="Search">
         </div>
@@ -34,9 +34,8 @@
     </div>
   </nav>
   <div class="container">
-    <div class="row"><span id="searchbox"><i class="material-icons" ng-click="search.$=''">search</i><input type="text" id="searchInput" ng-model="search.$" /></span></div>
-    <form>
-      <div class="panel panel-default">
+    <form style="margin-top:100px;">
+      <div class="panel panel-default" style="margin-bottom:0px;">
         <table class="table table-condensed table-striped">
           <thead class="noselect">
             <tr>
