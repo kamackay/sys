@@ -130,6 +130,6 @@ app.use("/machines/put", function (req, res, next) {
   res.send("Accepting Data on blind faith");
   saveData();
 });
-var port = process.env.PORT || 5555;
+var port = process.env.PORT || 80;
 app.listen(port);
 console.log("App Listening on port " + port);
