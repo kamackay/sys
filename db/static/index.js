@@ -2,7 +2,7 @@ var app = angular.module('module', ["ui.materialize"]);
 app.controller('controller', function ($scope, $http) {
   // Pull from the database
   $scope.update = function () {
-    $http.get('/machines/get').then(function (data) {
+    $http.get('/machines').then(function (data) {
       $scope.machines = data.data;
       // Materialize.toast("Updated from database", 2500, "rounded");
     });
@@ -74,6 +74,10 @@ app.controller('controller', function ($scope, $http) {
       }
     }
   };
+
+  $scope.getRDP = function (machine) {
+    openInNewTab(window.location + "rdp/" + machine.name);
+  }
 });
 
 // Stuff to do once the full page load is done
@@ -106,6 +110,11 @@ function storeData(e, o) {
 
 function getData(e) {
   return 'undefined' != typeof Storage ? localStorage.getItem(e) : null
+}
+
+function openInNewTab(url) {
+	var e = window.open(url, '_blank')
+	e.focus()
 }
 
 function toggleUpdate() {

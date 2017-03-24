@@ -69,7 +69,7 @@ namespace sys {
       }));
       keyTracker.Add(Keys.RControlKey, new KeyTrackerHandler(delegate {
         string num = Microsoft.VisualBasic.Interaction.InputBox("Which VM?", "Which VM?", "1");
-        if (!string.IsNullOrEmpty(num) && num.Length == 1) {
+        if (!string.IsNullOrEmpty(num) && (num.Length == 1 || num.Length == 2)) {
           try {
             string cmd = string.Format("\\\\nc45lta3virt{0}\\c$\\", num);
             if (Directory.Exists(cmd))

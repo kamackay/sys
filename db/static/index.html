@@ -35,9 +35,23 @@
       width: 175px;
     }
 
+    table th.actions,
+    table td.actions {
+      width: 200px;
+    }
+
     div.table-over {
       overflow-x: auto;
       min-width: 1000px;
+    }
+
+    .noscroll {
+      overflow: hidden;
+    }
+
+    #body button.btn,
+    #body button.btn * {
+      cursor: pointer;
     }
   </style>
 </head>
@@ -48,7 +62,7 @@
     <div class="container">
       <div class="navbar-header">
         <p style="display:inline;font-size:30px;cursor:default;" class="display-text">Test Machines</p>
-        <i style="display:inline;margin-left:15px;" id="reasonLabel">For while <a style="color:#26a69a;text-decoration:underline;" href="http://train7xp:8079/">train7xp</a> is down</i>
+        <i style="display:inline;margin-left:15px;" id="reasonLabel">For while <a style="color:#26a69a;text-decoration:underline;" href="" onclick="openInNewTab('http://train7xp:8079/')">train7xp</a> is down</i>
       </div>
       <form class="navbar-form navbar-right" id="navRight">
         <div class="form-group">
@@ -62,7 +76,7 @@
     <form style="margin-top:100px;">
       <div class="table-over">
         <div class="panel panel-default" style="margin-bottom:0px;">
-          <table class="table table-condensed table-striped">
+          <table class="table table-condensed table-striped table-bordered">
             <thead class="noselect">
               <tr>
                 <th class="big">Machine Name</th>
@@ -72,7 +86,7 @@
                 <th>Location</th>
                 <th>Claimed By</th>
                 <th>Notes</th>
-                <th class="big">Actions</th>
+                <th class="actions">Actions</th>
               </tr>
             </thead>
           </table>
@@ -117,13 +131,15 @@
                   <input type="text" ng-show="machine.edit" ng-model="machine.notes" />
                 </td>
                 <!-- Action Buttons -->
-                <td class="noselect big">
+                <td class="noselect actions">
                   <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
                     title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
                   <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
                   <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
                   <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red" tooltipped data-tooltip="Delete {{machine.name}}"
                     title="Delete {{machine.name}}"><i class="material-icons">clear</i></button>
+                  <button style="float:right;" class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Get RDP for {{machine.name}}"
+                    ng-click="getRDP(machine)"><i class="material-icons">get_app</i></button>
                 </td>
               </tr>
             </tbody>
@@ -146,6 +162,7 @@
     </form>
     <br>
     <span style="font-size:20px;" class="display-text" tooltipped data-tooltip="Like Mike does" data-position="top"><i>Do no evil (Don't steal machines)</i></span>
+    <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;" href="" onclick="openInNewTab('./machines?prettyPrint')">View All Raw Data</a></span>
   </div>
   <div class="fixed-action-btn tooltipped noselect" data-position="left" data-delay="50" data-tooltip="Add Machine">
     <a class="btn-floating btn-large red" ng-click="add()">

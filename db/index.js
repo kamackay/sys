@@ -31,11 +31,39 @@ function saveData() {
   });
 }
 app.use(bodyParser.json());
-app.use("/machines/get*", function (req, res, next) {
-  res.json(data.machines);
-  console.log("Get Request");
+app.get("/machines", function (req, res, next) {
+  if (req.query.prettyPrint !== undefined) {
+    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
+      JSON.stringify(data.machines, null, 4) + "</textarea></body></html>")
+  } else {
+    res.json(data.machines);
+    console.log("Get Request");
+  }
 });
-app.use("/machines/update*", function (req, res, next) {
+app.get("/machines/:name", function (req, res, next) {
+  var machine = undefined;
+  const machineName = req.params.name;
+  for (var x = 0; x < data.machines.length; x++)
+    if (data.machines[x].name.toLowerCase() === machineName.toLowerCase()) machine = data.machines[x];
+  if (machine === undefined) {
+    res.status(404).send("Unable to find a machine named " + machineName);
+    return;
+  }
+  if (req.query.prettyPrint !== undefined) {
+    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
+      JSON.stringify(machine, null, 4) + "</textarea></body></html>")
+  } else {
+    res.json(machine);
+    console.log("Get Request");
+  }
+});
+app.get("/rdp/:address", function (req, res, next) {
+  console.log("Request to get RDP for " + req.params.address);
+  res.setHeader('Content-Type', 'application/x-rdp');
+  res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.address + '.rdp');
+  res.end("full address:s:" + req.params.address + ":3389\r\nprompt for credentials:i:1");
+});
+app.use("/machines/update", function (req, res, next) {
   console.log("Start Update");
   const body = req.body;
   switch (body.action) {
@@ -97,7 +125,7 @@ app.use("/machines/update*", function (req, res, next) {
   console.log("Unsuccessful update");
   res.json({});
 });
-app.use("/machines/put*", function (req, res, next) {
+app.use("/machines/put", function (req, res, next) {
   data.machines = req.body;
   res.send("Accepting Data on blind faith");
   saveData();
