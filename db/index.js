@@ -6,12 +6,14 @@ app.use(express.static(__dirname + '/static'));
 app.use(bodyParser.urlencoded({
   'extended': 'true'
 }));
+
 data = {};
 jsonfile.readFile("./data.json", function (err, obj) {
   if (err) console.log(err);
   else {
     data = obj;
-    console.log(JSON.stringify(obj, null, 4));
+    //console.log(JSON.stringify(obj, null, 4));
+    console.log("Data loaded");
   }
 });
 
@@ -38,6 +40,16 @@ app.get("/machines", function (req, res, next) {
   } else {
     res.json(data.machines);
     console.log("Get Request");
+  }
+});
+app.get("/allData", function (req, res, next) {
+  if (req.query.prettyPrint !== undefined || req.query.pretty !== undefined) {
+    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
+      JSON.stringify(data, null, 4) + "</textarea></body></html>");
+    console.log("Request for all data (Pretty)")
+  } else {
+    res.json(data.machines);
+    console.log("Request for all data");
   }
 });
 app.get("/machines/:name", function (req, res, next) {

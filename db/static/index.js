@@ -30,8 +30,10 @@ app.controller('controller', function ($scope, $http) {
   };
   // Reserve A Machine
   $scope.reserve = function (machine, name) {
+    name = name || getData("username") || prompt('What is your name?', '');
+    storeData("username", name);
     $http.post("/machines/update", {
-      reservedBy: prompt('What is your name?', ''),
+      reservedBy: name,
       action: "reserve",
       machineName: machine
     }).then(function (data) {
