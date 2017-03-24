@@ -11,14 +11,15 @@ app.controller('controller', function ($scope, $http) {
   $scope.noEdit = function () {
     for (var x = 0; x < $scope.machines.length; x++) $scope.machines[x].edit = undefined;
   };
-  window.setInterval(() => {
+  $(window).focus(function (){
     if (document.getElementById('autoUpdate').checked) {
       // Don't do the update if one of the machines is being edited
       for (var x = 0; x < $scope.machines.length; x++)
         if ($scope.machines[x].edit) return;
       $scope.update();
+      console.log("Update on focus");
     }
-  }, 1000 * 60); // Update periodically
+  }); // Update when the window gets focus
   $scope.update();
   $scope.msg = "";
   // Push changes from the database
