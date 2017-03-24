@@ -42,6 +42,10 @@ app.get("/machines", function (req, res, next) {
     console.log("Get Request");
   }
 });
+app.post("/setValue", function (req, res, next){
+  var xPath = req.body.xPath;
+
+});
 app.get("/allData", function (req, res, next) {
   if (req.query.prettyPrint !== undefined || req.query.pretty !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
@@ -75,7 +79,7 @@ app.get("/rdp/:address", function (req, res, next) {
   res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.address + '.rdp');
   res.end("full address:s:" + req.params.address + ":3389\r\nprompt for credentials:i:1");
 });
-app.use("/machines/update", function (req, res, next) {
+app.post("/machines/update", function (req, res, next) {
   console.log("Start Update");
   const body = req.body;
   switch (body.action) {
