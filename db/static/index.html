@@ -3,27 +3,42 @@
 
 <head>
   <!-- Using jQuery, but in protest -->
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="./jquery-2.1.1.min.js"></script>
   <!-- Google Material Font stylesheet -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
   <!-- Default Bootstrap files -->
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="./bootstrap.min.css">
+  <script src="./bootstrap.min.js"></script>
   <!-- Google's Material Icons stuff -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="./material-icons.css" rel="stylesheet">
   <!-- Basic Angular js dependency -->
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+  <script src="./angular.min.js"></script>
   <!-- Materialize UI files, to make things prettier -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+  <script src="./materialize.min.js"></script>
+  <link rel="stylesheet" href="./materialize.min.css">
   <!-- Materialize Angular plugin -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
+  <script type="text/javascript" src="./angular-materialize.min.js"></script>
   <meta charset=utf-8 />
   <title>Test Machines</title>
   <link rel="icon" href="./icon.ico">
   <script type="text/javascript" src="./index.js"></script>
   <link rel="stylesheet" href="./index.css">
+  <style>
+    table th.small,
+    table td.small {
+      width: 150px;
+    }
+
+    table th.big,
+    table td.big {
+      width: 175px;
+    }
+
+    div.table-over {
+      overflow-x: auto;
+      min-width: 1000px;
+    }
+  </style>
 </head>
 
 <body id="body">
@@ -44,61 +59,75 @@
   <!-- Actual Page Contents -->
   <div class="" style="padding-right:50px;padding-left:50px;">
     <form style="margin-top:100px;">
-      <div class="panel panel-default" style="margin-bottom:0px;">
-        <table class="table table-condensed table-striped">
-          <thead class="noselect">
-            <tr>
-              <th>Machine Name</th>
-              <th>Machine Type</th>
-              <th>Location</th>
-              <th>Claimed By</th>
-              <th>Notes</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="table-container">
-        <table class="table table-striped table-hover table-bordered">
-          <tbody class="code-font">
-            <!-- For Each Machine -->
-            <tr ng-repeat="machine in machines | filter:search:strict" ng-class="{true:'success', false:'warning'}[machine.available]">
-              <!-- Machine Name -->
-              <td>
-                <span ng-show="!machine.edit">{{machine.name}}</span>
-                <input type="text" ng-show="machine.edit" ng-model="machine.name" />
-              </td>
-              <!-- Machine Type -->
-              <td>
-                <span ng-show="!machine.edit">{{machine.type}}</span>
-                <input type="text" ng-show="machine.edit" ng-model="machine.type" />
-              </td>
-              <!-- Machine Location -->
-              <td>
-                <span ng-show="!machine.edit">{{machine.location}}</span>
-                <input type="text" ng-show="machine.edit" ng-model="machine.location" />
-              </td>
-              <!-- Machine Claimed Info -->
-              <td>
-                <span>{{machine.reservedBy}}<span ng-show="machine.reservedAt">&nbsp;- {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
-              </td>
-              <!-- Machine Notes -->
-              <td>
-                <span ng-show="!machine.edit">{{machine.notes}}</span>
-                <input type="text" ng-show="machine.edit" ng-model="machine.notes" />
-              </td>
-              <!-- Action Buttons -->
-              <td class="noselect">
-                <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
-                  title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
-                <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
-                <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
-                <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red" tooltipped data-tooltip="Delete {{machine.name}}"
-                  title="Delete {{machine.name}}"><i class="material-icons">clear</i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="table-over">
+        <div class="panel panel-default" style="margin-bottom:0px;">
+          <table class="table table-condensed table-striped">
+            <thead class="noselect">
+              <tr>
+                <th class="big">Machine Name</th>
+                <th>Machine Type</th>
+                <th class="small">IP Address</th>
+                <th class="small">Network Type</th>
+                <th>Location</th>
+                <th>Claimed By</th>
+                <th>Notes</th>
+                <th class="big">Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="table-container">
+          <table class="table table-striped table-hover table-bordered">
+            <tbody class="code-font">
+              <!-- For Each Machine -->
+              <tr ng-repeat="machine in machines | filter:search:strict" ng-class="{true:'success', false:'warning'}[machine.available]">
+                <!-- Machine Name -->
+                <td class="big">
+                  <span ng-show="!machine.edit">{{machine.name}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.name" />
+                </td>
+                <!-- Machine Type -->
+                <td>
+                  <span ng-show="!machine.edit">{{machine.type}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.type" />
+                </td>
+                <!-- Machine IP Address -->
+                <td class="small">
+                  <span ng-show="!machine.edit">{{machine.ip}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.ip" />
+                </td>
+                <!-- Network Type -->
+                <td class="small">
+                  <span ng-show="!machine.edit">{{machine.network_type}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.network_type" />
+                </td>
+                <!-- Machine Location -->
+                <td>
+                  <span ng-show="!machine.edit">{{machine.location}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.location" />
+                </td>
+                <!-- Machine Claimed Info -->
+                <td>
+                  <span>{{machine.reservedBy}}<span ng-show="machine.reservedAt">&nbsp;- {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
+                </td>
+                <!-- Machine Notes -->
+                <td>
+                  <span ng-show="!machine.edit">{{machine.notes}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" />
+                </td>
+                <!-- Action Buttons -->
+                <td class="noselect big">
+                  <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
+                    title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
+                  <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
+                  <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
+                  <button ng-click="delete(machine.name)" type="button" style="float:right;" class="btn btn-xs red" tooltipped data-tooltip="Delete {{machine.name}}"
+                    title="Delete {{machine.name}}"><i class="material-icons">clear</i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <!-- Bottom Row of Buttons -->
       <div class="row" style="text-align:center;">

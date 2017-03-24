@@ -4,7 +4,7 @@ app.controller('controller', function ($scope, $http) {
   $scope.update = function () {
     $http.get('/machines/get').then(function (data) {
       $scope.machines = data.data;
-      Materialize.toast("Updated from database", 2500, "rounded");
+      // Materialize.toast("Updated from database", 2500, "rounded");
     });
   };
   // remove all of the edit flags from the data
@@ -13,6 +13,9 @@ app.controller('controller', function ($scope, $http) {
   };
   window.setInterval(() => {
     if (document.getElementById('autoUpdate').checked) {
+      // Don't do the update if one of the machines is being edited
+      for (var x = 0; x < $scope.machines.length; x++)
+        if ($scope.machines[x].edit) return;
       $scope.update();
     }
   }, 1000 * 60); // Update periodically
@@ -28,7 +31,7 @@ app.controller('controller', function ($scope, $http) {
   // Reserve A Machine
   $scope.reserve = function (machine, name) {
     $http.post("/machines/update", {
-      reservedBy: prompt('What is your name?', 'Name'),
+      reservedBy: prompt('What is your name?', ''),
       action: "reserve",
       machineName: machine
     }).then(function (data) {
