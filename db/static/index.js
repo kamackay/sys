@@ -93,16 +93,12 @@ $(document).ready(function () {
   if (getData("auto_update") === "true") document.getElementById('autoUpdate').setAttribute("checked", true);
   else if (getData("auto_update") === "false") document.getElementById("autoUpdate").removeAttribute("checked");
   $(window).resize(function () {
-    const reasonLabel = $("reasonLabel");
     if ($(window).width() < 900) {
       $("#navRight").hide();
-      $("#reasonLabel").hide();
     } else if ($(window).width() < 1100) {
       $("#navRight").show();
-      $("#reasonLabel").hide();
     } else {
       $("#navRight").show();
-      $("#reasonLabel").show();
     }
   });
   $(window).resize();
