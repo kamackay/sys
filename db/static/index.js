@@ -7,12 +7,12 @@ app.controller('controller', function ($scope, $http) {
   // Pull from the database
   $scope.update = function () {
     console.log("start update");
-    $http.get('http://nc45ltgz50q52/machines', {
+    $http.get('/machines', {
       timeout: 1000
     }).then(function (data) {
       $scope.machines = data.data;
       console.log("Updated successfully");
-      // Materialize.toast("Updated from database", 2500, "rounded");
+      Materialize.toast("Updated from database", 2500, "rounded");
     }, function (err) {
       console.log("Error", err);
     });
@@ -40,7 +40,7 @@ app.controller('controller', function ($scope, $http) {
           console.log("Updated successfully (" + window.resetCount + " times)");
         }
       }
-      xmlHttp.open("GET", 'http://nc45ltgz50q52/machines', true);
+      xmlHttp.open("GET", '/machines', true);
       xmlHttp.send(null);
     }
   };

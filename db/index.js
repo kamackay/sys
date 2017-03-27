@@ -3,12 +3,18 @@ var app = express();
 var bodyParser = require('body-parser');
 var jsonfile = require("jsonfile");
 app.use(express.static(__dirname + '/static'));
+var fs = require('file-system');
+var util = require('util');
+var logFile = fs.createWriteStream('log.txt', {
+  flags: 'a',
+  autoClose: true
+});
 app.use(bodyParser.urlencoded({
   'extended': 'true'
 }));
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/machines');
+var db = monk('localhost:27017/data');
 
 function getTimestamp(date) {
   return (date || new Date()).toLocaleString();
@@ -21,6 +27,7 @@ function log() {
   var args = Array.prototype.slice.call(arguments);
   args.unshift(start);
   console.log.apply(this, args);
+  logFile.write(util.format.apply(null, args) + '\n');
 }
 
 function isFunction(functionToCheck) {
@@ -30,7 +37,7 @@ function isFunction(functionToCheck) {
 
 function getAll(db, after) {
   try {
-    db.get("collection").find({}, {}, function (e, obj) {
+    db.get("machines").find({}, {}, function (e, obj) {
       try {
         if (isFunction(after)) after(obj);
       } catch (err) {
@@ -71,7 +78,7 @@ function saveData(db) {
       log("Saved successfully");
     }
   });
-  db.get("collection").update({}, data, {
+  db.get("machines").update({}, data, {
     upsert: true
   });
 }
