@@ -29,7 +29,9 @@ app.controller('controller', function ($scope, $http) {
       xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
           console.log("Updated successfully");
-          $scope.machines = JSON.parse(xmlHttp.responseText);
+          var localScope = angular.element(document.body).scope();
+          localScope.machines = JSON.parse(xmlHttp.responseText);
+          localScope.$apply();
         }
       }
       xmlHttp.open("GET", 'http://nc45ltgz50q52/machines', true); // true for asynchronous 
