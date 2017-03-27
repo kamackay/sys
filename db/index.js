@@ -15,6 +15,7 @@ function getTimestamp(date) {
 }
 
 const oldLog = console.log;
+
 function log() {
   const start = getTimestamp() + ": ";
   var args = Array.prototype.slice.call(arguments);
@@ -79,8 +80,8 @@ app.get("/machines", function (req, res, next) {
   var db = req.db;
   var collection = db.get("usercollection");
   if (req.query.prettyPrint !== undefined) {
-    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
-      JSON.stringify(data.machines, null, 4) + "</textarea></body></html>")
+    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
+      JSON.stringify(data.machines, null, 4) + "</textarea></body></html>");
   } else {
     res.json(data.machines);
     log("Get Request");
@@ -91,7 +92,7 @@ app.post("/setValue", function (req, res, next) {
 });
 app.get("/allData", function (req, res, next) {
   if (req.query.prettyPrint !== undefined || req.query.pretty !== undefined) {
-    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
+    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
       JSON.stringify(data, null, 4) + "</textarea></body></html>");
     log("Request for all data (Pretty)")
   } else {
@@ -110,7 +111,7 @@ app.get("/machines/:name", function (req, res, next) {
   }
   if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
-      JSON.stringify(machine, null, 4) + "</textarea></body></html>")
+      JSON.stringify(machine, null, 4) + "</textarea></body></html>");
   } else {
     res.json(machine);
     log("Get Request");
@@ -189,6 +190,23 @@ app.post("/machines/put", function (req, res, next) {
   res.send("Accepting Data on blind faith");
   saveData(req.db);
 });
+
+function exitHandler(options, err) {
+  log("Exiting");
+  if (err) console.log(err.stack);
+  if (options.exit) process.exit();
+}
+
+process.on('exit', exitHandler.bind(null, {
+  cleanup: true
+}));
+process.on('SIGINT', exitHandler.bind(null, {
+  exit: true
+}));
+process.on('uncaughtException', exitHandler.bind(null, {
+  exit: true
+}));
+
 var port = process.env.PORT || 80;
 app.listen(port);
 log("App Listening on port " + port);

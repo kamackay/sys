@@ -11,7 +11,7 @@ app.controller('controller', function ($scope, $http) {
       timeout: 1000
     }).then(function (data) {
       $scope.machines = data.data;
-      console.log("update successful");
+      console.log("Updated successfully");
       // Materialize.toast("Updated from database", 2500, "rounded");
     }, function (err) {
       console.log("Error", err);
