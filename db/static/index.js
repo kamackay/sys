@@ -102,6 +102,10 @@ $(document).ready(function () {
     }
   });
   $(window).resize();
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  });
 });
 
 function storeData(e, o) {
