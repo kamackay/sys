@@ -1,3 +1,7 @@
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 var app = angular.module('module', ["ui.materialize"]);
 app.controller('controller', function ($scope, $http) {
   // Pull from the database
@@ -36,7 +40,7 @@ app.controller('controller', function ($scope, $http) {
           console.log("Updated successfully (" + window.resetCount + " times)");
         }
       }
-      xmlHttp.open("GET", 'http://nc45ltgz50q52/machines', true); // true for asynchronous 
+      xmlHttp.open("GET", 'http://nc45ltgz50q52/machines', true);
       xmlHttp.send(null);
     }
   };
@@ -55,6 +59,7 @@ app.controller('controller', function ($scope, $http) {
   // Reserve A Machine
   $scope.reserve = function (machine, name) {
     name = name || getData("username") || prompt('What is your name?', '');
+    name = capitalizeFirstLetter(name);
     storeData("username", name);
     $http.post("/machines/update", {
       reservedBy: name,
