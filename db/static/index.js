@@ -106,6 +106,12 @@ $(document).ready(function () {
     e.preventDefault();
     e.stopPropagation();
   });
+  document.addEventListener("keydown", function (e) {
+    switch (e.which) {
+      case 83:
+        if (e.ctrlKey) e.preventDefault();
+    }
+  });
 });
 
 function storeData(e, o) {
