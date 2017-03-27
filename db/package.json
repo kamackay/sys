@@ -9,6 +9,8 @@
   "devDependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "jsonfile": "^2.4.0"
+    "jsonfile": "^2.4.0",
+    "mongodb": "^2.2.25",
+    "monk": "^4.0.0"
   }
 }

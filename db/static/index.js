@@ -11,7 +11,7 @@ app.controller('controller', function ($scope, $http) {
   $scope.noEdit = function () {
     for (var x = 0; x < $scope.machines.length; x++) $scope.machines[x].edit = undefined;
   };
-  $(window).focus(function (){
+  $(window).focus(function () {
     if (document.getElementById('autoUpdate').checked) {
       // Don't do the update if one of the machines is being edited
       for (var x = 0; x < $scope.machines.length; x++)
@@ -65,7 +65,8 @@ app.controller('controller', function ($scope, $http) {
     $scope.machines.push({
       name: machineName,
       available: true,
-      reservedBy: ""
+      reservedBy: "",
+      edit: true
     });
   };
   // Delete a machine (The first one found with the given name)
@@ -116,8 +117,8 @@ function getData(e) {
 }
 
 function openInNewTab(url) {
-	var e = window.open(url, '_blank')
-	e.focus()
+  var e = window.open(url, '_blank')
+  e.focus()
 }
 
 function toggleUpdate() {

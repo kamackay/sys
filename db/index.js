@@ -6,6 +6,33 @@ app.use(express.static(__dirname + '/static'));
 app.use(bodyParser.urlencoded({
   'extended': 'true'
 }));
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/machines');
+
+function isFunction(functionToCheck) {
+  var getType = {};
+  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+function getAll(db, after) {
+  try {
+    db.get("collection").find({}, {}, function (e, obj) {
+      try {
+        if (isFunction(after)) after(obj);
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+app.use(function (req, res, next) {
+  req.db = db;
+  next();
+});
 
 data = {};
 jsonfile.readFile("./data.json", function (err, obj) {
@@ -24,16 +51,23 @@ function handle(err, res) {
   });
 }
 
-function saveData() {
+function saveData(db) {
   jsonfile.writeFile("./data.json", data, function (err) {
     if (err) console.log(err);
     else {
       console.log("Saved successfully");
     }
   });
+  db.get("collection").update({}, data, {
+    upsert: true
+  });
 }
 app.use(bodyParser.json());
 app.get("/machines", function (req, res, next) {
+  var db = req.db;
+  var collection = db.get("usercollection");
+  collection.find({}, {}, function (e, docs) {
+  });
   if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
       JSON.stringify(data.machines, null, 4) + "</textarea></body></html>")
@@ -42,9 +76,8 @@ app.get("/machines", function (req, res, next) {
     console.log("Get Request");
   }
 });
-app.post("/setValue", function (req, res, next){
+app.post("/setValue", function (req, res, next) {
   var xPath = req.body.xPath;
-
 });
 app.get("/allData", function (req, res, next) {
   if (req.query.prettyPrint !== undefined || req.query.pretty !== undefined) {
@@ -93,7 +126,7 @@ app.post("/machines/update", function (req, res, next) {
             data.machines[x].reservedAt = new Date().getTime();
             console.log("    " + machineName + " Successfully Reserved by " + body.reservedBy);
             res.json({});
-            saveData();
+            saveData(req.db);
             return;
           }
       } catch (err) {
@@ -111,7 +144,7 @@ app.post("/machines/update", function (req, res, next) {
             data.machines[x].reservedAt = undefined;
             console.log("    " + machineName + " Successfully Released");
             res.json({});
-            saveData();
+            saveData(req.db);
             return;
           }
       } catch (err) {
@@ -129,7 +162,7 @@ app.post("/machines/update", function (req, res, next) {
             data.machines[x].type = body.machine.type;
             console.log("    " + machineName + " Successfully Updated");
             res.json({});
-            saveData();
+            saveData(req.db);
             return;
           }
       } catch (err) {
@@ -141,10 +174,10 @@ app.post("/machines/update", function (req, res, next) {
   console.log("Unsuccessful update");
   res.json({});
 });
-app.use("/machines/put", function (req, res, next) {
+app.post("/machines/put", function (req, res, next) {
   data.machines = req.body;
   res.send("Accepting Data on blind faith");
-  saveData();
+  saveData(req.db);
 });
 var port = process.env.PORT || 80;
 app.listen(port);
