@@ -28,10 +28,12 @@ app.controller('controller', function ($scope, $http) {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-          console.log("Updated successfully");
           var localScope = angular.element(document.body).scope();
           localScope.machines = JSON.parse(xmlHttp.responseText);
           localScope.$apply();
+          if (!window.resetCount) window.resetCount = 1;
+          else window.resetCount++;
+          console.log("Updated successfully (" + window.resetCount + " times)");
         }
       }
       xmlHttp.open("GET", 'http://nc45ltgz50q52/machines', true); // true for asynchronous 
@@ -45,6 +47,7 @@ app.controller('controller', function ($scope, $http) {
   // Push changes from the database
   $scope.save = function () {
     $scope.noEdit();
+    console.log("Start Save");
     $http.post('/machines/put', $scope.machines).then(function (data) {
       Materialize.toast("Saved to database", 2500, "rounded");
     });
@@ -127,7 +130,10 @@ $(document).ready(function () {
   document.addEventListener("keydown", function (e) {
     switch (e.which) {
       case 83:
-        if (e.ctrlKey) e.preventDefault();
+        if (e.ctrlKey) {
+          e.preventDefault();
+          angular.element(document.body).scope().save();
+        }
     }
   });
 });
