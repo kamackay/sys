@@ -66,8 +66,6 @@ app.use(bodyParser.json());
 app.get("/machines", function (req, res, next) {
   var db = req.db;
   var collection = db.get("usercollection");
-  collection.find({}, {}, function (e, docs) {
-  });
   if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
       JSON.stringify(data.machines, null, 4) + "</textarea></body></html>")

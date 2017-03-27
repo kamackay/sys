@@ -2,24 +2,42 @@ var app = angular.module('module', ["ui.materialize"]);
 app.controller('controller', function ($scope, $http) {
   // Pull from the database
   $scope.update = function () {
-    $http.get('/machines').then(function (data) {
+    console.log("start update");
+    $http.get('http://nc45ltgz50q52/machines', {
+      timeout: 1000
+    }).then(function (data) {
       $scope.machines = data.data;
+      console.log("update successful");
       // Materialize.toast("Updated from database", 2500, "rounded");
+    }, function (err) {
+      console.log("Error", err);
     });
   };
   // remove all of the edit flags from the data
   $scope.noEdit = function () {
     for (var x = 0; x < $scope.machines.length; x++) $scope.machines[x].edit = undefined;
   };
-  $(window).focus(function () {
+  const periodicUpdate = function () {
     if (document.getElementById('autoUpdate').checked) {
       // Don't do the update if one of the machines is being edited
       for (var x = 0; x < $scope.machines.length; x++)
         if ($scope.machines[x].edit) return;
-      $scope.update();
-      console.log("Update on focus");
+
+      // Just do the update with a plain JS Request
+      console.log("Start Update");
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+          console.log("Updated successfully");
+          $scope.machines = JSON.parse(xmlHttp.responseText);
+        }
+      }
+      xmlHttp.open("GET", 'http://nc45ltgz50q52/machines', true); // true for asynchronous 
+      xmlHttp.send(null);
     }
-  }); // Update when the window gets focus
+  };
+  window.setInterval(periodicUpdate, 1000 * 60);
+  $(window).focus(periodicUpdate);
   $scope.update();
   $scope.msg = "";
   // Push changes from the database
@@ -95,8 +113,6 @@ $(document).ready(function () {
   $(window).resize(function () {
     if ($(window).width() < 900) {
       $("#navRight").hide();
-    } else if ($(window).width() < 1100) {
-      $("#navRight").show();
     } else {
       $("#navRight").show();
     }

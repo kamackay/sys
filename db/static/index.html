@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="module" ng-controller="controller">
+<html ng-app="module">
 
 <head>
   <!-- Using jQuery, but in protest -->
@@ -56,7 +56,7 @@
   </style>
 </head>
 
-<body id="body">
+<body ng-controller="controller" id="body" ng-focus="focus()">
   <!-- Navbar -->
   <nav class="navbar navbar-default navbar-fixed-top" style="background-color:#555555">
     <div class="container">
@@ -65,7 +65,7 @@
       </div>
       <form class="navbar-form navbar-right" id="navRight">
         <div class="form-group">
-          <input type="text" style="color:white;" class="form-control" ng-model="search.$" placeholder="Search">
+          <input type="text" style="color:white;" class="form-control" id="searchInput" ng-model="search.$" placeholder="Search">
         </div>
       </form>
     </div>

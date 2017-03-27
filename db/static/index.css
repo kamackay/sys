@@ -128,14 +128,6 @@ body#body {
   color: #000
 }
 
-#searchInput {
-  margin-bottom: 0;
-  display: inline;
-  width: 0;
-  font-size: 20px;
-  max-height: 25px
-}
-
 table {
   table-layout: fixed
 }
