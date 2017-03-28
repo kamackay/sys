@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+const utils = require("./utils");
 var bodyParser = require('body-parser');
 var jsonfile = require("jsonfile");
 app.use(express.static(__dirname + '/static'));
@@ -16,8 +17,10 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/data');
 
-function getTimestamp(date) {
-  return (date || new Date()).toLocaleString();
+function getTimestamp() {
+  const date = new Date();
+  return "" + date.getFullYear() + "/" + utils.pad(date.getMonth(), 2) + "/" + utils.pad(date.getDate()) + " " + 
+    utils.pad(date.getHours()) +":"+ utils.pad(date.getMinutes()) + ":" + utils.pad(date.getSeconds());
 }
 
 const oldLog = console.log;
