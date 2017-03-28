@@ -26,7 +26,7 @@ function log(s, req, options) {
       var padding = "";
       for (var x = s.length; x < 60; x++) padding += "-";
       const addr = req.connection.remoteAddress;
-      _log(s + " " + padding + "- from " + (machinesAndNames[addr] ? machinesAndNames[addr] : addr));
+      _log(s + " " + padding + "- " + (machinesAndNames[addr] ? machinesAndNames[addr] : addr));
     } else _log(s);
   } else _log(s);
 }
@@ -107,19 +107,25 @@ app.get("/machines", function (req, res, next) {
     log("Get Request", req);
   }
 });
+
+// TODO: Set Value based on URL
 app.post("/setValue", function (req, res, next) {
   var xPath = req.body.xPath;
 });
+
+// Get All data
 app.get("/allData", function (req, res, next) {
   if (req.query.prettyPrint !== undefined || req.query.pretty !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
       JSON.stringify(data, null, 4) + "</textarea></body></html>");
     log("Request for all data (Pretty)", req)
   } else {
-    res.json(data.machines);
+    res.json(data);
     log("Request for all data", req);
   }
 });
+
+// Get the information for a specific machine
 app.get("/machines/:name", function (req, res, next) {
   var machine = undefined;
   const machineName = req.params.name;
@@ -132,12 +138,14 @@ app.get("/machines/:name", function (req, res, next) {
   if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
       JSON.stringify(machine, null, 4) + "</textarea></body></html>");
-    log("Get Request (pretty)", req);
+    log("Get Request for " + req.params.name + " (pretty)", req);
   } else {
     res.json(machine);
-    log("Get Request", req);
+    log("Get Request for " + req.params.name, req);
   }
 });
+
+// Get the RDP for a specific machine
 app.get("/rdp/:address", function (req, res, next) {
   log("Request to get RDP for " + req.params.address, req);
   res.setHeader('Content-Type', 'application/x-rdp');
@@ -156,7 +164,7 @@ app.post("/machines/update", function (req, res, next) {
             data.machines[x].available = false;
             data.machines[x].reservedBy = body.reservedBy;
             data.machines[x].reservedAt = new Date().getTime();
-            log("    " + machineName + " Successfully Reserved by " + body.reservedBy, req);
+            log("    " + machineName + " Reserved by " + body.reservedBy, req);
             res.json({});
             saveData(req.db);
             machinesAndNames[req.connection.remoteAddress] = body.reservedBy;
@@ -172,10 +180,11 @@ app.post("/machines/update", function (req, res, next) {
         const machineName = body.machineName;
         for (var x = 0; x < data.machines.length; x++)
           if (data.machines[x].name === machineName) {
+            var wasReservedBy = data.machines[x].reservedBy;
             data.machines[x].available = true;
             data.machines[x].reservedBy = "";
             data.machines[x].reservedAt = undefined;
-            log("    " + machineName + " Successfully Released", req);
+            log("    " + machineName + " Released (was reserved by " + wasReservedBy + ")", req);
             res.json({});
             saveData(req.db);
             return;
@@ -211,6 +220,7 @@ app.post("/machines/put", function (req, res, next) {
   if (req.body.length > 0) {
     data.machines = req.body;
     res.send("Accepting Data on blind faith");
+    log("Full Data Save (now " + data.machines.length + " machines)", req);
     saveData(req.db);
   } else log("Attempt to delete all data", req);
 });

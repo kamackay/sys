@@ -25,24 +25,9 @@
   <script type="text/javascript" src="./index.js"></script>
   <link rel="stylesheet" href="./index.css">
   <style>
-    table th.small,
-    table td.small {
-      width: 150px;
-    }
-
-    table th.big,
-    table td.big {
-      width: 175px;
-    }
-
-    table th.actions,
-    table td.actions {
-      width: 200px;
-    }
-
     div.table-over {
       overflow-x: auto;
-      min-width: 1000px;
+      min-width: 1500px;
     }
 
     .noscroll {
@@ -78,14 +63,14 @@
           <table class="table table-condensed table-striped table-bordered">
             <thead class="noselect">
               <tr>
-                <th class="big">Machine Name</th>
-                <th>Machine Type</th>
-                <th class="small">IP Address</th>
-                <th class="small">Network Type</th>
-                <th>Location</th>
-                <th>Claimed By</th>
-                <th>Notes</th>
-                <th class="actions">Actions</th>
+                <th class="col-md-1">Machine Name</th>
+                <th class="col-md-1">Machine Type</th>
+                <th class="col-md-1">IP Address</th>
+                <th class="col-md-1">Network Type</th>
+                <th class="col-md-1">Location</th>
+                <th class="col-md-2">Claimed By</th>
+                <th class="col-md-3">Notes</th>
+                <th class="col-md-2">Actions</th>
               </tr>
             </thead>
           </table>
@@ -96,41 +81,41 @@
               <!-- For Each Machine -->
               <tr ng-repeat="machine in machines | filter:search:strict" ng-class="{true:'success', false:'warning'}[machine.available]">
                 <!-- Machine Name -->
-                <td class="big">
+                <td class="col-md-1">
                   <span ng-show="!machine.edit">{{machine.name}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.name" />
                 </td>
                 <!-- Machine Type -->
-                <td>
+                <td class="col-md-1">
                   <span ng-show="!machine.edit">{{machine.type}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.type" />
                 </td>
                 <!-- Machine IP Address -->
-                <td class="small">
+                <td class="col-md-1">
                   <span ng-show="!machine.edit">{{machine.ip}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.ip" />
                 </td>
                 <!-- Network Type -->
-                <td class="small">
+                <td class="col-md-1">
                   <span ng-show="!machine.edit">{{machine.network_type}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.network_type" />
                 </td>
                 <!-- Machine Location -->
-                <td>
+                <td class="col-md-1">
                   <span ng-show="!machine.edit">{{machine.location}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.location" />
                 </td>
                 <!-- Machine Claimed Info -->
-                <td>
+                <td class="col-md-2">
                   <span>{{machine.reservedBy}}<span ng-show="machine.reservedAt">&nbsp;- {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
                 </td>
                 <!-- Machine Notes -->
-                <td>
+                <td class="col-md-3">
                   <span ng-show="!machine.edit">{{machine.notes}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.notes" />
                 </td>
                 <!-- Action Buttons -->
-                <td class="noselect actions">
+                <td class="noselect col-md-2">
                   <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
                     title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
                   <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>

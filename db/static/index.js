@@ -45,7 +45,7 @@ app.controller('controller', function ($scope, $http) {
     }
   };
   window.setInterval(periodicUpdate, 1000 * 60);
-  $(window).focus(periodicUpdate);
+  // $(window).focus(periodicUpdate);
   $scope.update();
   $scope.msg = "";
   // Push changes from the database

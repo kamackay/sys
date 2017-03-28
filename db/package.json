@@ -12,6 +12,7 @@
     "file-system": "^2.2.2",
     "jsonfile": "^2.4.0",
     "mongodb": "^2.2.25",
+    "mongoose": "^4.9.2",
     "monk": "^4.0.0",
     "util": "^0.10.3"
   }
