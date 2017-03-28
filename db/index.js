@@ -19,8 +19,8 @@ var db = monk('localhost:27017/data');
 
 function getTimestamp() {
   const date = new Date();
-  return "" + date.getFullYear() + "/" + utils.pad(date.getMonth(), 2) + "/" + utils.pad(date.getDate()) + " " + 
-    utils.pad(date.getHours()) +":"+ utils.pad(date.getMinutes()) + ":" + utils.pad(date.getSeconds());
+  return "" + date.getFullYear() + "/" + utils.pad(date.getMonth(), 2) + "/" + utils.pad(date.getDate()) + " " +
+    utils.pad(date.getHours()) + ":" + utils.pad(date.getMinutes()) + ":" + utils.pad(date.getSeconds());
 }
 
 const oldLog = console.log;
@@ -81,9 +81,15 @@ function saveData(db) {
       log("Saved successfully");
     }
   });
-  db.get("machines").update({}, data, {
-    upsert: true
-  });
+  var machineColl = db.get("machines");
+  for (var x = 0; x < data.machines.length; x++) {
+    machineColl.update({
+      name: data.machines[x].name
+    }, data.machines[x], {
+      upsert: true
+    });
+  }
+
 }
 app.use(bodyParser.json());
 app.get("/machines", function (req, res, next) {
@@ -196,9 +202,11 @@ app.post("/machines/update", function (req, res, next) {
   res.json({});
 });
 app.post("/machines/put", function (req, res, next) {
-  data.machines = req.body;
-  res.send("Accepting Data on blind faith");
-  saveData(req.db);
+  if (req.body.length > 0) {
+    data.machines = req.body;
+    res.send("Accepting Data on blind faith");
+    saveData(req.db);
+  } else log("Attempt to delete all data");
 });
 
 function exitHandler(options, err) {
