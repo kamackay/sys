@@ -82,7 +82,7 @@ app.controller('controller', function ($scope, $http) {
   };
   // Add a machine to the list
   $scope.add = function () {
-    var machineName = prompt("Machine Name", "");
+    var machineName = prompt("Machine Name", "").toUpperCase();
     // Check to see if that machine name exists already
     for (var x = 0; x < $scope.machines.length; x++) {
       if ($scope.machines[x].name === machineName) {

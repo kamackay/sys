@@ -139,7 +139,7 @@ app.get("/machines/:name", function (req, res, next) {
   }
 });
 app.get("/rdp/:address", function (req, res, next) {
-  log("Request to get RDP for " + req.params.address);
+  log("Request to get RDP for " + req.params.address, req);
   res.setHeader('Content-Type', 'application/x-rdp');
   res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.address + '.rdp');
   res.end("full address:s:" + req.params.address + ":3389\r\nprompt for credentials:i:1");
@@ -156,7 +156,7 @@ app.post("/machines/update", function (req, res, next) {
             data.machines[x].available = false;
             data.machines[x].reservedBy = body.reservedBy;
             data.machines[x].reservedAt = new Date().getTime();
-            log("    " + machineName + " Successfully Reserved by " + body.reservedBy);
+            log("    " + machineName + " Successfully Reserved by " + body.reservedBy, req);
             res.json({});
             saveData(req.db);
             machinesAndNames[req.connection.remoteAddress] = body.reservedBy;
@@ -175,7 +175,7 @@ app.post("/machines/update", function (req, res, next) {
             data.machines[x].available = true;
             data.machines[x].reservedBy = "";
             data.machines[x].reservedAt = undefined;
-            log("    " + machineName + " Successfully Released");
+            log("    " + machineName + " Successfully Released", req);
             res.json({});
             saveData(req.db);
             return;
@@ -193,7 +193,7 @@ app.post("/machines/update", function (req, res, next) {
             data.machines[x].notes = body.machine.notes;
             data.machines[x].location = body.machine.location;
             data.machines[x].type = body.machine.type;
-            log("    " + machineName + " Successfully Updated");
+            log("    " + machineName + " Successfully Updated", req);
             res.json({});
             saveData(req.db);
             return;
