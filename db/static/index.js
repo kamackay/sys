@@ -1,5 +1,5 @@
 function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 var app = angular.module('module', ["ui.materialize"]);
@@ -52,10 +52,13 @@ app.controller('controller', function ($scope, $http) {
   $scope.save = function () {
     $scope.noEdit();
     console.log("Start Save");
-    $http.post('/machines/put', $scope.machines).then(function (data) {
+    $http.post('/machines/put', {
+      machines: $scope.machines, name: getData("username")
+    }).then(function (data) {
       Materialize.toast("Saved to database", 2500, "rounded");
     });
   };
+  
   // Reserve A Machine
   $scope.reserve = function (machine, name) {
     name = name || getData("username") || prompt('What is your name?', '');

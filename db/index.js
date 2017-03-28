@@ -40,6 +40,7 @@ function _log() {
   logFile.write(util.format.apply(null, args) + '\n');
 }
 
+// Is the provided object a function?
 function isFunction(functionToCheck) {
   var getType = {};
   return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
@@ -59,6 +60,7 @@ function getAll(db, after) {
   }
 }
 
+// Runs for all inbound Requests
 app.use(function (req, res, next) {
   req.db = db;
   next();
@@ -74,6 +76,7 @@ jsonfile.readFile("./data.json", function (err, obj) {
   }
 });
 
+// Handle an Exception
 function handle(err, res) {
   log(err);
   res.status(500).json({
@@ -81,6 +84,7 @@ function handle(err, res) {
   });
 }
 
+// Save data to the Database (and the backup JSON file)
 function saveData(db) {
   jsonfile.writeFile("./data.json", data, function (err) {
     if (err) log(err);
@@ -98,6 +102,8 @@ function saveData(db) {
   }
 }
 app.use(bodyParser.json());
+
+// Get All machines
 app.get("/machines", function (req, res, next) {
   if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
@@ -152,6 +158,8 @@ app.get("/rdp/:address", function (req, res, next) {
   res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.address + '.rdp');
   res.end("full address:s:" + req.params.address + ":3389\r\nprompt for credentials:i:1");
 });
+
+// Preform an update with the given data
 app.post("/machines/update", function (req, res, next) {
   log("Start Update", req);
   const body = req.body;
@@ -216,9 +224,11 @@ app.post("/machines/update", function (req, res, next) {
   log("Unsuccessful Update", req);
   res.json({});
 });
+
+// Update all data based on the given data
 app.post("/machines/put", function (req, res, next) {
   if (req.body.length > 0) {
-    data.machines = req.body;
+    data.machines = req.body.machines;
     res.send("Accepting Data on blind faith");
     log("Full Data Save (now " + data.machines.length + " machines)", req);
     saveData(req.db);
