@@ -17,16 +17,23 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/data');
 
-function getTimestamp() {
-  const date = new Date();
-  return "" + date.getFullYear() + "/" + utils.pad(date.getMonth(), 2) + "/" + utils.pad(date.getDate()) + " " +
-    utils.pad(date.getHours()) + ":" + utils.pad(date.getMinutes()) + ":" + utils.pad(date.getSeconds());
+var machinesAndNames = {};
+
+/* Regular log method for strings */
+function log(s, req, options) {
+  if (typeof (s) === "string") {
+    if (req) {
+      var padding = "";
+      for (var x = s.length; x < 60; x++) padding += "-";
+      const addr = req.connection.remoteAddress;
+      _log(s + " " + padding + "- from " + (machinesAndNames[addr] ? machinesAndNames[addr] : addr));
+    } else _log(s);
+  } else _log(s);
 }
 
-const oldLog = console.log;
-
-function log() {
-  const start = getTimestamp() + ": ";
+/* Log Method for objects and such */
+function _log() {
+  const start = utils.getTimestamp() + ": ";
   var args = Array.prototype.slice.call(arguments);
   args.unshift(start);
   console.log.apply(this, args);
@@ -89,18 +96,15 @@ function saveData(db) {
       upsert: true
     });
   }
-
 }
 app.use(bodyParser.json());
 app.get("/machines", function (req, res, next) {
-  var db = req.db;
-  var collection = db.get("usercollection");
   if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
       JSON.stringify(data.machines, null, 4) + "</textarea></body></html>");
   } else {
     res.json(data.machines);
-    log("Get Request");
+    log("Get Request", req);
   }
 });
 app.post("/setValue", function (req, res, next) {
@@ -110,10 +114,10 @@ app.get("/allData", function (req, res, next) {
   if (req.query.prettyPrint !== undefined || req.query.pretty !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
       JSON.stringify(data, null, 4) + "</textarea></body></html>");
-    log("Request for all data (Pretty)")
+    log("Request for all data (Pretty)", req)
   } else {
     res.json(data.machines);
-    log("Request for all data");
+    log("Request for all data", req);
   }
 });
 app.get("/machines/:name", function (req, res, next) {
@@ -128,9 +132,10 @@ app.get("/machines/:name", function (req, res, next) {
   if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
       JSON.stringify(machine, null, 4) + "</textarea></body></html>");
+    log("Get Request (pretty)", req);
   } else {
     res.json(machine);
-    log("Get Request");
+    log("Get Request", req);
   }
 });
 app.get("/rdp/:address", function (req, res, next) {
@@ -140,7 +145,7 @@ app.get("/rdp/:address", function (req, res, next) {
   res.end("full address:s:" + req.params.address + ":3389\r\nprompt for credentials:i:1");
 });
 app.post("/machines/update", function (req, res, next) {
-  log("Start Update");
+  log("Start Update", req);
   const body = req.body;
   switch (body.action) {
     case "reserve":
@@ -154,6 +159,7 @@ app.post("/machines/update", function (req, res, next) {
             log("    " + machineName + " Successfully Reserved by " + body.reservedBy);
             res.json({});
             saveData(req.db);
+            machinesAndNames[req.connection.remoteAddress] = body.reservedBy;
             return;
           }
       } catch (err) {
@@ -198,7 +204,7 @@ app.post("/machines/update", function (req, res, next) {
       }
       break;
   }
-  log("Unsuccessful Update");
+  log("Unsuccessful Update", req);
   res.json({});
 });
 app.post("/machines/put", function (req, res, next) {
@@ -206,7 +212,7 @@ app.post("/machines/put", function (req, res, next) {
     data.machines = req.body;
     res.send("Accepting Data on blind faith");
     saveData(req.db);
-  } else log("Attempt to delete all data");
+  } else log("Attempt to delete all data", req);
 });
 
 function exitHandler(options, err) {
