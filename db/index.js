@@ -19,6 +19,17 @@ var db = monk('localhost:27017/data');
 
 var machinesAndNames = {};
 
+function setMachineName(name, req) {
+  try {
+    if (name && req) {
+      machinesAndNames[req.connection.remoteAddress] = name;
+      log("" + req.connection.remoteAddress + " = " + name, req);
+    }
+  } catch (ex) {
+    log(ex);
+  }
+}
+
 /* Regular log method for strings */
 function log(s, req, options) {
   if (typeof (s) === "string") {
@@ -175,7 +186,7 @@ app.post("/machines/update", function (req, res, next) {
             log("    " + machineName + " Reserved by " + body.reservedBy, req);
             res.json({});
             saveData(req.db);
-            machinesAndNames[req.connection.remoteAddress] = body.reservedBy;
+            setMachineName(body.reservedBy, req);
             return;
           }
       } catch (err) {
@@ -227,11 +238,12 @@ app.post("/machines/update", function (req, res, next) {
 
 // Update all data based on the given data
 app.post("/machines/put", function (req, res, next) {
-  if (req.body.length > 0) {
+  if (req.body.machines.length > 0) {
     data.machines = req.body.machines;
     res.send("Accepting Data on blind faith");
     log("Full Data Save (now " + data.machines.length + " machines)", req);
     saveData(req.db);
+    if (req.body.name) setMachineName(req.body.name, req);
   } else log("Attempt to delete all data", req);
 });
 
