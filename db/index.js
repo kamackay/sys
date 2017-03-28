@@ -219,4 +219,5 @@ process.on('uncaughtException', exitHandler.bind(null, {
 
 var port = process.env.PORT || 80;
 app.listen(port);
+log("----------------------------------------")
 log("App Listening on port " + port);
