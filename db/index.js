@@ -144,7 +144,25 @@ app.get("/allData", function (req, res, next) {
 
 // Get the information for a specific machine
 app.get("/machines/:name", function (req, res, next) {
-  var machine = undefined;
+  var responseObject = {};
+  const sendResponse = (obj) => {
+    res.status(200).json(obj);
+  };
+  const machineName = req.params.name;
+  // Pull Data on this machine from the Database
+  req.db.get("machines").find({
+    name: machineName.toUpperCase()
+  }, {}, function (e, obj) {
+    if (obj && !e) {
+      responseObject.machine = obj;
+      sendResponse(responseObject);
+    } else {
+      res.status(404).json({
+        error: "Could not find machine " + machineName
+      });
+    }
+  });
+  /*var machine = undefined;
   const machineName = req.params.name;
   for (var x = 0; x < data.machines.length; x++)
     if (data.machines[x].name.toLowerCase() === machineName.toLowerCase()) machine = data.machines[x];
@@ -160,6 +178,7 @@ app.get("/machines/:name", function (req, res, next) {
     res.json(machine);
     log("Get Request for " + req.params.name, req);
   }
+  /* Old Version */
 });
 
 // Get the RDP for a specific machine
@@ -238,7 +257,7 @@ app.post("/machines/update", function (req, res, next) {
 
 // Update all data based on the given data
 app.post("/machines/put", function (req, res, next) {
-  if (req.body.machines.length > 0) {
+  if (req.body.machines && req.body.machines.length > 0) {
     data.machines = req.body.machines;
     res.send("Accepting Data on blind faith");
     log("Full Data Save (now " + data.machines.length + " machines)", req);

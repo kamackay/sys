@@ -34,10 +34,58 @@
       overflow: hidden;
     }
 
+    #body table tbody td,
+    #body table thead th {
+      text-align: center;
+      padding-right: 2px;
+      padding-left: 2px;
+    }
+
+    .not-applicable{
+      color: #998888;
+    }
+
     #body button.btn,
     #body button.btn * {
       cursor: pointer;
     }
+
+    .col-name {
+      width: 8%;
+    }
+
+    .col-type {
+      width: 8%;
+    }
+
+    .col-ip {
+      width: 8%;
+    }
+
+    .col-network {
+      width: 8%;
+    }
+
+    .col-netID {
+      width: 4%;
+    }
+
+    .col-location {
+      width: 8%;
+    }
+
+    .col-claimed {
+      width: 12%;
+    }
+
+    .col-notes {
+      width: 25%;
+    }
+
+    .col-actions {
+      width: 15%;
+    }
+    /* Make sure all of these add up to 100 */
   </style>
 </head>
 
@@ -63,14 +111,15 @@
           <table class="table table-condensed table-striped table-bordered">
             <thead class="noselect">
               <tr>
-                <th class="col-md-1">Machine Name</th>
-                <th class="col-md-1">Machine Type</th>
-                <th class="col-md-1">IP Address</th>
-                <th class="col-md-1">Network Type</th>
-                <th class="col-md-1">Location</th>
-                <th class="col-md-2">Claimed By</th>
-                <th class="col-md-3">Notes</th>
-                <th class="col-md-2">Actions</th>
+                <th class="col-name">Machine Name</th>
+                <th class="col-type">Machine Type</th>
+                <th class="col-ip">IP Address</th>
+                <th class="col-network">Network Type</th>
+                <th class="col-netID">Net ID</th>
+                <th class="col-location">Location</th>
+                <th class="col-claimed">Claimed By</th>
+                <th class="col-notes">Notes</th>
+                <th class="col-actions">Actions</th>
               </tr>
             </thead>
           </table>
@@ -81,41 +130,48 @@
               <!-- For Each Machine -->
               <tr ng-repeat="machine in machines | filter:search:strict" ng-class="{true:'success', false:'warning'}[machine.available]">
                 <!-- Machine Name -->
-                <td class="col-md-1">
+                <td class="col-name">
                   <span ng-show="!machine.edit">{{machine.name}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.name" />
                 </td>
                 <!-- Machine Type -->
-                <td class="col-md-1">
+                <td class="col-type">
                   <span ng-show="!machine.edit">{{machine.type}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.type" />
                 </td>
                 <!-- Machine IP Address -->
-                <td class="col-md-1">
+                <td class="col-ip">
                   <span ng-show="!machine.edit">{{machine.ip}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.ip" />
                 </td>
                 <!-- Network Type -->
-                <td class="col-md-1">
-                  <span ng-show="!machine.edit">{{machine.network_type}}</span>
+                <td class="col-network">
+                  <span ng-show="!machine.edit && machine.network_type">{{machine.network_type}}</span>
+                  <span ng-show="!machine.edit && !machine.network_type" class="not-applicable">N/A</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.network_type" />
                 </td>
+                <!-- Network ID -->
+                <td class="col-netID">
+                  <span ng-show="!machine.edit && machine.netID">{{machine.netID}}</span>
+                  <span ng-show="!machine.edit && !machine.netID" class="not-applicable">N/A</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.netID" />
+                </td>
                 <!-- Machine Location -->
-                <td class="col-md-1">
+                <td class="col-location">
                   <span ng-show="!machine.edit">{{machine.location}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.location" />
                 </td>
                 <!-- Machine Claimed Info -->
-                <td class="col-md-2">
+                <td class="col-claimed">
                   <span>{{machine.reservedBy}}<span ng-show="machine.reservedAt">&nbsp;- {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
                 </td>
                 <!-- Machine Notes -->
-                <td class="col-md-3">
+                <td class="col-notes">
                   <span ng-show="!machine.edit">{{machine.notes}}</span>
                   <input type="text" ng-show="machine.edit" ng-model="machine.notes" />
                 </td>
                 <!-- Action Buttons -->
-                <td class="noselect col-md-2">
+                <td class="noselect col-actions">
                   <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
                     title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
                   <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
