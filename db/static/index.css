@@ -1,6 +1,6 @@
 @font-face {
-	font-family: hack-font;
-	src: url(./hack.ttf) format("truetype");
+  font-family: hack-font;
+  src: url(./hack.ttf) format("truetype");
 }
 
 .machine-row {
@@ -24,7 +24,9 @@ button {
 }
 
 .noselect,
-.noselect * {
+.noselect *,
+.not-applicable,
+.not-applicable * {
   cursor: default
 }
 
