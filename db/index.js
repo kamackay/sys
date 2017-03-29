@@ -177,6 +177,7 @@ app.get("/machines/:name", function (req, res, next) {
     res.status(200).json(obj);
   };
   const machineName = req.params.name;
+  log("Request for raw data of " + machineName, req);
   // Pull Data on this machine from the Database
   req.db.get("machines").find({
     name: machineName.toUpperCase()
