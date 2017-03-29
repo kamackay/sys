@@ -126,8 +126,36 @@ app.get("/machines", function (req, res, next) {
 });
 
 // TODO: Set Value based on URL
-app.post("/setValue", function (req, res, next) {
-  var xPath = req.body.xPath;
+app.put("/machines/:machineName/:valueName", function (req, res, next) {
+  const machineName = req.params.machineName;
+  const valueName = req.params.valueName;
+  const value = req.body.value;
+  const machineColl = req.db.get("machines");
+  if (req.body.name) setMachineName(req.body.name, req);
+  log("Attempting to set " + machineName + "." + valueName + " to " + value, req);
+  machineColl.findOne({
+    name: machineName
+  }, {}, function (e, obj) {
+    if (obj && !e) {
+      obj[valueName] = value;
+      machineColl.update({
+        name: machineName
+      }, obj, {
+        upsert: true
+      });
+      log("Set " + machineName + "." + valueName + " to " + value, req);
+      res.json({
+        status: "Success"
+      });
+      return;
+    } else {
+      log(e, req);
+      res.status(404).json({
+        error: "Could not find the machine in question"
+      });
+      return;
+    }
+  });
 });
 
 // Get All data
