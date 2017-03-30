@@ -53,12 +53,13 @@ app.controller('controller', function ($scope, $http) {
     $scope.noEdit();
     console.log("Start Save");
     $http.post('/machines/put', {
-      machines: $scope.machines, name: getData("username")
+      machines: $scope.machines,
+      name: getData("username")
     }).then(function (data) {
       Materialize.toast("Saved to database", 2500, "rounded");
     });
   };
-  
+
   // Reserve A Machine
   $scope.reserve = function (machine, name) {
     name = name || getData("username") || prompt('What is your name?', '');
@@ -112,7 +113,13 @@ app.controller('controller', function ($scope, $http) {
 
   $scope.getRDP = function (machine) {
     openInNewTab(window.location + "rdp/" + machine.name);
-  }
+  };
+
+  // Sort by a property
+  $scope.sortBy = function (propertyName) {
+    $scope.sortReverse = ($scope.sortProperty === propertyName) ? !$scope.sortReverse : false;
+    $scope.sortProperty = propertyName;
+  };
 });
 
 // Stuff to do once the full page load is done
