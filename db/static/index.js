@@ -48,7 +48,7 @@ app.controller('controller', function ($scope, $http) {
   // $(window).focus(periodicUpdate);
   $scope.update();
   $scope.msg = "";
-  $scope.sortProperty = "name";
+  $scope.sortProperty = "id";
   // Push changes from the database
   $scope.save = function () {
     $scope.noEdit();

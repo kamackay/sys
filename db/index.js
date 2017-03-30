@@ -77,16 +77,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-data = {};
-jsonfile.readFile("./data.json", function (err, obj) {
-  if (err) log(err);
-  else {
-    data = obj;
-    //log(JSON.stringify(obj, null, 4));
-    log("Data loaded");
-  }
-});
-
 // Handle an Exception
 function handle(err, res) {
   log(err);
@@ -96,7 +86,7 @@ function handle(err, res) {
 }
 
 // Save data to the Database (and the backup JSON file)
-function saveData(db) {
+/*function saveData(db) {
   jsonfile.writeFile("./data.json", data, function (err) {
     if (err) log(err);
     else {
@@ -111,7 +101,7 @@ function saveData(db) {
       upsert: true
     });
   }
-}
+}/* Should no longer be used */
 app.use(bodyParser.json());
 
 // Get All machines
@@ -167,18 +157,6 @@ app.put("/machines/:machineName/:valueName", function (req, res, next) {
       return;
     }
   });
-});
-
-// Get All data
-app.get("/allData", function (req, res, next) {
-  if (req.query.prettyPrint !== undefined || req.query.pretty !== undefined) {
-    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
-      JSON.stringify(data, null, 4) + "</textarea></body></html>");
-    log("Request for all data (Pretty)", req)
-  } else {
-    res.json(data);
-    log("Request for all data", req);
-  }
 });
 
 // Get the information for a specific machine
@@ -318,42 +296,31 @@ app.post("/machines/update", function (req, res, next) {
         return;
       }/* Old Code that doesn't use the database */
       return;
-    case "update":
-      try {
-        log("Update Endpoint being used - UNEXPECTED", req);
-        const machineName = body.machine.name;
-        for (var x = 0; x < data.machines.length; x++)
-          if (data.machines[x].name === machineName) {
-            data.machines[x].notes = body.machine.notes;
-            data.machines[x].location = body.machine.location;
-            data.machines[x].type = body.machine.type;
-            log("    " + machineName + " Successfully Updated", req);
-            res.json({});
-            saveData(req.db);
-            return;
-          }
-      } catch (err) {
-        handle(err, res);
-        return;
-      }
-      break;
   }
   log("Unsuccessful Update", req);
-  res.json({});
+  res.status(400).json({});
 });
 
 // Update all data based on the given data
 app.post("/machines/put", function (req, res, next) {
   if (req.body.machines && req.body.machines.length > 0) {
-    data.machines = req.body.machines;
     res.send("Accepting Data on blind faith");
-    log("Full Data Save (now " + data.machines.length + " machines)", req);
-    saveData(req.db);
+    const collection = req.db.get("machines");
+    for (var x = 0; x < req.body.machines.length; x++) {
+      const machine = req.body.machines[x];
+      collection.update({
+        name: machine.name
+      }, machine, {
+        upsert: true
+      });
+    }
+    log("Full Data Save (now " + req.body.machines.length + " machines)", req);
     if (req.body.name) setMachineName(req.body.name, req);
   } else log("Attempt to delete all data", req);
 });
 
 function exitHandler(options, err) {
+  db.close();
   log("Exiting");
   if (err) console.log(err.stack);
   if (options.exit) process.exit();

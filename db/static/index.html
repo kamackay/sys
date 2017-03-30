@@ -50,6 +50,10 @@
       cursor: pointer;
     }
 
+    .col-id {
+      width: 3%;
+    }
+
     .col-name {
       width: 8%;
     }
@@ -79,7 +83,7 @@
     }
 
     .col-notes {
-      width: 25%;
+      width: 22%;
     }
 
     .col-actions {
@@ -125,6 +129,9 @@
           <table class="table table-condensed table-striped table-bordered">
             <thead class="noselect">
               <tr>
+                <th ng-click="sortBy('id')" class="col-sort col-id">ID
+                  <span class="sortorder" ng-show="sortProperty === 'id'" ng-class="{reverse: sortReverse}"></span>
+                </th>
                 <th ng-click="sortBy('name')" class="col-sort col-name">Machine Name
                   <span class="sortorder" ng-show="sortProperty === 'name'" ng-class="{reverse: sortReverse}"></span>
                 </th>
@@ -157,6 +164,11 @@
             <tbody class="code-font">
               <!-- For Each Machine -->
               <tr ng-repeat="machine in machines | filter:search:strict | orderBy:sortProperty:sortReverse" ng-class="{true:'success', false:'warning'}[machine.available]">
+                <!-- Machine's ID -->
+                <td class="col-id">
+                  <span ng-show="!machine.edit">{{machine.id}}</span>
+                  <input type="number" ng-show="machine.edit" ng-model="machine.id" />
+                </td>
                 <!-- Machine Name -->
                 <td class="col-name">
                   <span ng-show="!machine.edit">{{machine.name}}</span>
