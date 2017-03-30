@@ -116,13 +116,24 @@ app.use(bodyParser.json());
 
 // Get All machines
 app.get("/machines", function (req, res, next) {
-  if (req.query.prettyPrint !== undefined) {
+  req.db.get("machines").find({}, {}, function (e, obj) {
+    if (obj && !e) {
+      res.status(200).json(obj);
+      log("Machines Get Request", req);
+    } else {
+      res.status(404).json({
+        error: e
+      });
+      log(e, req);
+    }
+  });
+  /*if (req.query.prettyPrint !== undefined) {
     res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
       JSON.stringify(data.machines, null, 4) + "</textarea></body></html>");
   } else {
     res.json(data.machines);
     log("Get Request", req);
-  }
+  }/* The old code */
 });
 
 // TODO: Set Value based on URL

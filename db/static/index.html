@@ -104,23 +104,22 @@
 <body ng-controller="controller" id="body" ng-focus="focus()">
   <!-- Navbar -->
   <nav class="navbar navbar-default navbar-fixed-top noselect" style="background-color:#555555">
-    <div class="container">
+    <div class="container container-fluid">
       <div class="navbar-header">
         <p style="display:inline;font-size:30px;cursor:default;" class="display-text">Test Machines</p>
       </div>
-      <form class="navbar-form navbar-right" id="navRight">
-        <div class="form-group">
-          <input type="text" style="color:white;cursor:text;" class="form-control" id="searchInput" ng-model="search.$" placeholder="Search">
-        </div>
-      </form>
+      <div class="collapse navbar-collapse">
+        <form class="navbar-form navbar-right" id="navRight">
+          <div class="form-group">
+            <input type="text" style="color:white;cursor:text;" class="form-control" id="searchInput" ng-model="search.$" placeholder="Search">
+          </div>
+        </form>
+      </div>
     </div>
   </nav>
   <!-- Actual Page Contents -->
   <div class="" style="padding-right:50px;padding-left:50px;">
     <form style="margin-top:100px;">
-      <button ng-show="sortProperty != null" class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Show the table in its natural order"
-        ng-click="sortProperty = null; sortReverse = false">Unsort</button>
-
       <div class="table-over">
         <div class="panel panel-default" style="margin-bottom:0px;">
           <table class="table table-condensed table-striped table-bordered">
@@ -238,8 +237,9 @@
     <br>
     <div class="noselect">
       <span style="font-size:20px;" class="display-text" tooltipped data-tooltip="Like Mike does" data-position="top"><i>Do no evil (Don't steal machines)</i></span>
-      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" href="" onclick="openInNewTab('./machines?prettyPrint')">View All Raw Data</a></span>
-      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" href="" onclick="storeData('username', '')">Clear Cached Username</a></span>
+      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" onclick="openInNewTab('./machines?prettyPrint')">View All Raw Data</a></span>
+      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" onclick="storeData('username', '')">Clear Cached Username</a></span>
+      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" ng-show="sortProperty != null" ng-click="sortProperty = null; sortReverse = false">Unsort List</a></span>
     </div>
   </div>
   <div class="fixed-action-btn tooltipped noselect" style="cursor:pointer;" data-position="left" data-delay="50" data-tooltip="Add Machine">
