@@ -230,12 +230,35 @@ app.get("/rdp/:address", function (req, res, next) {
 });
 
 // Preform an update with the given data
+// TODO: Use Database 
 app.post("/machines/update", function (req, res, next) {
-  log("Start Update", req);
+  log("Update Endpoint", req);
   const body = req.body;
   switch (body.action) {
     case "reserve":
-      try {
+      req.db.get("machines").findOne({
+        name: body.machineName
+      }, {}, function (e, obj) {
+        if (obj && !e) {
+          obj.available = false;
+          obj.reservedBy = body.reservedBy;
+          obj.reservedAt = new Date().getTime();
+          log("    " + body.machineName + " Reserved by " + body.reservedBy, req);
+          req.db.get("machines").update({
+            name: obj.name
+          }, obj, {
+            upsert: true
+          });
+          setMachineName(body.reservedBy, req);
+          res.status(200).json(obj);
+        } else {
+          log(e, req);
+          res.status(404).json({
+            error: e
+          });
+        }
+      });
+      /*try {
         const machineName = body.machineName;
         for (var x = 0; x < data.machines.length; x++)
           if (data.machines[x].name === machineName) {
@@ -251,10 +274,33 @@ app.post("/machines/update", function (req, res, next) {
       } catch (err) {
         handle(err, res);
         return;
-      }
-      break;
+      }/* Old (non-database) code */
+      return;
     case "release":
-      try {
+      req.db.get("machines").findOne({
+        name: body.machineName
+      }, {}, function (e, obj) {
+        if (obj && !e) {
+          const wasReservedBy = obj.reservedBy;
+          obj.available = true;
+          obj.reservedBy = "";
+          obj.reservedAt = undefined;
+          log("    " + obj.name + " Released (was reserved by " + wasReservedBy + ")", req);
+          req.db.get("machines").update({
+            name: obj.name
+          }, obj, {
+            upsert: true
+          });
+          setMachineName(body.reservedBy, req);
+          res.status(200).json(obj);
+        } else {
+          log(e, req);
+          res.status(404).json({
+            error: e
+          });
+        }
+      });
+      /*try {
         const machineName = body.machineName;
         for (var x = 0; x < data.machines.length; x++)
           if (data.machines[x].name === machineName) {
@@ -270,10 +316,11 @@ app.post("/machines/update", function (req, res, next) {
       } catch (err) {
         handle(err, res);
         return;
-      }
-      break;
+      }/* Old Code that doesn't use the database */
+      return;
     case "update":
       try {
+        log("Update Endpoint being used - UNEXPECTED", req);
         const machineName = body.machine.name;
         for (var x = 0; x < data.machines.length; x++)
           if (data.machines[x].name === machineName) {

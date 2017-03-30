@@ -31,7 +31,7 @@ namespace sys {
           IPv4InterfaceStatistics stats = nic.GetIPv4Statistics();
           int upSpeed = (int)(stats.BytesSent - uploadArr[i]) / 1024;
           int downSpeed = (int)(stats.BytesReceived - downloadArr[i]) / 1024;
-          sb.AppendLine(string.Format("{0} - Upload: {1} {2}/s Download: Upload: {3} {4}/s",
+          sb.AppendLine(string.Format("{0} - Upload: {1} {2}/s Download: {3} {4}/s",
             nic.Name,
             upSpeed > 1024 ? upSpeed / 1024 : upSpeed, upSpeed > 1024 ? "MB" : "KB",
             downSpeed > 1024 ? downSpeed / 1024 : downSpeed, downSpeed > 1024 ? "MB" : "KB"));
