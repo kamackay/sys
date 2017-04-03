@@ -65,6 +65,7 @@ app.controller('controller', function ($scope, $http) {
   $scope.reserve = function (machine, name) {
     name = name || getData("username") || prompt('What is your name?', '');
     name = capitalizeFirstLetter(name);
+    if (name === "") return;
     storeData("username", name);
     $http.post("/machines/update", {
       reservedBy: name,

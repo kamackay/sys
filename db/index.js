@@ -168,7 +168,7 @@ app.get("/machines/:name", function (req, res, next) {
   const machineName = req.params.name;
   log("Request for raw data of " + machineName, req);
   // Pull Data on this machine from the Database
-  req.db.get("machines").find({
+  req.db.get("machines").findOne({
     name: machineName.toUpperCase()
   }, {}, function (e, obj) {
     if (obj && !e) {
@@ -317,6 +317,45 @@ app.post("/machines/put", function (req, res, next) {
     log("Full Data Save (now " + req.body.machines.length + " machines)", req);
     if (req.body.name) setMachineName(req.body.name, req);
   } else log("Attempt to delete all data", req);
+});
+
+// Get An SSPEC's Information
+app.get("/sspec/:name", function (req, res, next) {
+  const name = req.params.name;
+  log("Get Request for SSPEC " + name, req);
+  req.db.get("sspec").findOne({
+    id: parseInt(name)
+  }, function (e, obj) {
+    if (obj && !e) {
+      res.status(200).json({
+        sspec: obj
+      });
+    } else {
+      res.status(404).json({
+        error: e
+      });
+    }
+  })
+
+});
+
+// Set An SSPEC's Information
+app.put("/sspec*", function (req, res, next) {
+  if (req.body.name) setMachineName(req.body.name, req);
+  const sspecData = req.body.sspec;
+  if (sspecData.id) {
+    req.db.get("sspec").update({
+      id: parseInt(sspecData.id)
+    }, sspecData, {
+      upsert: true
+    });
+    log("Saved sspec Data for " + sspecData.id, req);
+    res.status(200).json(sspecData);
+  } else {
+    res.status(400).json({
+      error: "Could not parse data"
+    });
+  }
 });
 
 function exitHandler(options, err) {
