@@ -85,23 +85,6 @@ function handle(err, res) {
   });
 }
 
-// Save data to the Database (and the backup JSON file)
-/*function saveData(db) {
-  jsonfile.writeFile("./data.json", data, function (err) {
-    if (err) log(err);
-    else {
-      log("Saved successfully");
-    }
-  });
-  var machineColl = db.get("machines");
-  for (var x = 0; x < data.machines.length; x++) {
-    machineColl.update({
-      name: data.machines[x].name
-    }, data.machines[x], {
-      upsert: true
-    });
-  }
-}/* Should no longer be used */
 app.use(bodyParser.json());
 
 // Get All machines
@@ -117,13 +100,6 @@ app.get("/machines", function (req, res, next) {
       log(e, req);
     }
   });
-  /*if (req.query.prettyPrint !== undefined) {
-    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:10px;'>" +
-      JSON.stringify(data.machines, null, 4) + "</textarea></body></html>");
-  } else {
-    res.json(data.machines);
-    log("Get Request", req);
-  }/* The old code */
 });
 
 // TODO: Set Value based on URL
@@ -180,23 +156,6 @@ app.get("/machines/:name", function (req, res, next) {
       });
     }
   });
-  /*var machine = undefined;
-  const machineName = req.params.name;
-  for (var x = 0; x < data.machines.length; x++)
-    if (data.machines[x].name.toLowerCase() === machineName.toLowerCase()) machine = data.machines[x];
-  if (machine === undefined) {
-    res.status(404).send("Unable to find a machine named " + machineName);
-    return;
-  }
-  if (req.query.prettyPrint !== undefined) {
-    res.send("<!DOCTYPE html><html><head><title>Machine Data (Raw View)</title><link rel='icon' href='./icon.ico'></head><body style='overflow:hidden;'><textarea readonly style='width:100vw;height:100vh;border-width:0px;padding:0px;'>" +
-      JSON.stringify(machine, null, 4) + "</textarea></body></html>");
-    log("Get Request for " + req.params.name + " (pretty)", req);
-  } else {
-    res.json(machine);
-    log("Get Request for " + req.params.name, req);
-  }
-  /* Old Version */
 });
 
 // Get the RDP for a specific machine
@@ -236,23 +195,6 @@ app.post("/machines/update", function (req, res, next) {
           });
         }
       });
-      /*try {
-        const machineName = body.machineName;
-        for (var x = 0; x < data.machines.length; x++)
-          if (data.machines[x].name === machineName) {
-            data.machines[x].available = false;
-            data.machines[x].reservedBy = body.reservedBy;
-            data.machines[x].reservedAt = new Date().getTime();
-            log("    " + machineName + " Reserved by " + body.reservedBy, req);
-            res.json({});
-            saveData(req.db);
-            setMachineName(body.reservedBy, req);
-            return;
-          }
-      } catch (err) {
-        handle(err, res);
-        return;
-      }/* Old (non-database) code */
       return;
     case "release":
       req.db.get("machines").findOne({
@@ -278,23 +220,6 @@ app.post("/machines/update", function (req, res, next) {
           });
         }
       });
-      /*try {
-        const machineName = body.machineName;
-        for (var x = 0; x < data.machines.length; x++)
-          if (data.machines[x].name === machineName) {
-            var wasReservedBy = data.machines[x].reservedBy;
-            data.machines[x].available = true;
-            data.machines[x].reservedBy = "";
-            data.machines[x].reservedAt = undefined;
-            log("    " + machineName + " Released (was reserved by " + wasReservedBy + ")", req);
-            res.json({});
-            saveData(req.db);
-            return;
-          }
-      } catch (err) {
-        handle(err, res);
-        return;
-      }/* Old Code that doesn't use the database */
       return;
   }
   log("Unsuccessful Update", req);
@@ -332,11 +257,98 @@ app.get("/sspec/:name", function (req, res, next) {
       });
     } else {
       res.status(404).json({
-        error: e
+        error: "Could not find SSPEC"
       });
     }
   })
+});
 
+app.get("/connections/", function (req, res, next) {
+  if (req.query.machineName) {
+    const machineName = req.query.machineName;
+    log("Request for the connections for machine " + req.query.machineName, req);
+    req.db.get("machines").findOne({
+      name: req.query.machineName
+    }, {}, function (e, obj) {
+      if (obj && !e) {
+        if (obj.connections) {
+          var query = [];
+          for (var x = 0; x < obj.connections.length; x++)
+            query.push({
+              name: obj.connections[x]
+            });
+          log("Looking for Connections: " + JSON.stringify(query), req);
+          req.db.get("connections").find({
+            $or: query
+          }, {}, function (e, obj) {
+            if (obj && !e) {
+              res.json({
+                connections: obj
+              });
+            } else {
+              res.status(400).json({
+                error: e
+              });
+            }
+          });
+        } else {
+          log("    No connections listed for machine " + req.query.machineName, req);
+          res.json({
+            connections: []
+          });
+        }
+      } else {
+        res.status(400).json({
+          error: e
+        });
+      }
+    });
+  } else if (req.query.connectionName) { // Get By Connection Name
+    log("Request for connection named " + req.query.connectionName, req);
+    req.db.get("connections").findOne({
+      name: req.query.connectionName
+    }, {}, function (e, obj) {
+      if (obj && !e) {
+        res.json(obj);
+      } else {
+        res.status(400).json({
+          error: e
+        });
+      }
+    });
+  } else {
+    log("Request for All Connections", req);
+    req.db.get("connections").find({}, {}, function (e, obj) {
+      if (obj && !e) {
+        res.json({
+          data: obj
+        });
+      } else {
+        res.status(400).json({
+          error: e
+        });
+      }
+    })
+  }
+});
+
+app.put("/connections/", function (req, res, next) {
+  const connectionData = req.body.data;
+  if (!connectionData.name) {
+    res.status(400).json({
+      error: "No Name in the data"
+    });
+    return;
+  }
+  req.db.get("connections").update({
+    name: connectionData.name
+  }, connectionData, {
+    upsert: true
+  });
+  log("Put on connection " + connectionData.name, req);
+  res.json({
+    status: "success"
+  });
 });
 
 // Set An SSPEC's Information
