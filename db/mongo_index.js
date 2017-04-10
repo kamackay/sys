@@ -13,20 +13,9 @@ var logFile = fs.createWriteStream('log.txt', {
 app.use(bodyParser.urlencoded({
   'extended': 'true'
 }));
-const mysql = require("mysql");
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Passw0rd',
-  database: "machines"
-});
-connection.connect(function (err) {
-  if (err) {
-    _log(err);
-  } else {
-    log("Connection!");
-  }
-});
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/data');
 
 var machinesAndNames = {};
 
@@ -68,9 +57,23 @@ function isFunction(functionToCheck) {
   return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
+function getAll(db, after) {
+  try {
+    db.get("machines").find({}, {}, function (e, obj) {
+      try {
+        if (isFunction(after)) after(obj);
+      } catch (err) {
+        log(err);
+      }
+    });
+  } catch (err) {
+    log(err);
+  }
+}
+
 // Runs for all inbound Requests
 app.use(function (req, res, next) {
-  req.db = connection;
+  req.db = db;
   next();
 });
 
@@ -86,13 +89,17 @@ app.use(bodyParser.json());
 
 // Get All machines
 app.get("/machines", function (req, res, next) {
-  log("Request for all Machines", req);
-  var query = connection.query("SELECT * FROM machines", {}, function (err, result) {
-    if (err) _log(err);
-    else {
-      res.json(result);
+  req.db.get("machines").find({}, {}, function (e, obj) {
+    if (obj && !e) {
+      res.status(200).json(obj);
+      log("Machines Get Request", req);
+    } else {
+      res.status(404).json({
+        error: e
+      });
+      log(e, req);
     }
-  })
+  });
 });
 
 // TODO: Set Value based on URL
@@ -160,38 +167,56 @@ app.get("/rdp/:address", function (req, res, next) {
 });
 
 // Preform an update with the given data
+// TODO: Use Database 
 app.post("/machines/update", function (req, res, next) {
   log("Update Endpoint", req);
   const body = req.body;
   switch (body.action) {
     case "reserve":
-      const post = [body.reservedBy, new Date(), body.machineName];
-      var query = req.db.query("UPDATE machines SET available=0, reservedBy=?, reservedAt=? WHERE name=?", post, function (err) {
-        if (err) {
-          _log(err);
-          res.status(500).json({
-            error: err
-          });
-        } else {
+      req.db.get("machines").findOne({
+        name: body.machineName
+      }, {}, function (e, obj) {
+        if (obj && !e) {
+          obj.available = false;
+          obj.reservedBy = body.reservedBy;
+          obj.reservedAt = new Date().getTime();
           log("    " + body.machineName + " Reserved by " + body.reservedBy, req);
-          res.json({
-            success: true
+          req.db.get("machines").update({
+            name: obj.name
+          }, obj, {
+            upsert: true
+          });
+          setMachineName(body.reservedBy, req);
+          res.status(200).json(obj);
+        } else {
+          log(e, req);
+          res.status(404).json({
+            error: e
           });
         }
       });
       return;
     case "release":
-      const dbData = [null, null, body.machineName];
-      var query = req.db.query("UPDATE machines SET available=1, reservedBy=?, reservedAt=? WHERE name=?", dbData, function (err) {
-        if (err) {
-          _log(err);
-          res.status(500).json({
-            error: err
+      req.db.get("machines").findOne({
+        name: body.machineName
+      }, {}, function (e, obj) {
+        if (obj && !e) {
+          const wasReservedBy = obj.reservedBy;
+          obj.available = true;
+          obj.reservedBy = "";
+          obj.reservedAt = undefined;
+          log("    " + obj.name + " Released (was reserved by " + wasReservedBy + ")", req);
+          req.db.get("machines").update({
+            name: obj.name
+          }, obj, {
+            upsert: true
           });
+          setMachineName(body.reservedBy, req);
+          res.status(200).json(obj);
         } else {
-          log("    " + body.machineName + " Released (was reserved by " + "unknown" + ")", req);
-          res.json({
-            success: true
+          log(e, req);
+          res.status(404).json({
+            error: e
           });
         }
       });
@@ -346,7 +371,7 @@ app.put("/sspec*", function (req, res, next) {
 });
 
 function exitHandler(options, err) {
-  connection.destroy();
+  db.close();
   log("Exiting");
   if (err) console.log(err.stack);
   if (options.exit) process.exit();

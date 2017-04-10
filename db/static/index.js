@@ -140,10 +140,10 @@ $(document).ready(function () {
     }
   });
   $(window).resize();
-  document.addEventListener("contextmenu", function (e) {
+  /*document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
     e.stopPropagation();
-  });
+  });/* Because this was annoying */
   document.addEventListener("keydown", function (e) {
     switch (e.which) {
       case 83:

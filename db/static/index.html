@@ -163,7 +163,7 @@
           <table class="table table-striped table-hover table-bordered">
             <tbody class="code-font">
               <!-- For Each Machine -->
-              <tr ng-repeat="machine in machines | filter:search:strict | orderBy:sortProperty:sortReverse" ng-class="{true:'success', false:'warning'}[machine.available]">
+              <tr ng-repeat="machine in machines | filter:search:strict | orderBy:sortProperty:sortReverse" ng-class="{true:'success', false:'warning'}[machine.available != 0]">
                 <!-- Machine's ID -->
                 <td class="col-id">
                   <span ng-show="!machine.edit">{{machine.id}}</span>
@@ -213,9 +213,9 @@
                 <!-- Action Buttons -->
                 <td class="noselect col-actions">
                   <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
-                    title="Claim {{machine.name}}" ng-show="machine.available">Claim</button>
+                    title="Claim {{machine.name}}" ng-show="machine.available != 0">Claim</button>
 
-                  <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="!machine.available">Release</button>
+                  <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="machine.available == 0">Release</button>
 
                   <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
                   <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="View all data for {{machine.name}}"
