@@ -52,13 +52,35 @@ app.controller('controller', function ($scope, $http) {
   // Push changes from the database
   $scope.save = function () {
     $scope.noEdit();
-    console.log("Start Save");
-    $http.post('/machines/put', {
-      machines: $scope.machines,
-      name: getData("username")
-    }).then(function (data) {
-      Materialize.toast("Saved to database", 2500, "rounded");
-    });
+    // console.log("Start Save");
+    // $http.post('/machines/put', {
+    //   machines: $scope.machines,
+    //   name: getData("username")
+    // }).then(function (data) {
+    //   Materialize.toast("Saved to database", 2500, "rounded");
+    // });
+    for (var x = 0; x < $scope.machines.length; x++) {
+      const machine = $scope.machines[x];
+      if (machine.changed) {
+        console.log("Send edited data for", machine.name);
+        var httpReq = new XMLHttpRequest();
+        httpReq.onreadystatechange = function () {
+          if (httpReq.readyState == httpReq.DONE) {
+            if (httpReq.status != 200) {
+              console.log("Status: ", httpReq.status);
+              console.log("Data:", httpReq.responseText);
+            } else {
+              setTimeout(periodicUpdate, 500);
+            }
+          }
+        };
+        httpReq.open("PUT", "/machines/" + machine.name);
+        httpReq.setRequestHeader("Content-Type", "application/json");
+        httpReq.send(JSON.stringify({
+          machine: machine
+        }));
+      }
+    }
   };
 
   // Reserve A Machine
@@ -100,7 +122,8 @@ app.controller('controller', function ($scope, $http) {
       name: machineName,
       available: true,
       reservedBy: "",
-      edit: true
+      edit: true,
+      changed: true
     });
   };
   // Delete a machine (The first one found with the given name)
@@ -140,10 +163,10 @@ $(document).ready(function () {
     }
   });
   $(window).resize();
-  /*document.addEventListener("contextmenu", function (e) {
+  document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
     e.stopPropagation();
-  });/* Because this was annoying */
+  }); /** */
   document.addEventListener("keydown", function (e) {
     switch (e.which) {
       case 83:

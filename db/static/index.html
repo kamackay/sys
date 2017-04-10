@@ -167,39 +167,39 @@
                 <!-- Machine's ID -->
                 <td class="col-id">
                   <span ng-show="!machine.edit">{{machine.id}}</span>
-                  <input type="number" ng-show="machine.edit" ng-model="machine.id" />
+                  <input type="number" ng-show="machine.edit" ng-model="machine.id" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Machine Name -->
                 <td class="col-name">
                   <span ng-show="!machine.edit">{{machine.name}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.name" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.name" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Machine Type -->
                 <td class="col-type">
                   <span ng-show="!machine.edit">{{machine.type}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.type" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.type" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Machine IP Address -->
                 <td class="col-ip">
                   <span ng-show="!machine.edit">{{machine.ip}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.ip" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.ip" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Network Type -->
                 <td class="col-network">
                   <span ng-show="!machine.edit && machine.network_type">{{machine.network_type}}</span>
                   <span ng-show="!machine.edit && !machine.network_type" class="not-applicable">N/A</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.network_type" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.network_type" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Network ID -->
                 <td class="col-netID">
                   <span ng-show="!machine.edit && machine.netID">{{machine.netID}}</span>
                   <span ng-show="!machine.edit && !machine.netID" class="not-applicable">N/A</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.netID" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.netID" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Machine Location -->
                 <td class="col-location">
                   <span ng-show="!machine.edit">{{machine.location}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.location" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Machine Claimed Info -->
                 <td class="col-claimed">
@@ -208,7 +208,7 @@
                 <!-- Machine Notes -->
                 <td class="col-notes">
                   <span ng-show="!machine.edit">{{machine.notes}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Action Buttons -->
                 <td class="noselect col-actions">
@@ -226,6 +226,9 @@
 
                   <button style="float:right;margin-right:5px;" class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Get RDP for {{machine.name}}"
                     ng-click="getRDP(machine)"><i class="material-icons">get_app</i></button>
+
+                  <span style="float:right;font-size:20px;padding-top:5px;" ng-show="machine.changed">&#916;</span>
+                  <span style="float:right;font-size:20px;padding-top:5px;" ng-show="!machine.changed">&nbsp;</span>
                 </td>
               </tr>
             </tbody>

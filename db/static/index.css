@@ -135,7 +135,7 @@ table {
 }
 
 .table-container {
-  height: 65vh;
+  height: 70vh;
   overflow-y: auto;
   margin-bottom: 25px
 }

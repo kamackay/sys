@@ -88,8 +88,12 @@ app.use(bodyParser.json());
 app.get("/machines", function (req, res, next) {
   log("Request for all Machines", req);
   var query = connection.query("SELECT * FROM machines", {}, function (err, result) {
-    if (err) _log(err);
-    else {
+    if (err) {
+      _log(err);
+      res.status(500).json({
+        error: err
+      });
+    } else {
       res.json(result);
     }
   })
@@ -128,6 +132,29 @@ app.put("/machines/:machineName/:valueName", function (req, res, next) {
   });
 });
 
+app.put("/machines/:name", function (req, res, next) {
+  const machineName = req.params.name;
+  const machine = req.body.machine;
+  log("Update data for " + machineName, req);
+  var dbData = [machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location,
+    machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location
+  ];
+  req.db.query("INSERT INTO machines(name, id, type, notes, ip, network_type, netID, location) VALUES (?,?,?,?,?,?,?,?) " +
+    "ON DUPLICATE KEY UPDATE id=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?", dbData,
+    function (err) {
+      if (err) {
+        _log(err);
+        res.status(500).json({
+          error: err
+        });
+      } else {
+        res.json({
+          success: true
+        });
+      }
+    });
+});
+
 // Get the information for a specific machine
 app.get("/machines/:name", function (req, res, next) {
   var responseObject = {};
@@ -137,15 +164,31 @@ app.get("/machines/:name", function (req, res, next) {
   const machineName = req.params.name;
   log("Request for raw data of " + machineName, req);
   // Pull Data on this machine from the Database
-  req.db.get("machines").findOne({
-    name: machineName.toUpperCase()
-  }, {}, function (e, obj) {
-    if (obj && !e) {
-      responseObject.machine = obj;
-      sendResponse(responseObject);
+  req.db.query("SELECT * FROM machines WHERE name=?", [machineName], function (err, result) {
+    if (err) {
+      _log(err);
+      res.status(500).json({
+        error: err
+      });
     } else {
-      res.status(404).json({
-        error: "Could not find machine " + machineName
+      res.json(result);
+    }
+  });
+});
+
+// Delete a machine from the database
+app.delete("/machines/:name", function (req, res, next) {
+  const machineName = req.params.name;
+  log("!Delete machine " + machineName, req);
+  req.db.query("DELETE FROM machines WHERE name=?", [machineName], function (err) {
+    if (err) {
+      _log(err);
+      res.status(500).json({
+        error: err
+      });
+    } else {
+      res.json({
+        success: true
       });
     }
   });
@@ -205,14 +248,18 @@ app.post("/machines/update", function (req, res, next) {
 app.post("/machines/put", function (req, res, next) {
   if (req.body.machines && req.body.machines.length > 0) {
     res.send("Accepting Data on blind faith");
-    const collection = req.db.get("machines");
     for (var x = 0; x < req.body.machines.length; x++) {
       const machine = req.body.machines[x];
-      collection.update({
-        name: machine.name
-      }, machine, {
-        upsert: true
-      });
+      // There has to be a better way to do this
+      var dbData = [
+        machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location,
+        machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location
+      ];
+      req.db.query("INSERT INTO machines(name, id, type, notes, ip, network_type, netID, location) VALUES (?,?,?,?,?,?,?,?) " +
+        "ON DUPLICATE KEY UPDATE id=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?", dbData,
+        function (err) {
+          if (err) _log(err);
+        })
     }
     log("Full Data Save (now " + req.body.machines.length + " machines)", req);
     if (req.body.name) setMachineName(req.body.name, req);
