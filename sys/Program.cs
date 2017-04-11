@@ -66,6 +66,9 @@ namespace sys {
       }));
       keyTracker.Add(Keys.LControlKey, new KeyTrackerHandler(delegate {
         Process.Start("https://google.com");
+        Toast.show("Click to disable", timeout: 2500, backgroundColor: Color.Black, animate: false, click: delegate {
+          SysSettings.setSetting(SysSettings.keyPressListenerOn, false.ToString());
+        });
       }));
       keyTracker.Add(Keys.RControlKey, new KeyTrackerHandler(delegate {
         string num = Microsoft.VisualBasic.Interaction.InputBox("Which VM?", "Which VM?", "1");
@@ -80,7 +83,7 @@ namespace sys {
         } else Toast.show("Invalid");
       }));
       keyTracker.Add(Keys.RShiftKey, new KeyTrackerHandler(delegate {
-        Toast.show("Stop pressing Shift so much", 3500, Color.Red);
+        Toast.show("Stop pressing Shift so much", timeout:3500, backgroundColor:Color.Red);
       }, 5, 10000));
       keyTracker.Add(Keys.PrintScreen, new KeyTrackerHandler(delegate {
         Toast.show("Give Me a Macro", 3000, Color.Gray);

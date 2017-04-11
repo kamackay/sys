@@ -127,13 +127,10 @@ app.controller('controller', function ($scope, $http) {
     });
   };
   // Delete a machine (The first one found with the given name)
-  $scope.delete = function (machine) {
-    for (var x = 0; x < $scope.machines.length; x++) {
-      if ($scope.machines[x].name == machine) {
-        $scope.machines.splice(x, 1);
-        return;
-      }
-    }
+  $scope.delete = function (machineName) {
+    $http.delete("/machines/" + machineName, {}).then(function (data) {
+      $scope.update();
+    });
   };
 
   $scope.getRDP = function (machine) {

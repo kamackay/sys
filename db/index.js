@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 }));
 const mysql = require("mysql");
 const connection = mysql.createConnection({
-  host: 'localhost',
+  host: 'http://nc45ltgz50q52',
   user: 'root',
   password: 'Passw0rd',
   database: "machines"
@@ -24,7 +24,7 @@ connection.connect(function (err) {
   if (err) {
     _log(err);
   } else {
-    log("Connection!");
+    log("Database Successfully Connected");
   }
 });
 
@@ -87,7 +87,7 @@ app.use(bodyParser.json());
 // Get All machines
 app.get("/machines", function (req, res, next) {
   log("Request for all Machines", req);
-  var query = connection.query("SELECT * FROM machines", {}, function (err, result) {
+  var query = connection.query("SELECT * FROM Machines", {}, function (err, result) {
     if (err) {
       _log(err);
       res.status(500).json({
@@ -139,7 +139,7 @@ app.put("/machines/:name", function (req, res, next) {
   var dbData = [machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location,
     machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location
   ];
-  req.db.query("INSERT INTO machines(name, id, type, notes, ip, network_type, netID, location) VALUES (?,?,?,?,?,?,?,?) " +
+  req.db.query("INSERT INTO Machines(name, id, type, notes, ip, network_type, netID, location) VALUES (?,?,?,?,?,?,?,?) " +
     "ON DUPLICATE KEY UPDATE id=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?", dbData,
     function (err) {
       if (err) {
@@ -164,7 +164,7 @@ app.get("/machines/:name", function (req, res, next) {
   const machineName = req.params.name;
   log("Request for raw data of " + machineName, req);
   // Pull Data on this machine from the Database
-  req.db.query("SELECT * FROM machines WHERE name=?", [machineName], function (err, result) {
+  req.db.query("SELECT * FROM Machines WHERE name=?", [machineName], function (err, result) {
     if (err) {
       _log(err);
       res.status(500).json({
@@ -180,7 +180,7 @@ app.get("/machines/:name", function (req, res, next) {
 app.delete("/machines/:name", function (req, res, next) {
   const machineName = req.params.name;
   log("!Delete machine " + machineName, req);
-  req.db.query("DELETE FROM machines WHERE name=?", [machineName], function (err) {
+  req.db.query("DELETE FROM Machines WHERE name=?", [machineName], function (err) {
     if (err) {
       _log(err);
       res.status(500).json({
@@ -209,7 +209,7 @@ app.post("/machines/update", function (req, res, next) {
   switch (body.action) {
     case "reserve":
       const post = [body.reservedBy, new Date(), body.machineName];
-      var query = req.db.query("UPDATE machines SET available=0, reservedBy=?, reservedAt=? WHERE name=?", post, function (err) {
+      var query = req.db.query("UPDATE Machines SET available=0, reservedBy=?, reservedAt=? WHERE name=?", post, function (err) {
         if (err) {
           _log(err);
           res.status(500).json({
@@ -225,7 +225,7 @@ app.post("/machines/update", function (req, res, next) {
       return;
     case "release":
       const dbData = [null, null, body.machineName];
-      var query = req.db.query("UPDATE machines SET available=1, reservedBy=?, reservedAt=? WHERE name=?", dbData, function (err) {
+      var query = req.db.query("UPDATE Machines SET available=1, reservedBy=?, reservedAt=? WHERE name=?", dbData, function (err) {
         if (err) {
           _log(err);
           res.status(500).json({
@@ -264,25 +264,6 @@ app.post("/machines/put", function (req, res, next) {
     log("Full Data Save (now " + req.body.machines.length + " machines)", req);
     if (req.body.name) setMachineName(req.body.name, req);
   } else log("Attempt to delete all data", req);
-});
-
-// Get An SSPEC's Information
-app.get("/sspec/:name", function (req, res, next) {
-  const name = req.params.name;
-  log("Get Request for SSPEC " + name, req);
-  req.db.get("sspec").findOne({
-    id: parseInt(name)
-  }, function (e, obj) {
-    if (obj && !e) {
-      res.status(200).json({
-        sspec: obj
-      });
-    } else {
-      res.status(404).json({
-        error: "Could not find SSPEC"
-      });
-    }
-  })
 });
 
 app.get("/connections/", function (req, res, next) {

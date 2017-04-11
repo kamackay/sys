@@ -6,12 +6,12 @@ using System.Windows.Forms;
 
 namespace sys {
   public class Toast : Form {
-    public static void show(string message, int timeout = 2000, Color? backgroundColor = null, bool animate = true) {
+    public static void show(string message, int timeout = 2000, Color? backgroundColor = null, bool animate = true, Action click = null) {
       if (backgroundColor == null) backgroundColor = Color.FromArgb(0x22, 0x22, 0x22);
-      new Toast(message, timeout, (Color)backgroundColor, animate: animate).Show();
+      new Toast(message, timeout, (Color)backgroundColor, animate: animate, click: click).Show();
     }
 
-    private Toast(string message, int timeout, Color backgroundColor, bool animate) {
+    private Toast(string message, int timeout, Color backgroundColor, bool animate, Action click) {
       components = new Container();
       AutoScaleMode = AutoScaleMode.Font;
       FormBorderStyle = FormBorderStyle.None;
@@ -63,10 +63,17 @@ namespace sys {
           } catch { }
         });
       };
-      Click += delegate {
+      EventHandler onClick = delegate {
         Close();
         open = false;
+        if (click != null) {
+          try { click.Invoke(); } catch (Exception e) {
+            Console.WriteLine(e.Message);
+          }
+        }
       };
+      Click += onClick;
+      foreach (Control c in Controls) c.Click += onClick;
     }
     Label l;
 
