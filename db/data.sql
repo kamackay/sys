@@ -1,5 +1,7 @@
 -- Create a Schema named "machines" to run this in
 
+DROP TABLE MachineConnections;
+DROP TABLE Connections;
 DROP TABLE Machines;
 
 CREATE TABLE Machines (
@@ -17,9 +19,18 @@ CREATE TABLE Machines (
 );
 
 CREATE TABLE Connections (
-  id INT PRIMARY KEY AUTO_INCREMENT,
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name TEXT NOT NULL,
+  channel TEXT,
+  protocol TEXT,
+  md TEXT
+);
+
+CREATE TABLE MachineConnections (
+  connectionID INT,
   machineID INT,
-  FOREIGN KEY (machineID) REFERENCES Machines(id)
+  FOREIGN KEY (machineID) REFERENCES Machines(id),
+  FOREIGN KEY (connectionID) REFERENCES Connections(id)
 );
 
 INSERT INTO Machines (name, type, notes, ip, network_type, netID, location) VALUES
