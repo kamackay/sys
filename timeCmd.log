@@ -1,0 +1,46 @@
+
+Executing Command : ping localhost 
+
+Pinging NC45LT3TYQQF2.ral.elsterus.com [::1] with 32 bytes of data:
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+
+Ping statistics for ::1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+Took 3.219322 seconds to execute
+Executing Command : python svn.py 
+
+Executing Command : ping localhost 
+
+Pinging NC45LT3TYQQF2.ral.elsterus.com [::1] with 32 bytes of data:
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+
+Ping statistics for ::1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+Took 3.189318 seconds to execute
+Executing Command : ping localhost 
+
+Pinging NC45LT3TYQQF2.ral.elsterus.com [::1] with 32 bytes of data:
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+Reply from ::1: time<1ms 
+
+Ping statistics for ::1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+Took 3.149315 seconds to execute
+Executing Command : python svn.py 

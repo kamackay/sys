@@ -7,7 +7,7 @@ def get_input():
   s = input("What Folder?\t")
   a = shlex.split(s.replace('\\', '\\\\'))
   arguments = {
-    "path": a[0],
+    "path": a[0] if len(a) > 0 else "",
     "verbose": "--v" in a,
     "sub-info": "--sub-info" in a or "--sub-items" in a,
     "raw": a
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
 
   args = get_input()
-  while args["path"] != "q":
+  while args["path"] != "q" and args["path"] != "":
     path = args["path"]
     if os.path.exists(path):
       start_time = datetime.now()
