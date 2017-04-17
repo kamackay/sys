@@ -41,10 +41,12 @@ def svn_pull(path):
   log("{}: SVN Update on {}".format(get_timestamp().split(' ')[-1], quotes(path)))
   pipe = subprocess.Popen("svn update {}".format(quotes(path)),
                           stdout=subprocess.PIPE,
-                          stderr=subprocess.PIPE)
-  out, err = pipe.communicate()
-  log(out.decode(), indent=1)
-  log(err.decode(), indent=1)
+                          stderr=subprocess.PIPE,
+                          universal_newlines=True)
+  for stdout_line in iter(pipe.stdout.readline, ""):
+    log(stdout_line, indent=1)
+  pipe.stdout.close()
+  return_code = pipe.wait()
 
 
 if __name__ == "__main__":
