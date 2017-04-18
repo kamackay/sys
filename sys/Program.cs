@@ -119,7 +119,8 @@ namespace sys {
         createTimer(delegate {
           try {
             foreach(Process p in Process.GetProcesses()) {
-              if (!p.Responding) Toast.show(string.Format("\"{0}\" is not responding", p.ProcessName), animate: false);
+              if (!p.Responding && bool.Parse(SysSettings.getSetting(SysSettings.showNonRespondingProcesses)))
+                Toast.show(string.Format("\"{0}\" is not responding", p.ProcessName), animate: false);
             }
           } catch (Exception e) {
             handle(e);
@@ -384,7 +385,8 @@ namespace sys {
         defaults = new Dictionary<string, string>() {
           { deleteFromDownloadsDays, "7" },
           { openTextEditorOnStartup, "false" },
-          { keyPressListenerOn, "true" }
+          { keyPressListenerOn, "true" },
+          { showNonRespondingProcesses, "true" }
         };
       }
 
@@ -393,7 +395,8 @@ namespace sys {
       public static string lastOpened = "SettingsLastOpened",
         deleteFromDownloadsDays = "DeleteFromDownloadsDays",
         openTextEditorOnStartup = "OpenTextEditorOnStartup",
-        keyPressListenerOn = "KeyPressListenerOn";
+        keyPressListenerOn = "KeyPressListenerOn", 
+        showNonRespondingProcesses = "ShowNonRespondingProcesses";
 
       private static string settingRoot = @"Software\Keith\Sys\Settings";
 
