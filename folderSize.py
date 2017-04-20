@@ -31,7 +31,7 @@ def pad_to_len(s, l, front = False):
 
 # noinspection PyBroadException
 def get_size(start_path = '.', verbose = True):
-  total_size = 0
+  total_size = os.path.getsize(start_path) if os.path.isfile(start_path) else 0
   items = 0
   try:
     for dirpath, dirnames, filenames in os.walk(start_path):
