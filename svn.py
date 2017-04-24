@@ -54,7 +54,7 @@ if __name__ == "__main__":
   join = os.path.join
   start_time = datetime.now()
   log("\n{}\nStarting: {}\n".format('=' * 50, get_timestamp()))
-  for root in get_lines("svn.paths") + sys.argv[1:]:
+  for root in sys.argv[1:] + get_lines("svn.paths"):
     try:
       if root.startswith("#"):
         continue
