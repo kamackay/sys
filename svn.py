@@ -29,7 +29,7 @@ def quotes(text):
   return text if ' ' not in text else '"{}"'.format(text)
 
 
-def get_lines(filename="svn.paths"):
+def get_lines(filename = "svn.paths"):
   try:
     with open(filename, "r+") as f:
       content = f.readlines()
@@ -67,7 +67,7 @@ if __name__ == "__main__":
             sub_path = join(path, folder)
             svn_pull(sub_path)
       else:
-          svn_pull(root)
+        svn_pull(root)
     except Exception as e:
       log(e)
   log("{}: Done - Total Time: {}\n".format(get_timestamp(), (datetime.now() - start_time)))
