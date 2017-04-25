@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 }));
 const mysql = require("mysql");
 const connection = mysql.createConnection({
-  host: 'http://nc45ltgz50q52',
+  host: 'localhost',
   user: 'root',
   password: 'Passw0rd',
   database: "machines"
