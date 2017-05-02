@@ -9,7 +9,7 @@ def get_timestamp():
   return str(datetime.now())
 
 
-def to_file(line, filename = "svn.log", append = True):
+def to_file(line, filename = "c:\\keith\\tools\\svn.log", append = True):
   with open(filename, "a+" if append else "w+") as f:
     f.write(line)
 
