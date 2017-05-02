@@ -1,9 +1,11 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -149,8 +151,10 @@ namespace sys {
         string downloadsFolder = KnownFolders.GetPath(KnownFolder.Downloads);
         try {
           bool didSomething = false;
-          foreach (string path in Directory.GetFileSystemEntries(downloadsFolder, "*", SearchOption.TopDirectoryOnly)) {
+          List<string> dirs = new List<string>();
+          foreach (string path in Directory.GetFileSystemEntries(downloadsFolder, "*", SearchOption.AllDirectories)) {
             if (Directory.Exists(path)) {
+              dirs.Add(path);
               // Is a path
               DateTime time = Directory.GetLastWriteTime(path);
               if ((DateTime.Now - time).TotalDays >= days) {
@@ -164,6 +168,12 @@ namespace sys {
                 File.Delete(path);
                 didSomething = true;
               }
+            }
+          }
+          foreach (string path in dirs) {
+            if (!Directory.EnumerateFileSystemEntries(path).Any()) {
+              // Empty Directory, delete it
+              Directory.Delete(path, true);
             }
           }
           if (didSomething || log) Toast.show("Downloads Cleaned Up");
