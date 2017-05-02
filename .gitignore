@@ -11,4 +11,5 @@ db/node_modules/*
 db/log.txt
 timeCmd.log
 *.log
+*log.txt
 *pycache*
