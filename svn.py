@@ -14,11 +14,11 @@ def to_file(line, filename = "svn.log", append = True):
     f.write(line)
 
 
-def log(s, indent = 0, print_timestamp = False):
+def log(s, indent = 0, print_timestamp = True):
   tabbing = "\t" * (indent + 1 if print_timestamp else indent)
   if isinstance(s, str):
     for line in s.splitlines():
-      t = get_timestamp() + tabbing + line if print_timestamp else tabbing + line
+      t = get_timestamp().split(" ")[-1] + tabbing + line if print_timestamp else tabbing + line
       print(t)
       to_file(t + "\n")
   else:
@@ -54,7 +54,7 @@ if __name__ == "__main__":
   join = os.path.join
   start_time = datetime.now()
   log("\n{}\nStarting: {}\n".format('=' * 50, get_timestamp()))
-  for root in sys.argv[1:] + get_lines("svn.paths"):
+  for root in sys.argv[1:] + get_lines("c:\\keith\\tools\\svn.paths"):
     try:
       if root.startswith("#"):
         continue
