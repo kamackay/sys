@@ -83,7 +83,7 @@ namespace sys {
         } else Toast.show("Invalid");
       }));
       keyTracker.Add(Keys.RShiftKey, new KeyTrackerHandler(delegate {
-        Toast.show("Stop pressing Shift so much", timeout:3500, backgroundColor:Color.Red);
+        Toast.show("Stop pressing Shift so much", timeout: 3500, backgroundColor: Color.Red);
       }, 5, 10000));
       keyTracker.Add(Keys.PrintScreen, new KeyTrackerHandler(delegate {
         Toast.show("Give Me a Macro", 3000, Color.Gray);
@@ -105,6 +105,7 @@ namespace sys {
         } catch { }
       };
       trayIcon.ContextMenu.MenuItems.AddRange(new MenuItem[] {
+        new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); }),
         new MenuItem("Show Editor", delegate { new TextEditor().show(); }),
         new MenuItem("Show Info", showInfo),
         new MenuItem("-"),
@@ -126,34 +127,7 @@ namespace sys {
             handle(e);
           }
         }, 1000),
-        createTimer(delegate {
-          try {
-            string daysString = SysSettings.getSetting(SysSettings.deleteFromDownloadsDays);
-            int days = int.Parse(daysString);
-            string downloadsFolder = KnownFolders.GetPath(KnownFolder.Downloads);
-            try {
-              bool didSomething = false;
-              foreach(string path in Directory.GetFileSystemEntries(downloadsFolder, "*", SearchOption.TopDirectoryOnly)) {
-                if (Directory.Exists(path)) {
-                  // Is a path
-                  DateTime time = Directory.GetLastWriteTime(path);
-                   if ((DateTime.Now - time).TotalDays >= days) {
-                      Directory.Delete(path, true);
-                      didSomething = true;
-                    }
-                } else {
-                  // Is a file
-                  DateTime time = new FileInfo(path).LastWriteTime;
-                  if ((DateTime.Now - time).TotalDays >= days) {
-                    File.Delete(path);
-                    didSomething = true;
-                  }
-                }
-              }
-              if (didSomething) Toast.show("Downloads Cleaned Up");
-            } catch(Exception e) { handle(e); Toast.show("Error while trying to clear your Downloads folder"); }
-          } catch (Exception e) {handle(e); Toast.show("Could not parse your settings. Please verify them"); }
-        }, Time.minutes(1))
+        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1))
       }) {
         t.Start();
         actions.Add(t);
@@ -166,6 +140,35 @@ namespace sys {
         string openString = SysSettings.getSetting(SysSettings.openTextEditorOnStartup);
         if (bool.Parse(openString)) new TextEditor().show();
       } catch { }
+    }
+
+    public void cleanUpDownloads(bool log = false) {
+      try {
+        string daysString = SysSettings.getSetting(SysSettings.deleteFromDownloadsDays);
+        int days = int.Parse(daysString);
+        string downloadsFolder = KnownFolders.GetPath(KnownFolder.Downloads);
+        try {
+          bool didSomething = false;
+          foreach (string path in Directory.GetFileSystemEntries(downloadsFolder, "*", SearchOption.TopDirectoryOnly)) {
+            if (Directory.Exists(path)) {
+              // Is a path
+              DateTime time = Directory.GetLastWriteTime(path);
+              if ((DateTime.Now - time).TotalDays >= days) {
+                Directory.Delete(path, true);
+                didSomething = true;
+              }
+            } else {
+              // Is a file
+              DateTime time = new FileInfo(path).LastWriteTime;
+              if ((DateTime.Now - time).TotalDays >= days) {
+                File.Delete(path);
+                didSomething = true;
+              }
+            }
+          }
+          if (didSomething || log) Toast.show("Downloads Cleaned Up");
+        } catch (Exception e) { handle(e); Toast.show("Error while trying to clear your Downloads folder"); }
+      } catch (Exception e) { handle(e); Toast.show("Could not parse your settings. Please verify them"); }
     }
 
     void initializeSettings() {
@@ -395,7 +398,7 @@ namespace sys {
       public static string lastOpened = "SettingsLastOpened",
         deleteFromDownloadsDays = "DeleteFromDownloadsDays",
         openTextEditorOnStartup = "OpenTextEditorOnStartup",
-        keyPressListenerOn = "KeyPressListenerOn", 
+        keyPressListenerOn = "KeyPressListenerOn",
         showNonRespondingProcesses = "ShowNonRespondingProcesses";
 
       private static string settingRoot = @"Software\Keith\Sys\Settings";
