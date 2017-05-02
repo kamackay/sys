@@ -18,7 +18,7 @@ def log(s, indent = 0, print_timestamp = True):
   tabbing = "\t" * (indent + 1 if print_timestamp else indent)
   if isinstance(s, str):
     for line in s.splitlines():
-      t = get_timestamp().split(" ")[-1] + tabbing + line if print_timestamp else tabbing + line
+      t = "{}{}{}".format((get_timestamp().split(" ")[-1] + " - ") if print_timestamp else "", tabbing, line)
       print(t)
       to_file(t + "\n")
   else:
