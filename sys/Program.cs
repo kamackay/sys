@@ -107,6 +107,12 @@ namespace sys {
         } catch { }
       };
       trayIcon.ContextMenu.MenuItems.AddRange(new MenuItem[] {
+        new MenuItem("Update APM", delegate {
+          ProcessStartInfo psi = new ProcessStartInfo();
+          psi.FileName = "APM.cmd";
+          psi.Arguments = "update";
+          Process.Start(psi);
+        }),
         new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); }),
         new MenuItem("Show Editor", delegate { new TextEditor().show(); }),
         new MenuItem("Show Info", showInfo),
@@ -129,7 +135,13 @@ namespace sys {
             handle(e);
           }
         }, 1000),
-        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1))
+        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1)),
+        createTimer(delegate {
+          ProcessStartInfo psi = new ProcessStartInfo();
+          psi.FileName = "APM.cmd";
+          psi.Arguments = "update";
+          Process.Start(psi);
+        }, Time.minutes(10))
       }) {
         t.Start();
         actions.Add(t);
