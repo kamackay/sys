@@ -135,13 +135,7 @@ namespace sys {
             handle(e);
           }
         }, 1000),
-        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1)),
-        createTimer(delegate {
-          ProcessStartInfo psi = new ProcessStartInfo();
-          psi.FileName = "APM.cmd";
-          psi.Arguments = "update";
-          Process.Start(psi);
-        }, Time.minutes(10))
+        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1))
       }) {
         t.Start();
         actions.Add(t);
@@ -411,7 +405,8 @@ namespace sys {
           { deleteFromDownloadsDays, "7" },
           { openTextEditorOnStartup, "false" },
           { keyPressListenerOn, "true" },
-          { showNonRespondingProcesses, "true" }
+          { showNonRespondingProcesses, "true" },
+          { apmUpgradeInterval, "10" }
         };
       }
 
@@ -421,7 +416,8 @@ namespace sys {
         deleteFromDownloadsDays = "DeleteFromDownloadsDays",
         openTextEditorOnStartup = "OpenTextEditorOnStartup",
         keyPressListenerOn = "KeyPressListenerOn",
-        showNonRespondingProcesses = "ShowNonRespondingProcesses";
+        showNonRespondingProcesses = "ShowNonRespondingProcesses",
+        apmUpgradeInterval = "APMUpgradeInterval";
 
       private static string settingRoot = @"Software\Keith\Sys\Settings";
 
