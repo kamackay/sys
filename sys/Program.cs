@@ -130,7 +130,9 @@ namespace sys {
           try {
             foreach(Process p in Process.GetProcesses()) {
               if (!p.Responding && bool.Parse(SysSettings.getSetting(SysSettings.showNonRespondingProcesses)))
-                Toast.show(string.Format("\"{0}\" is not responding", p.ProcessName), animate: false);
+                Toast.show(string.Format("\"{0}\" is not responding", p.ProcessName), animate: false, click:delegate {
+                  Process.Start("procexp"); // Start Process Explorer
+                });
             }
           } catch (Exception e) {
             handle(e);
@@ -469,7 +471,7 @@ namespace sys {
       }
 
       public static int seconds(double minutes) {
-        return (int)TimeSpan.FromSeconds(minutes).TotalMilliseconds;
+        return (int)(minutes * 1000);
       }
 
       public static string timestamp(DateTime? time = null) {
