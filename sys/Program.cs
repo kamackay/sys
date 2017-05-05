@@ -68,7 +68,7 @@ namespace sys {
       }));
       keyTracker.Add(Keys.LControlKey, new KeyTrackerHandler(delegate {
         Process.Start("https://google.com");
-        Toast.show("Click to disable", timeout: 2500, backgroundColor: Color.Black, animate: false, click: delegate {
+        Toast.show("Click to disable", timeout: Time.seconds(2.5), backgroundColor: Color.Black, animate: false, click: delegate {
           SysSettings.setSetting(SysSettings.keyPressListenerOn, false.ToString());
         });
       }));
@@ -85,13 +85,13 @@ namespace sys {
         } else Toast.show("Invalid");
       }));
       keyTracker.Add(Keys.RShiftKey, new KeyTrackerHandler(delegate {
-        Toast.show("Stop pressing Shift so much", timeout: 3500, backgroundColor: Color.Red);
-      }, 5, 10000));
+        Toast.show("Stop pressing Shift so much", timeout: Time.seconds(3.5), backgroundColor: Color.Red);
+      }, 5, Time.seconds(10)));
       keyTracker.Add(Keys.PrintScreen, new KeyTrackerHandler(delegate {
-        Toast.show("Give Me a Macro", 3000, Color.Gray);
+        Toast.show("Give Me a Macro", Time.seconds(3), Color.Gray);
       }));
       keyTracker.Add(Keys.Pause, new KeyTrackerHandler(delegate {
-        Toast.show("Give Me a Macro", 3000, Color.Gray);
+        Toast.show("Give Me a Macro", Time.seconds(3), Color.Gray);
       }));
       foreach (Keys key in new Keys[] { Keys.LWin }) keyStatus.Add(key, false);
       initializeSettings();
@@ -108,6 +108,7 @@ namespace sys {
       };
       trayIcon.ContextMenu.MenuItems.AddRange(new MenuItem[] {
         new MenuItem("Update APM", delegate {
+          closeMenu();
           ProcessStartInfo psi = new ProcessStartInfo();
           psi.FileName = "APM.cmd";
           psi.Arguments = "update";
@@ -134,7 +135,7 @@ namespace sys {
           } catch (Exception e) {
             handle(e);
           }
-        }, 1000),
+        }, Time.seconds(1)),
         createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1))
       }) {
         t.Start();
@@ -150,7 +151,16 @@ namespace sys {
       } catch { }
     }
 
+    public void closeMenu() {
+      try {
+        typeof(NotifyIcon).GetMethod("HideContextMenu", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(trayIcon, null);
+      } catch { }
+    }
+
     public void cleanUpDownloads(bool log = false) {
+      Action openDownloads = delegate {
+        Process.Start(KnownFolders.GetPath(KnownFolder.Downloads));
+      };
       try {
         string daysString = SysSettings.getSetting(SysSettings.deleteFromDownloadsDays);
         int days = int.Parse(daysString);
@@ -182,9 +192,9 @@ namespace sys {
               Directory.Delete(path, true);
             }
           }
-          if (didSomething || log) Toast.show("Downloads Cleaned Up");
-        } catch (Exception e) { handle(e); Toast.show("Error while trying to clear your Downloads folder"); }
-      } catch (Exception e) { handle(e); Toast.show("Could not parse your settings. Please verify them"); }
+          if (didSomething || log) Toast.show("Downloads Cleaned Up", click: openDownloads);
+        } catch (Exception e) { handle(e); Toast.show("Error while trying to clear your Downloads folder", click: openDownloads); }
+      } catch (Exception e) { handle(e); Toast.show("Could not parse your settings. Please verify them", click: delegate { new SettingsForm().Show(); }); }
     }
 
     void initializeSettings() {
@@ -206,7 +216,7 @@ namespace sys {
           // --------------------- Windows + Other Key -------------------------------
           switch (key) {
             case Keys.Q:
-              Toast.show("Windows Q");
+              // Toast.show("Windows Q");
               break;
             default: break;
           }
@@ -457,6 +467,11 @@ namespace sys {
       public static int minutes(double minutes) {
         return (int)TimeSpan.FromMinutes(minutes).TotalMilliseconds;
       }
+
+      public static int seconds(double minutes) {
+        return (int)TimeSpan.FromSeconds(minutes).TotalMilliseconds;
+      }
+
       public static string timestamp(DateTime? time = null) {
         DateTime t = time == null ? DateTime.Now : (DateTime)time;
         return t.ToString("yyyy/MM/dd HH:mm:ss:ffff");
