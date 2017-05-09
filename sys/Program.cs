@@ -201,7 +201,7 @@ namespace sys {
               Directory.Delete(path, true);
             }
           }
-          if (didSomething || log) Toast.show("Downloads Cleaned Up", click: openDownloads);
+          if (didSomething || log) Toast.show("Downloads Cleaned Up", click: openDownloads, timeout:3000);
         } catch (Exception e) { handle(e); Toast.show("Error while trying to clear your Downloads folder", click: openDownloads); }
       } catch (Exception e) { handle(e); Toast.show("Could not parse your settings. Please verify them", click: delegate { new SettingsForm().Show(); }); }
     }
