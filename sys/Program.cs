@@ -115,6 +115,13 @@ namespace sys {
           Process.Start(psi);
         }),
         new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); }),
+        new MenuItem("Fix the stupid internet thing", delegate {
+          new System.Threading.Thread(new System.Threading.ThreadStart(delegate {
+            Process p = Process.Start("iexplore");
+            System.Threading.Thread.Sleep(Time.seconds(10));
+            p.Kill();
+          })).Start();
+        }),
         new MenuItem("Show Editor", delegate { new TextEditor().show(); }),
         new MenuItem("Show Info", showInfo),
         new MenuItem("-"),
