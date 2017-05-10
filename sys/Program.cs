@@ -115,13 +115,7 @@ namespace sys {
           Process.Start(psi);
         }),
         new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); }),
-        new MenuItem("Fix the stupid internet thing", delegate {
-          new System.Threading.Thread(new System.Threading.ThreadStart(delegate {
-            Process p = Process.Start("iexplore");
-            System.Threading.Thread.Sleep(Time.seconds(10));
-            p.Kill();
-          })).Start();
-        }),
+        new MenuItem("Fix the stupid internet issue", delegate { fixStupidInternetIssue(); }),
         new MenuItem("Show Editor", delegate { new TextEditor().show(); }),
         new MenuItem("Show Info", showInfo),
         new MenuItem("-"),
@@ -145,7 +139,9 @@ namespace sys {
             handle(e);
           }
         }, Time.seconds(1)),
-        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1))
+        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1)),
+        createTimer(delegate { fixStupidInternetIssue(); }, interval: Time.minutes(10))
+        // -------------- End of Timers List ------------------
       }) {
         t.Start();
         actions.Add(t);
@@ -164,6 +160,16 @@ namespace sys {
       try {
         typeof(NotifyIcon).GetMethod("HideContextMenu", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(trayIcon, null);
       } catch { }
+    }
+
+    public void fixStupidInternetIssue() {
+      new System.Threading.Thread(new System.Threading.ThreadStart(delegate {
+        ProcessStartInfo psi = new ProcessStartInfo("iexplore");
+        psi.WindowStyle = ProcessWindowStyle.Minimized;
+        Process p = Process.Start(psi);
+        System.Threading.Thread.Sleep(Time.seconds(10));
+        p.Kill();
+      })).Start();
     }
 
     public void cleanUpDownloads(bool log = false) {
@@ -201,7 +207,7 @@ namespace sys {
               Directory.Delete(path, true);
             }
           }
-          if (didSomething || log) Toast.show("Downloads Cleaned Up", click: openDownloads, timeout:3000);
+          if (didSomething || log) Toast.show("Downloads Cleaned Up", click: openDownloads, timeout: 3000);
         } catch (Exception e) { handle(e); Toast.show("Error while trying to clear your Downloads folder", click: openDownloads); }
       } catch (Exception e) { handle(e); Toast.show("Could not parse your settings. Please verify them", click: delegate { new SettingsForm().Show(); }); }
     }

@@ -33,6 +33,12 @@ CREATE TABLE MachineConnections (
   FOREIGN KEY (connectionID) REFERENCES Connections(id)
 );
 
+CREATE TABLE WikiPages (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar(45) NOT NULL UNIQUE,
+  text LONGTEXT
+);
+
 INSERT INTO Machines (name, type, notes, ip, network_type, netID, location) VALUES
 ("NC45LTA3VIRT1", "A3Sim", "", "129.30.145.229", "NGC", 42, "Keith's Desk"),
 ("NC45LTA3VIRT2", "A3Sim", "", "129.30.145.230", "NGC", 42, "Keith's Desk"),

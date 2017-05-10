@@ -374,6 +374,29 @@ app.put("/sspec*", function (req, res, next) {
   }
 });
 
+
+// ---------- WIKI STUFF ---------------------
+
+app.get("/wikipage/:name", function (req, res, next) {
+  var name = req.params.name;
+  log("Request for wiki page \"" + name + "\"");
+
+  req.db.query("SELECT * FROM WikiPages WHERE name=?", [name], function (err, result) {
+    if (err) {
+      _log(err);
+      res.status(500).json({
+        error: err
+      });
+    } else {
+      log(result[0].contents);
+      res.send(result[0].contents);
+    }
+  });
+  try {
+    //res.status(500).send("Error while getting wiki page");
+  } catch (err) { /* Headers were already sent, so a response has already been sent */ }
+});
+
 function exitHandler(options, err) {
   connection.destroy();
   log("Exiting");
