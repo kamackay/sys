@@ -137,10 +137,10 @@ app.put("/machines/:name", function (req, res, next) {
   const machine = req.body.machine;
   log("Update data for " + machineName, req);
   var dbData = [machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location,
-    machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location
+    machine.name, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location
   ];
   req.db.query("INSERT INTO Machines(name, id, type, notes, ip, network_type, netID, location) VALUES (?,?,?,?,?,?,?,?) " +
-    "ON DUPLICATE KEY UPDATE id=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?", dbData,
+    "ON DUPLICATE KEY UPDATE name=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?", dbData,
     function (err) {
       if (err) {
         _log(err);
@@ -217,6 +217,7 @@ app.post("/machines/update", function (req, res, next) {
           });
         } else {
           log("    " + body.machineName + " Reserved by " + body.reservedBy, req);
+          setMachineName(body.reservedBy, req);
           res.json({
             success: true
           });
