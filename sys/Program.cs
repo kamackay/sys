@@ -138,8 +138,8 @@ namespace sys {
           } catch (Exception e) {
             handle(e);
           }
-        }, Time.seconds(1)),
-        createTimer(delegate { cleanUpDownloads(); }, Time.minutes(1)),
+        }, interval: Time.seconds(1)),
+        createTimer(delegate { cleanUpDownloads(); }, interval: Time.minutes(1)),
         createTimer(delegate { fixStupidInternetIssue(); }, interval: Time.minutes(10))
         // -------------- End of Timers List ------------------
       }) {
