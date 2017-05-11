@@ -1,10 +1,9 @@
 C:\FirmwareVerification\NGC_Servers
 C:\FirmwareVerification\My
 C:\FirmwareVerification
-#D:\FirmwareVerification
 C:\DevTools
 C:\MeterTools
 C:\MeterDefinitions
-#C:\EAComms
 C:\EAComms\App\trunk
 C:\MTApps
+C:\EAComms --silent
