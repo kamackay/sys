@@ -160,7 +160,7 @@ $(document).ready(function () {
     }
   });
   $(window).resize();
-  document.addEventListener("contextmenu", function (e) {
+  /**document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
     e.stopPropagation();
   }); /** */

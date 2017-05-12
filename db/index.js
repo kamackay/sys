@@ -84,10 +84,6 @@ function handle(err, res) {
 
 app.use(bodyParser.json());
 
-app.get("/teapot*", function (req, res, next) {
-  res.status(418).send();
-});
-
 // Get All machines
 app.get("/machines", function (req, res, next) {
   log("Request for all Machines", req);
@@ -140,11 +136,11 @@ app.put("/machines/:name", function (req, res, next) {
   const machineName = req.params.name;
   const machine = req.body.machine;
   log("Update data for " + machineName, req);
-  var dbData = [machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location,
-    machine.name, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location
+  var dbData = [machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location, machine.working,
+    machine.name, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location, machine.working
   ];
-  req.db.query("INSERT INTO Machines(name, id, type, notes, ip, network_type, netID, location) VALUES (?,?,?,?,?,?,?,?) " +
-    "ON DUPLICATE KEY UPDATE name=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?", dbData,
+  req.db.query("INSERT INTO Machines(name, id, type, notes, ip, network_type, netID, location, working) VALUES (?,?,?,?,?,?,?,?,?) " +
+    "ON DUPLICATE KEY UPDATE name=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?, working=?", dbData,
     function (err) {
       if (err) {
         _log(err);
@@ -257,11 +253,11 @@ app.post("/machines/put", function (req, res, next) {
       const machine = req.body.machines[x];
       // There has to be a better way to do this
       var dbData = [
-        machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location,
-        machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location
+        machine.name, machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location, machine.working,
+        machine.id, machine.type, machine.notes, machine.ip, machine.network_type, machine.netID, machine.location, machine.working
       ];
-      req.db.query("INSERT INTO machines(name, id, type, notes, ip, network_type, netID, location) VALUES (?,?,?,?,?,?,?,?) " +
-        "ON DUPLICATE KEY UPDATE id=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?", dbData,
+      req.db.query("INSERT INTO machines(name, id, type, notes, ip, network_type, netID, location, working) VALUES (?,?,?,?,?,?,?,?,?) " +
+        "ON DUPLICATE KEY UPDATE id=?, type=?, notes=?, ip=?, network_type=?, netID=?, location=?, working=?", dbData,
         function (err) {
           if (err) _log(err);
         })
@@ -376,29 +372,6 @@ app.put("/sspec*", function (req, res, next) {
       error: "Could not parse data"
     });
   }
-});
-
-
-// ---------- WIKI STUFF ---------------------
-
-app.get("/wikipage/:name", function (req, res, next) {
-  var name = req.params.name;
-  log("Request for wiki page \"" + name + "\"");
-
-  req.db.query("SELECT * FROM WikiPages WHERE name=?", [name], function (err, result) {
-    if (err) {
-      _log(err);
-      res.status(500).json({
-        error: err
-      });
-    } else {
-      log(result[0].contents);
-      res.send(result[0].contents);
-    }
-  });
-  try {
-    //res.status(500).send("Error while getting wiki page");
-  } catch (err) { /* Headers were already sent, so a response has already been sent */ }
 });
 
 function exitHandler(options, err) {

@@ -20,7 +20,8 @@
   <!-- Materialize Angular plugin -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
   <meta charset=utf-8 />
-  <!-- Contraband --><title>Test Machines Page</title>
+  <!-- Contraband -->
+  <title>Test Machines Page</title>
   <link rel="icon" href="./icon.ico">
   <script type="text/javascript" src="./index.js"></script>
   <link rel="stylesheet" href="./index.css">
@@ -59,7 +60,7 @@
     }
 
     .col-type {
-      width: 8%;
+      width: 7%;
     }
 
     .col-ip {
@@ -67,7 +68,7 @@
     }
 
     .col-network {
-      width: 8%;
+      width: 7%;
     }
 
     .col-netID {
@@ -76,6 +77,10 @@
 
     .col-location {
       width: 8%;
+    }
+
+    .col-working {
+      width: 4%;
     }
 
     .col-claimed {
@@ -151,6 +156,9 @@
                 <th ng-click="sortBy('location')" class="col-sort col-location">Location
                   <span class="sortorder" ng-show="sortProperty === 'location'" ng-class="{reverse: sortReverse}"></span>
                 </th>
+                <th ng-click="sortBy('working')" class="col-sort col-working">Working
+                  <span class="sortorder" ng-show="sortProperty === 'working'" ng-class="{reverse: sortReverse}"></span>
+                </th>
                 <th ng-click="sortBy('reservedBy')" class="col-sort col-claimed">Claimed By
                   <span class="sortorder" ng-show="sortProperty === 'reservedBy'" ng-class="{reverse: sortReverse}"></span>
                 </th>
@@ -164,43 +172,50 @@
           <table class="table table-striped table-hover table-bordered">
             <tbody class="code-font">
               <!-- For Each Machine -->
-              <tr ng-repeat="machine in machines | filter:search:strict | orderBy:sortProperty:sortReverse" ng-class="{true:'success', false:'warning'}[machine.available != 0]">
+              <tr ng-repeat="machine in machines | filter:search:strict | orderBy:sortProperty:sortReverse" ng-class="{success:machine.available!=0,warning:machine.available==0&&machine.working!=0,danger:machine.working==0}">
+                <!-- ng-class="{true:'success', false:'warning'}[machine.available != 0]" -->
                 <!-- Machine's ID -->
                 <td class="col-id">
                   <span ng-show="!machine.edit">{{machine.id}}</span>
-                  <input type="number" ng-show="machine.edit" ng-model="machine.id" ng-change="machine.changed = true"/>
+                  <input type="number" ng-show="machine.edit" ng-model="machine.id" ng-change="machine.changed = true" />
                 </td>
                 <!-- Machine Name -->
                 <td class="col-name">
                   <span ng-show="!machine.edit">{{machine.name}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.name" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.name" ng-change="machine.changed = true" />
                 </td>
                 <!-- Machine Type -->
                 <td class="col-type">
                   <span ng-show="!machine.edit">{{machine.type}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.type" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.type" ng-change="machine.changed = true" />
                 </td>
                 <!-- Machine IP Address -->
                 <td class="col-ip">
                   <span ng-show="!machine.edit">{{machine.ip}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.ip" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.ip" ng-change="machine.changed = true" />
                 </td>
                 <!-- Network Type -->
                 <td class="col-network">
                   <span ng-show="!machine.edit && machine.network_type">{{machine.network_type}}</span>
                   <span ng-show="!machine.edit && !machine.network_type" class="not-applicable">N/A</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.network_type" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.network_type" ng-change="machine.changed = true" />
                 </td>
                 <!-- Network ID -->
                 <td class="col-netID">
                   <span ng-show="!machine.edit && machine.netID">{{machine.netID}}</span>
                   <span ng-show="!machine.edit && !machine.netID" class="not-applicable">N/A</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.netID" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.netID" ng-change="machine.changed = true" />
                 </td>
                 <!-- Machine Location -->
                 <td class="col-location">
                   <span ng-show="!machine.edit">{{machine.location}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true" />
+                </td>
+                <!-- Machine Working -->
+                <td class="col-working">
+                  <span ng-show="!machine.edit">{{machine.working ? "Yes" : "No"}}</span>
+                  <span ng-show="machine.edit"><input type="checkbox" id="checkbox{{machine.id}}" ng-model="machine.working" ng-true-value="1" ng-false-value="0" ng-change="machine.changed=true"/>
+                  <label for="checkbox{{machine.id}}">{{machine.working}}</label></span>
                 </td>
                 <!-- Machine Claimed Info -->
                 <td class="col-claimed">
@@ -209,7 +224,7 @@
                 <!-- Machine Notes -->
                 <td class="col-notes">
                   <span ng-show="!machine.edit">{{machine.notes}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true" />
                 </td>
                 <!-- Action Buttons -->
                 <td class="noselect col-actions">
