@@ -15,7 +15,8 @@ CREATE TABLE Machines (
   netID int(11),
   location TEXT,
   reservedBy TEXT DEFAULT NULL,
-  reservedAt DATETIME
+  reservedAt DATETIME,
+  working tinyint(1) default 1
 );
 
 CREATE TABLE Connections (
