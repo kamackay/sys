@@ -84,6 +84,10 @@ function handle(err, res) {
 
 app.use(bodyParser.json());
 
+app.get("/teapot*", function (req, res, next) {
+  res.status(418).send();
+});
+
 // Get All machines
 app.get("/machines", function (req, res, next) {
   log("Request for all Machines", req);
