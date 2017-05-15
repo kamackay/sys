@@ -114,13 +114,13 @@ namespace sys {
           psi.Arguments = "update";
           Process.Start(psi);
         }),
-        new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); }),
-        new MenuItem("Fix the stupid internet issue", delegate { fixStupidInternetIssue(); }),
-        new MenuItem("Show Editor", delegate { new TextEditor().show(); }),
+        new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); closeMenu(); }),
+        new MenuItem("Fix the stupid internet issue", delegate { fixStupidInternetIssue(); closeMenu(); }),
+        new MenuItem("Show Editor", delegate { new TextEditor().show(); closeMenu(); }),
         new MenuItem("Show Info", showInfo),
         new MenuItem("-"),
-        new MenuItem("Settings", delegate { new SettingsForm().Show(); }),
-        new MenuItem("E&xit", delegate { exit(); })
+        new MenuItem("Settings", delegate { new SettingsForm().Show(); closeMenu(); }),
+        new MenuItem("E&xit", delegate { exit(); closeMenu(); })
       });
       trayIcon.MouseDoubleClick += delegate (object o, MouseEventArgs args) {
         if (args.Button == MouseButtons.Left) { new TextEditor().Show(); }
