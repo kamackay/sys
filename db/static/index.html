@@ -244,7 +244,7 @@
                   <button style="float:right;margin-right:5px;" class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Get RDP for {{machine.name}}"
                     ng-click="getRDP(machine)"><i class="material-icons">get_app</i></button>
 
-                  <span style="float:right;font-size:20px;padding-top:5px;" ng-show="machine.changed">&#916;</span>
+                  <span style="float:right;font-size:20px;padding-top:5px;" tooltipped data-tooltip="You have unsaved changes on {{machine.name}}" ng-show="machine.changed">&#916;</span>
                   <span style="float:right;font-size:20px;padding-top:5px;" ng-show="!machine.changed">&nbsp;</span>
                 </td>
               </tr>
