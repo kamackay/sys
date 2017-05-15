@@ -168,7 +168,7 @@ namespace sys {
         psi.WindowStyle = ProcessWindowStyle.Minimized;
         Process p = Process.Start(psi);
         System.Threading.Thread.Sleep(Time.seconds(10));
-        p.Kill();
+        try { p.Kill(); } catch { /* Must have already been killed? */}
       })).Start();
     }
 

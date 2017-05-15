@@ -142,6 +142,17 @@ app.controller('controller', function ($scope, $http) {
     $scope.sortReverse = ($scope.sortProperty === propertyName) ? !$scope.sortReverse : false;
     $scope.sortProperty = propertyName;
   };
+
+  $scope.keyPress = function (event){
+    switch(event.keyCode){
+      case 13:
+        $scope.save();
+        break;
+      default:
+        //console.log("Keypress", event.keyCode);
+        break;
+    }
+  };
 });
 
 // Stuff to do once the full page load is done

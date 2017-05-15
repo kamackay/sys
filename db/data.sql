@@ -5,18 +5,18 @@ DROP TABLE Connections;
 DROP TABLE Machines;
 
 CREATE TABLE Machines (
-  id int PRIMARY KEY AUTO_INCREMENT,
-  name varchar(45) NOT NULL UNIQUE,
-  type varchar(45),
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL UNIQUE,
+  type VARCHAR(45),
   notes LONGTEXT,
-  ip varchar(50),
-  available tinyint(1) DEFAULT 1,
+  ip VARCHAR(50),
+  available TINYINT(1) DEFAULT 1,
   network_type TEXT,
-  netID int(11),
+  netID INT(11),
   location TEXT,
   reservedBy TEXT DEFAULT NULL,
   reservedAt DATETIME,
-  working tinyint(1) default 1
+  working TINYINT(1) DEFAULT 1
 );
 
 CREATE TABLE Connections (

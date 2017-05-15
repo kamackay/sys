@@ -209,13 +209,14 @@
                 <!-- Machine Location -->
                 <td class="col-location">
                   <span ng-show="!machine.edit">{{machine.location}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true"/>
                 </td>
                 <!-- Machine Working -->
                 <td class="col-working">
-                  <span ng-show="!machine.edit">{{machine.working ? "Yes" : "No"}}</span>
-                  <span ng-show="machine.edit"><input type="checkbox" id="checkbox{{machine.id}}" ng-model="machine.working" ng-true-value="1" ng-false-value="0" ng-change="machine.changed=true"/>
-                  <label for="checkbox{{machine.id}}">{{machine.working}}</label></span>
+                  <span ng-show="true">
+                    <input type="checkbox" id="checkbox{{machine.id}}" ng-checked="machine.working==1" ng-click="machine.working=(machine.working+1)%2;machine.changed=true;"/>
+                    <label for="checkbox{{machine.id}}" tooltipped data-tooltip="Mark {{machine.name}} as {{machine.working==0?'Working':'Not Working'}}"></label>
+                  </span>
                 </td>
                 <!-- Machine Claimed Info -->
                 <td class="col-claimed">
@@ -224,7 +225,7 @@
                 <!-- Machine Notes -->
                 <td class="col-notes">
                   <span ng-show="!machine.edit">{{machine.notes}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true" />
+                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true" ng-keypress="keyPress($event);"/>
                 </td>
                 <!-- Action Buttons -->
                 <td class="noselect col-actions">
