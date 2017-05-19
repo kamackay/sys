@@ -4,7 +4,7 @@ C:\FirmwareVerification
 C:\DevTools
 C:\MeterTools
 C:\MeterDefinitions
-C:\EAComms\App\trunk
+C:\EAComms\App\trunk --silent
 #C:\EAComms\App\tags --silent
 C:\MTApps
 #C:\EAComms --silent
