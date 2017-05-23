@@ -95,12 +95,13 @@ namespace sys {
       }));
       foreach (Keys key in new Keys[] { Keys.LWin }) keyStatus.Add(key, false);
       initializeSettings();
-      trayIcon = new NotifyIcon();
-      trayIcon.Icon = Properties.Resources.icon;
-      trayIcon.Text = "System Info";
-      trayIcon.BalloonTipTitle = "System Manager";
-      trayIcon.Visible = true;
-      trayIcon.ContextMenu = new ContextMenu();
+      trayIcon = new NotifyIcon() {
+        Icon = Properties.Resources.icon,
+        Text = "System Info",
+        BalloonTipTitle = "System Manager",
+        Visible = true,
+        ContextMenu = new ContextMenu()
+      };
       trayIcon.MouseClick += (object o, MouseEventArgs args) => {
         try {
           typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(trayIcon, null);
@@ -164,8 +165,7 @@ namespace sys {
 
     public void fixStupidInternetIssue() {
       new System.Threading.Thread(new System.Threading.ThreadStart(delegate {
-        ProcessStartInfo psi = new ProcessStartInfo("iexplore");
-        psi.WindowStyle = ProcessWindowStyle.Minimized;
+        ProcessStartInfo psi = new ProcessStartInfo("iexplore") { WindowStyle = ProcessWindowStyle.Minimized };
         Process p = Process.Start(psi);
         System.Threading.Thread.Sleep(Time.seconds(10));
         try { p.Kill(); } catch { /* Must have already been killed? */}
