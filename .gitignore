@@ -13,3 +13,4 @@ timeCmd.log
 *.log
 *log.txt
 *pycache*
+*node_modules/*
