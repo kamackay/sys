@@ -24,7 +24,6 @@
   <title>{{pageName}}</title>
   <link rel="icon" href="../icon.ico">
   <script type="text/javascript" src="./index.js"></script>
-  <link rel="stylesheet" href="./index.css">
   <style>
     .noscroll {
       overflow: hidden;
@@ -39,8 +38,8 @@
       width: 90vw;
       bottom: 5px;
       left: 5vw;
-      border: thin black solid;
       overflow: auto;
+      padding:5px;
     }
   </style>
 </head>
@@ -77,13 +76,18 @@
             </div>
           </div>
         </div>
-        <div style="text-align:center;" class="col-md-6 col-sm-12">
+        <div style="text-align:center;padding:3px;" class="col-md-3 col-sm-12">
           <button class="btn waves-effect waves-light btn-large" type="submit" name="action">Parse
             <i class="material-icons right">send</i>
           </button>
         </div>
+        <div style="text-align:center;padding:3px;" class="col-md-3 col-sm-12">
+          <button class="btn waves-effect waves-light btn-large" type="button" ng-click="downloadInfo()">Download
+            <i class="material-icons right">get_app</i>
+          </button>
+        </div>
       </div>
-      <div id="logOutput"></div>
+      <div id="logOutput" class="well"></div>
     </form>
   </div>
 </body>
