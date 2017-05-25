@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html ng-app="module" ng-controller="controller">
+
+<head>
+  <!-- Using jQuery, but in protest -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!-- Google Material Font stylesheet -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <!-- Default Bootstrap files -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <!-- Google's Material Icons stuff -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Basic Angular js dependency -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+  <!-- Materialize UI files, to make things prettier -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+  <!-- Materialize Angular plugin -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
+  <meta charset=utf-8 />
+  <!-- Contraband -->
+  <title>{{pageName}}</title>
+  <link rel="icon" href="../icon.ico">
+  <script type="text/javascript" src="./index.js"></script>
+  <link rel="stylesheet" href="./index.css">
+  <style>
+    .noscroll {
+      overflow: hidden;
+    }
+
+    body#body {
+      background-color: #fff;
+    }
+
+    #logOutput {
+      position: fixed;
+      width: 90vw;
+      bottom: 5px;
+      left: 5vw;
+      border: thin black solid;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body id="body" ng-focus="focus()" class="">
+  <!-- Navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top noselect" style="background-color:#555555">
+    <div class="container container-fluid">
+      <a class="navbar-left" style="margin-right:25px;"><img style="max-height:45px;" src="../lambda.png"></a>
+      <div class="navbar-header">
+        <p style="display:inline;font-size:30px;cursor:default;" class="display-text">{{pageName}}</p>
+      </div>
+      <div class="collapse navbar-collapse">
+        <form class="navbar-form navbar-right" id="navRight">
+          <div class="form-group">
+            <input autofocus type="text" style="color:white;cursor:text;" class="form-control" id="searchInput" ng-model="search.$" placeholder="Search">
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <!-- Actual Page Contents -->
+  <div class="" style="padding-right:50px;padding-left:50px;">
+    <form style="margin-top:100px;" ng-submit="parse()">
+      <div class="row" id="topRow">
+        <div class="col-md-6 col-sm-12">
+          <div class="file-field input-field">
+            <div class="btn">
+              <span>File</span>
+              <input type="file" multiple id="fileInput">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" placeholder="Upload log files to parse">
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;" class="col-md-6 col-sm-12">
+          <button class="btn waves-effect waves-light btn-large" type="submit" name="action">Parse
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
+      <div id="logOutput"></div>
+    </form>
+  </div>
+</body>
+
+</html>
