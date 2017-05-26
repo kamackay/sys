@@ -20,6 +20,8 @@ app.controller('controller', function ($scope, $http) {
           // TODO: Not run all of these on every line
           // TODO: Warnings/failures/errors
           // TODO: User-specified strings/patterns to search for?
+          // TODO: add colors, marquees, other formatting
+          // TODO: Summary of the results for each file/all files
           // A bunch of regex patterns
           var re_start = /Running: (\w+)\.py -> (\w+)/;
           var re_end = /Ran \d tests? in (\d+\.?\d*)s/;
@@ -30,24 +32,46 @@ app.controller('controller', function ($scope, $http) {
           var re_assert_hline = /INFO -\W+Assert Line Number (\d+)/;
           var re_assert_cfile = /INFO -\W+Assert File ID = (\d+)/;
           var re_assert_cline = /INFO -\W+Assert Line ID = (\d+)/;
+          var re_pass = /OK/;
+          var re_fail = /FAILED \(failures=1\)/;
+          var re_error = /FAILED \(errors=1\)/;
+          var re_warning = /\<WARNING\>/;
           // Break up the log
           var logSplit = logContents.split('\n');
           fileResults += 'Number of lines: ' + logSplit.length + '<br>';
           // Iterate over each line, search for exciting facts about tests
           var error = '';
+          var has_warning = 0
           for (var j = 0; j < logSplit.length; j++) {
             // Find the name of the suite and test case
             var start = re_start.exec(logSplit[j]);
             if (start) {
               suite = '<br>- ' + start[1]
               test = '<br>- ' + start[2]
-              fileResults += '<br><b>' + logSplit[j] + '</b>' + suite + test;
+              fileResults += '<br><br><h5>' + logSplit[j] + '</h5>' + suite + test;
             };
             // Find the total time run
             var end = re_end.exec(logSplit[j]);
             if (end) {
-              time = '<br>- ' + end[1]
-              fileResults += time + ' seconds <br>';
+              time = Math.ceil(parseFloat(end[1]) / 60)
+              timestr = '<br>- ' + time + ' minute'
+              if (time > 1) timestr = timestr + 's'
+              fileResults += timestr;
+              // Find whether or not the test passed
+              var pass = re_pass.exec(logSplit[j + 2])
+              if (pass) {
+                if (has_warning) fileResults += '<br>- <span style="color: #ff9911">PASS-WR</span>'
+                else fileResults += '<br>- <span style="color: #11cc11">PASS</span>'
+              };
+              var fail = re_fail.exec(logSplit[j + 2])
+              if (fail) {
+                fileResults += '<br>- <span style="color: #dd1111">FAIL</span>'
+              };
+              var error = re_error.exec(logSplit[j + 2])
+              if (error) {
+                fileResults += '<br>- <span style="color: #dd1111">ERROR</span>'
+              };
+              has_warning = 0
             };
             // Find device type and version/revision
             var device = re_device.exec(logSplit[j]);
@@ -82,8 +106,13 @@ app.controller('controller', function ($scope, $http) {
               assert = cfile[1] + ':' + cline[1]
               fileResults += '<br>- Comms Assert [' + assert + ']';
             };
+            // Find warnings
+            var warning = re_warning.exec(logSplit[j]);
+            if (warning) {
+              has_warning = 1
+            };
           };
-          fileResults += '<br><marquee class="noselect"><a><img style="max-height:10px;" src="http://nc45ltgz50q52/lambda.png"></a></marquee>';
+          fileResults += '<br><br><marquee scrollamount="20" direction="right" behavior="alternate" class="noselect"><a><img style="max-height:10px;" src="http://nc45ltgz50q52/lambda.png"></a></marquee>';
           $el.append(fileResults);
         };
       }
