@@ -25,6 +25,27 @@
   <link rel="icon" href="../icon.ico">
   <script type="text/javascript" src="./index.js"></script>
   <style>
+    #toast-container *,
+    .btn,
+    .display-text,
+    .display-text *,
+    .noselect,
+    .noselect *,
+    button {
+      user-select: none;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      -o-user-select: none
+    }
+
+    .noselect,
+    .noselect *,
+    .not-applicable,
+    .not-applicable * {
+      cursor: default
+    }
+
     .noscroll {
       overflow: hidden;
     }
@@ -39,7 +60,7 @@
       bottom: 5px;
       left: 5vw;
       overflow: auto;
-      padding:5px;
+      padding: 5px;
     }
   </style>
 </head>
