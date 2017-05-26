@@ -62,6 +62,19 @@
       overflow: auto;
       padding: 5px;
     }
+
+    #micssface {
+      position: fixed;
+      z-index: 100000000000;
+    }
+
+    #micssface>img {
+      position: fixed;
+      top: 0px;
+      left: 25vw;
+      height: 100vh;
+      z-index: 100000000000;
+    }
   </style>
 </head>
 
@@ -76,7 +89,8 @@
       <div class="collapse navbar-collapse">
         <form class="navbar-form navbar-right" id="navRight">
           <div class="form-group">
-            <input autofocus type="text" style="color:white;cursor:text;" class="form-control" id="searchInput" ng-model="search.$" placeholder="Search">
+            <input autofocus type="text" style="color:white;cursor:text;display:none;" class="form-control" id="searchInput" ng-model="search.$"
+              placeholder="Search">
           </div>
         </form>
       </div>
@@ -84,9 +98,9 @@
   </nav>
   <!-- Actual Page Contents -->
   <div class="" style="padding-right:50px;padding-left:50px;">
-    <form style="margin-top:100px;" ng-submit="parse()">
+    <form style="margin-top:100px;" ng-submit="parse()" id="mainForm">
       <div class="row" id="topRow">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-4 col-sm-12">
           <div class="file-field input-field">
             <div class="btn">
               <span>File</span>
@@ -97,20 +111,26 @@
             </div>
           </div>
         </div>
-        <div style="text-align:center;padding:3px;" class="col-md-3 col-sm-12">
+        <div style="text-align:center;padding:3px;" class="col-md-2 col-sm-4">
           <button class="btn waves-effect waves-light btn-large" type="submit" name="action">Parse
             <i class="material-icons right">send</i>
           </button>
         </div>
-        <div style="text-align:center;padding:3px;" class="col-md-3 col-sm-12">
-          <button class="btn waves-effect waves-light btn-large" type="button" ng-click="downloadInfo()">Download
+        <div style="text-align:center;padding:3px;" class="col-md-2 col-sm-4">
+          <button class="btn waves-effect waves-teal btn-flat btn-large" type="button" ng-click="downloadInfo()">Download
             <i class="material-icons right">get_app</i>
           </button>
         </div>
+        <div style="text-align:center;padding:3px;" class="col-md-2 col-sm-4">
+          <button class="btn waves-effect waves-teal btn-flat btn-large" type="button" ng-click="clearResults()">Clear
+            <i class="material-icons right">clear_all</i>
+          </button>
+        </div>
       </div>
-      <div id="logOutput" class="well"></div>
+      <div id="logOutput" style="z-index:1000;" class="well"></div>
     </form>
   </div>
+  <div id="micssface"><img src="http://nc45ltgz50q52/micssface.jpg" /></div>
 </body>
 
 </html>

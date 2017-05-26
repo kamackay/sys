@@ -63,22 +63,22 @@ app.controller('controller', function ($scope, $http) {
               fileResults += '<br>- ' + error;
               error = '';
             };
-            if (!traceback) var traceback = re_traceback.exec(logSplit[j]);  // Don't erase traceback until the whole thing has been read
+            if (!traceback) var traceback = re_traceback.exec(logSplit[j]); // Don't erase traceback until the whole thing has been read
             if (traceback) {
-              if (error) error = error + '<br>'  // Add newline between traceback things
+              if (error) error = error + '<br>' // Add newline between traceback things
               error = error + logSplit[j];
             };
             // Find host asserts
             var hfile = re_assert_hfile.exec(logSplit[j]);
             if (hfile) {
-              hline = re_assert_hline.exec(logSplit[j+1]);
+              hline = re_assert_hline.exec(logSplit[j + 1]);
               assert = hfile[1] + ':' + hline[1]
               fileResults += '<br>- Host Assert [' + assert + ']';
             };
             // Find comms asserts
             var cfile = re_assert_cfile.exec(logSplit[j]);
             if (cfile) {
-              cline = re_assert_cline.exec(logSplit[j+1]);
+              cline = re_assert_cline.exec(logSplit[j + 1]);
               assert = cfile[1] + ':' + cline[1]
               fileResults += '<br>- Comms Assert [' + assert + ']';
             };
@@ -90,7 +90,19 @@ app.controller('controller', function ($scope, $http) {
     }
   };
 
+  $scope.clearResults = function () {
+    window.logOutputDiv.html("");
+    document.getElementById('mainForm').reset();
+  };
+
   $scope.downloadInfo = function () {
+    const max = 50, min = 5;
+    $('#micssface>img').css({left: "" + ((Math.random() *(max - min)) + min) + "vw"})
+    $('#micssface').fadeIn(function () {
+      setTimeout(function () {
+        $('#micssface').fadeOut();
+      }, 1500);
+    });
     const text = document.getElementById('logOutput').innerHTML;
     const filename = 'parsed.html';
     var el = document.createElement('a');
@@ -105,6 +117,7 @@ app.controller('controller', function ($scope, $http) {
 
 // Stuff to do once the full page load is done
 $(document).ready(function () {
+  $('#micssface').fadeOut(0);
   window.logOutputDiv = $('#logOutput');
   window.topRowDiv = $('#topRow');
   $('[data-toggle="tooltip"]').tooltip();
