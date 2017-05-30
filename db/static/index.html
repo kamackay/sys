@@ -107,6 +107,10 @@
     #body th.col-sort {
       cursor: pointer;
     }
+
+    #body a {
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -118,6 +122,9 @@
       <div class="navbar-header">
         <p style="display:inline;font-size:30px;cursor:default;" class="display-text">Test Machines</p>
       </div>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href=".\logs\">Log Parser</a></li>
+      </ul>
       <div class="collapse navbar-collapse">
         <form class="navbar-form navbar-right" id="navRight">
           <div class="form-group">
@@ -209,7 +216,7 @@
                 <!-- Machine Location -->
                 <td class="col-location">
                   <span ng-show="!machine.edit">{{machine.location}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true" />
                 </td>
                 <!-- Machine Working -->
                 <td class="col-working">
@@ -225,7 +232,8 @@
                 <!-- Machine Notes -->
                 <td class="col-notes">
                   <span ng-show="!machine.edit">{{machine.notes}}</span>
-                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true" ng-keypress="keyPress($event);"/>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true" ng-keypress="keyPress($event);"
+                  />
                 </td>
                 <!-- Action Buttons -->
                 <td class="noselect col-actions">
@@ -238,13 +246,14 @@
                   <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="View all data for {{machine.name}}"
                     onclick="openInNewTab('./machines/{{machine.name}}')"><i class="material-icons">visibility</i></button>
 
-                  <button ng-click="delete(machine.name)" type="button" style="float:right;max-height:25px;" class="btn btn-xs btn-small red" tooltipped data-tooltip="Delete {{machine.name}}"
-                    title="Delete {{machine.name}}"><i style="font-size:12px;" class="material-icons">clear</i></button>
+                  <button ng-click="delete(machine.name)" type="button" style="float:right;max-height:25px;" class="btn btn-xs btn-small red"
+                    tooltipped data-tooltip="Delete {{machine.name}}" title="Delete {{machine.name}}"><i style="font-size:12px;" class="material-icons">clear</i></button>
 
                   <button style="float:right;margin-right:5px;" class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Get RDP for {{machine.name}}"
                     ng-click="getRDP(machine)"><i class="material-icons">get_app</i></button>
 
-                  <span style="float:right;font-size:20px;padding-top:5px;" tooltipped data-tooltip="You have unsaved changes on {{machine.name}}" ng-show="machine.changed">&#916;</span>
+                  <span style="float:right;font-size:20px;padding-top:5px;" tooltipped data-tooltip="You have unsaved changes on {{machine.name}}"
+                    ng-show="machine.changed">&#916;</span>
                   <span style="float:right;font-size:20px;padding-top:5px;" ng-show="!machine.changed">&nbsp;</span>
                 </td>
               </tr>
