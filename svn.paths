@@ -6,5 +6,6 @@ C:\MeterTools
 C:\MeterDefinitions
 C:\EAComms\App\trunk --silent
 #C:\EAComms\App\tags --silent
+#C:\EAComms\App\branches --silent
 C:\MTApps
 #C:\EAComms --silent
