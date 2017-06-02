@@ -3,6 +3,11 @@
   "version": "1.1.0",
   "main": "app.js",
   "devDependencies": {
-    "electron": "^1.4.14"
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "file-system": "^2.2.2",
+    "monk": "^4.0.0",
+    "mysql": "^2.13.0",
+    "util": "^0.10.3"
   }
 }
