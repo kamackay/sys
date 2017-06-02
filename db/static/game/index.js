@@ -1,7 +1,7 @@
-(function() {
+(function () {
   var EndGamePopOver, GameField, GameState, NewGameButton, TicTacToeCell, TicTacToeCellsMatrix, TitleLabel, div, gameState, h1, ref;
 
-  GameState = (function() {
+  GameState = (function () {
     GameState.prototype.isX = true;
 
     GameState.prototype.playerX = 0;
@@ -18,7 +18,7 @@
 
     function GameState() {
       var x;
-      this.gameField = (function() {
+      this.gameField = (function () {
         var j, results;
         results = [];
         for (x = j = 0; j <= 8; x = ++j) {
@@ -28,7 +28,7 @@
       })();
     }
 
-    GameState.prototype.currentSymbol = function() {
+    GameState.prototype.currentSymbol = function () {
       if (this.isX) {
         return 'x';
       } else {
@@ -36,7 +36,7 @@
       }
     };
 
-    GameState.prototype.currentPlayer = function() {
+    GameState.prototype.currentPlayer = function () {
       if (this.isX) {
         return this.playerX;
       } else {
@@ -44,7 +44,7 @@
       }
     };
 
-    GameState.prototype.checkWinConditions = function() {
+    GameState.prototype.checkWinConditions = function () {
       var j, len, number, ref;
       ref = this.winningNumbers;
       for (j = 0, len = ref.length; j < len; j++) {
@@ -53,16 +53,16 @@
           this.winner = "Player " + (this.currentSymbol().toUpperCase());
         }
       }
-      if (this.moves > 8) {
+      if (this.moves > 9) {
         return this.winner = 'Nobody';
       }
     };
 
-    GameState.prototype.updateCurrentSymbol = function() {
+    GameState.prototype.updateCurrentSymbol = function () {
       return this.isX = !this.isX;
     };
 
-    GameState.prototype.updateState = function(index) {
+    GameState.prototype.updateState = function (index) {
       if (this.isX) {
         this.playerX += this.gameField[index];
       } else {
@@ -73,7 +73,7 @@
       return this.updateCurrentSymbol();
     };
 
-    GameState.prototype.reset = function() {
+    GameState.prototype.reset = function () {
       this.isX = true;
       this.playerX = 0;
       this.playerO = 0;
@@ -89,17 +89,17 @@
 
   ref = React.DOM, div = ref.div, h1 = ref.h1;
 
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     return React.renderComponent(GameField(), document.body);
   });
 
   GameField = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
       return {
         gameIsBeingPlayed: false
       };
     },
-    render: function() {
+    render: function () {
       return div({
         className: 'tic-tac-toe--field',
         children: [
@@ -113,13 +113,13 @@
         ]
       });
     },
-    onNewGame: function() {
+    onNewGame: function () {
       gameState.reset();
       return this.setState({
         gameIsBeingPlayed: true
       });
     },
-    onCellClick: function() {
+    onCellClick: function () {
       if (gameState.winner) {
         return this.setState({
           gameIsBeingPlayed: false
@@ -129,28 +129,28 @@
   });
 
   TicTacToeCell = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
       return {
         symbol: null
       };
     },
-    componentWillReceiveProps: function() {
+    componentWillReceiveProps: function () {
       if (!this.props.gameIsBeingPlayed) {
         return this.setState({
           symbol: null
         });
       }
     },
-    render: function() {
+    render: function () {
       return div({
         className: this.classes(),
         onMouseUp: this.clickHandler
       });
     },
-    classes: function() {
+    classes: function () {
       return ['tic-tac-toe-cell', this.state.symbol ? this.state.symbol + "Symbol" : void 0].join(' ');
     },
-    clickHandler: function() {
+    clickHandler: function () {
       if (!this.state.symbol) {
         this.setState({
           symbol: gameState.currentSymbol()
@@ -162,11 +162,11 @@
   });
 
   TicTacToeCellsMatrix = React.createClass({
-    render: function() {
+    render: function () {
       var i;
       return div({
         className: 'tic-tac-toe--cells-matrix',
-        children: (function() {
+        children: (function () {
           var j, results;
           results = [];
           for (i = j = 0; j <= 8; i = ++j) {
@@ -183,7 +183,7 @@
   });
 
   EndGamePopOver = React.createClass({
-    render: function() {
+    render: function () {
       return div({
         className: this.classes(),
         children: [
@@ -195,13 +195,13 @@
         ]
       });
     },
-    classes: function() {
+    classes: function () {
       return ['tic-tac-toe--end-game-popover', this.props.gameIsBeingPlayed ? "hidden" : void 0].join(' ');
     }
   });
 
   TitleLabel = React.createClass({
-    render: function() {
+    render: function () {
       return h1({
         className: 'tic-tac-toe--title-label',
         children: this.props.winner ? this.props.winner + " wins" : void 0
@@ -210,7 +210,7 @@
   });
 
   NewGameButton = React.createClass({
-    render: function() {
+    render: function () {
       return div({
         className: 'tic-tac-toe--new-game-button',
         children: 'New game',
