@@ -128,9 +128,10 @@ app.controller('controller', function ($scope, $http) {
   };
   // Delete a machine (The first one found with the given name)
   $scope.delete = function (machineName) {
-    $http.delete("/machines/" + machineName, {}).then(function (data) {
-      $scope.update();
-    });
+    if (window.confirm('Are you sure you want to delete ' + machineName + "?"))
+      $http.delete("/machines/" + machineName, {}).then(function (data) {
+        $scope.update();
+      });
   };
 
   $scope.getRDP = function (machine) {
@@ -143,8 +144,8 @@ app.controller('controller', function ($scope, $http) {
     $scope.sortProperty = propertyName;
   };
 
-  $scope.keyPress = function (event){
-    switch(event.keyCode){
+  $scope.keyPress = function (event) {
+    switch (event.keyCode) {
       case 13:
         $scope.save();
         break;
