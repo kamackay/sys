@@ -8,8 +8,8 @@ const E = {
 //const viewWindow = {ul: {x: 0,y: 1,z: 0},ll: {x: 0,y: 1,z: 0},ur: {x: 1,y: 1,z: 0},lr: {x: 1,y: 1,z: 0}}
 const lights = [{
     location: {
-        x: 2,
-        y: 4,
+        x: 1,
+        y: 1,
         z: -2
     },
     ambient: [1, 1, 1],
@@ -24,45 +24,45 @@ var calcLighting = true;
 // Color constructor
 class Color {
     constructor(r, g, b, a) {
-            try {
-                if ((typeof (r) !== 'number') || (typeof (g) !== 'number') || (typeof (b) !== 'number') || (typeof (a) !== 'number'))
-                    throw 'color component not a number'
-                else if ((r < 0) || (g < 0) || (b < 0) || (a < 0))
-                    throw 'color component less than 0'
-                else if ((r > 255) || (g > 255) || (b > 255) || (a > 255))
-                    throw 'color component bigger than 255'
-                else {
-                    this.r = r
-                    this.g = g
-                    this.b = b
-                    this.a = a
-                }
-            } // end try
-            catch (e) {
-                console.log(e)
+        try {
+            if ((typeof (r) !== 'number') || (typeof (g) !== 'number') || (typeof (b) !== 'number') || (typeof (a) !== 'number'))
+                throw 'color component not a number'
+            else if ((r < 0) || (g < 0) || (b < 0) || (a < 0))
+                throw 'color component less than 0'
+            else if ((r > 255) || (g > 255) || (b > 255) || (a > 255))
+                throw 'color component bigger than 255'
+            else {
+                this.r = r
+                this.g = g
+                this.b = b
+                this.a = a
             }
-        } // end Color constructor
+        } // end try
+        catch (e) {
+            console.log(e)
+        }
+    } // end Color constructor
 
     // Color change method
     change(r, g, b, a) {
-            try {
-                if ((typeof (r) !== 'number') || (typeof (g) !== 'number') || (typeof (b) !== 'number') || (typeof (a) !== 'number'))
-                    throw 'color component not a number'
-                else if ((r < 0) || (g < 0) || (b < 0) || (a < 0))
-                    throw 'color component less than 0'
-                else if ((r > 255) || (g > 255) || (b > 255) || (a > 255))
-                    throw 'color component bigger than 255'
-                else {
-                    this.r = r
-                    this.g = g
-                    this.b = b
-                    this.a = a
-                }
-            } // end throw
-            catch (e) {
-                console.log(e)
+        try {
+            if ((typeof (r) !== 'number') || (typeof (g) !== 'number') || (typeof (b) !== 'number') || (typeof (a) !== 'number'))
+                throw 'color component not a number'
+            else if ((r < 0) || (g < 0) || (b < 0) || (a < 0))
+                throw 'color component less than 0'
+            else if ((r > 255) || (g > 255) || (b > 255) || (a > 255))
+                throw 'color component bigger than 255'
+            else {
+                this.r = r
+                this.g = g
+                this.b = b
+                this.a = a
             }
-        } // end Color change method
+        } // end throw
+        catch (e) {
+            console.log(e)
+        }
+    } // end Color change method
 } // end color class
 
 /* utility functions */
@@ -169,7 +169,7 @@ function drawPixel(imagedata, x, y, color) {
 
 // get the input spheres from the standard class URL
 function getInputSpheres(complete) {
-    $.get('http://keithmackay.com/school/rayTracer/spheres.json', function (data) {
+    $.get('./spheres.json', function (data) {
         if (typeof complete === 'function') complete(data);
     });
 } // end get input spheres
@@ -259,11 +259,7 @@ function drawAllPixels(context, calcLight) {
                                     Math.max(I.Ld[a] * I.Kd[a] * I.n_dot_l, 0) +
                                     Math.max(I.Ls[a] * I.Ks[a] * Math.pow(vm.dot(vm.norm(I.R), I.V), I.n), 0);
                             });
-                            c.change(
-                                255 * I.val[0],
-                                255 * I.val[1],
-                                255 * I.val[2],
-                                255);
+                            c.change(255 * I.val[0], 255 * I.val[1], 255 * I.val[2], 255);
                             /**
                             if (doLog) {
                                 console.log(I);
@@ -272,11 +268,7 @@ function drawAllPixels(context, calcLight) {
                             } /* Don't Really need this at the moment */
                             drawPixel(imagedata, x, y, c);
                         } else {
-                            c.change(
-                                cir.diffuse[0] * 255,
-                                cir.diffuse[1] * 255,
-                                cir.diffuse[2] * 255,
-                                255);
+                            c.change(cir.diffuse[0] * 255, cir.diffuse[1] * 255, cir.diffuse[2] * 255, 255);
                             drawPixel(imagedata, x, y, c);
                         }
                     }
@@ -318,7 +310,7 @@ function toggle3D() {
 
 function draw() {
     var canvas = document.getElementById('viewport');
-    var dim = Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight) * .9;
+    var dim = Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight) // * .9;
     canvas.width = dim;
     canvas.height = dim;
     var context = canvas.getContext('2d');
