@@ -60,7 +60,7 @@ class Color {
             }
         } // end throw
         catch (e) {
-            console.log(e)
+            // console.log(e);
         }
     } // end Color change method
 } // end color class
@@ -70,7 +70,7 @@ class Color {
 //Math Functions that can be performed on Vecors
 const vm = {
     dot: function (v1, v2) {
-        if (v1 == undefined || v2 == undefined) throw "undefined Vector";
+        if (v1 === undefined || v2 === undefined) throw "undefined Vector";
         if (v1.x != undefined) return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
         else {
             //Not a direction vector, have to do it dynamically
@@ -139,8 +139,8 @@ const vm = {
             };
         } else {
             var vx = [],
-                mag = 1 / this.mag(v);
-            for (var i = 0; i < v.length; i++) vx[i] = v[i] * mag;
+                mag = this.mag(v);
+            for (var i = 0; i < v.length; i++) vx.append(v[i] / mag);
             return vx;
         }
     }
@@ -276,7 +276,9 @@ function drawAllPixels(context, calcLight) {
             }
         }
         document.getElementById('viewport').getContext('2d').putImageData(imagedata, 0, 0);
-        console.log('Draw in ' + (new Date().getTime() - startTime).toString() + ' milliseconds');
+        const time = (new Date().getTime() - startTime).toString();
+        document.getElementById('loadTime').value = time
+        console.log('Draw in ' + time + ' milliseconds');
         // console.log('O(' + n + ')');
     });
 }
@@ -291,7 +293,7 @@ function quadForm(a, b, c) {
 
 function updateN() {
     nFactor = parseFloat(document.getElementById('nVal').value);
-    console.log("UpdateN");
+    console.log("Update");
     draw();
 }
 

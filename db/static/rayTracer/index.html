@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Pixel Drawing</title>
-    <link type="icon" href="../favicon.ico">
+    <link type="icon" href="../icon.ico">
     <script type="text/javascript" src="./jquery.js"></script>
     <script type="text/javascript" src="drawstuff.js"></script>
     <style>
@@ -35,6 +35,18 @@
         input.lightLoc {
             width: 50px;
         }
+
+        #loadTime {
+            width: 100px;
+            float: right;
+            margin-right: 15px;
+            background-color: rgba(175, 175, 175, .6);
+            color: white;
+            border: 0;
+            background: none;
+            box-shadow: none;
+            border-radius: 0px;
+        }
     </style>
 </head>
 
@@ -46,6 +58,7 @@
             <input onchange="updateLights()" class="lightLoc" type="number" id="lightY" />&nbsp;z:
         <input onchange="updateLights()" class="lightLoc" type="number" id="lightZ" />&nbsp;
         3D<input type="checkbox" id="calcLighting" onchange="toggle3D()">
+        <input id="loadTime" type="text" readonly/>
         </span>
     </div>
     <center>

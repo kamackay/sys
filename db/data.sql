@@ -5,18 +5,17 @@ DROP TABLE Connections;
 DROP TABLE Machines;
 
 CREATE TABLE Machines (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(45) NOT NULL UNIQUE,
-  type VARCHAR(45),
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar(45) NOT NULL UNIQUE,
+  type varchar(45),
   notes LONGTEXT,
-  ip VARCHAR(50),
-  available TINYINT(1) DEFAULT 1,
+  ip varchar(50),
+  available tinyint(1) DEFAULT 1,
   network_type TEXT,
-  netID INT(11),
+  netID int(11),
   location TEXT,
   reservedBy TEXT DEFAULT NULL,
-  reservedAt DATETIME,
-  working TINYINT(1) DEFAULT 1
+  reservedAt DATETIME
 );
 
 CREATE TABLE Connections (
@@ -32,12 +31,6 @@ CREATE TABLE MachineConnections (
   machineID INT,
   FOREIGN KEY (machineID) REFERENCES Machines(id),
   FOREIGN KEY (connectionID) REFERENCES Connections(id)
-);
-
-CREATE TABLE WikiPages (
-  id int PRIMARY KEY AUTO_INCREMENT,
-  name varchar(45) NOT NULL UNIQUE,
-  text LONGTEXT
 );
 
 INSERT INTO Machines (name, type, notes, ip, network_type, netID, location) VALUES
