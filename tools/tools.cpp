@@ -355,7 +355,7 @@ int main(int argc, char *argv[]) {
           regex regular_expression(match.c_str());
           for (ProcessInfo info : processes) {
             if (ignoreUnknowns && !info.known) continue;
-            if (regex_match(info.name, regular_expression)) {
+            if (regex_match(toLower(info.name), regular_expression)) {
               char* strArr = new char[100 + info.name.length()];
               sprintf(strArr, "%s - %d", info.name.c_str(), info.pid);
               print(strArr, 1);
