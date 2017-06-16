@@ -335,7 +335,7 @@ int main(int argc, char *argv[]) {
         const string log_info = "log-info";
         const int input_pid = getIntArg(argc, argv, "pid", -1);
         string option = getArg(argc, argv, "option", log_info);
-        string match = getArg(argc, argv, "match", REGEX_ALL);
+        string match = toLower(getArg(argc, argv, "match", REGEX_ALL));
         bool ignoreUnknowns = getBoolArg(argc, argv, "unknowns", true);
         option = toLower(option);
         vector<ProcessInfo> processes;
