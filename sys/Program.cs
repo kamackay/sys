@@ -192,6 +192,10 @@ namespace sys {
       })).Start();
     }
 
+    /// <summary>
+    /// Cleans up downloads older than defined date, and deletes empty directories
+    /// </summary>
+    /// <param name="log">Whether or not to log information</param>
     public void cleanUpDownloads(bool log = false) {
       Action openDownloads = delegate {
         Process.Start(KnownFolders.GetPath(KnownFolder.Downloads));
