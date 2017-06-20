@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -55,6 +54,8 @@ namespace sys {
 
     private NotifyIcon trayIcon;
     private List<Timer> actions;
+    private bool isLocked = false;  // Assume that the program initializes while the computer is unlocked
+
     public Sys() {
       runOnStartup();
       _proc = HookCallback;
@@ -141,7 +142,7 @@ namespace sys {
           }
         }, interval: Time.seconds(1)),
         createTimer(delegate { cleanUpDownloads(); }, interval: Time.minutes(1)),
-        createTimer(delegate { fixStupidInternetIssue(); }, interval: Time.minutes(10))
+        createTimer(delegate { if (!isLocked) fixStupidInternetIssue(); }, interval: Time.minutes(10))
         // -------------- End of Timers List ------------------
       }) {
         t.Start();
@@ -150,6 +151,22 @@ namespace sys {
       Application.ApplicationExit += delegate {
         trayIcon.Visible = false;
       };
+
+      // Listener for sign-in and sign-off events
+      SystemEvents.SessionSwitch += (object sender, SessionSwitchEventArgs args) => {
+        switch (args.Reason) {
+          case SessionSwitchReason.SessionLock:
+            isLocked = true;
+            break;
+          case SessionSwitchReason.SessionUnlock:
+            isLocked = false;
+            Toast.show("Welcome Back!", timeout: 5000, animate: false);
+            break;
+          default:
+            return;
+        }
+      };
+
       Toast.show("Sys Manager Now Running", backgroundColor: Color.DarkGreen);
       try {
         string openString = SysSettings.getSetting(SysSettings.openTextEditorOnStartup);
@@ -168,7 +185,10 @@ namespace sys {
         ProcessStartInfo psi = new ProcessStartInfo("iexplore") { WindowStyle = ProcessWindowStyle.Minimized };
         Process p = Process.Start(psi);
         System.Threading.Thread.Sleep(Time.seconds(10));
-        try { p.Kill(); } catch { /* Must have already been killed? */}
+        try { p.Kill(); } catch {
+          /* Must have already been killed? */
+          Toast.show("Failed to kill Internet Explorer");
+        }
       })).Start();
     }
 
