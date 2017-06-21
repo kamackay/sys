@@ -27,7 +27,7 @@ app.controller('controller', function ($scope, $http) {
           var re_end = /Ran \d tests? in (\d+\.?\d*)s/;
           var re_device = /INFO -\s*MD:(\w+)_(\d+_\d+)/;
           var re_traceback = /Traceback \(most recent call last\):/;
-          var re_bcl = />> begin captured logging <</;
+          var re_traceback_end = /-{70}/;
           var re_assert_hfile = /INFO -\W+Assert File ID (\d+)/;
           var re_assert_hline = /INFO -\W+Assert Line Number (\d+)/;
           var re_assert_cfile = /INFO -\W+Assert File ID = (\d+)/;
@@ -36,9 +36,9 @@ app.controller('controller', function ($scope, $http) {
           var re_pass = /OK/;
           var re_fail = /FAILED \(failures=1\)/;
           var re_error = /FAILED \(errors=1\)/;
-          var re_log_fail = /.*[\[|\<]FAIL(ED)?[\>|\]].*/;
-          var re_log_warning = /.*[\[|\<]WARNING[\>|\]].*/;
-          var re_log_error = /.*[\[|\<]ERROR[\>|\]].*/;
+          var re_log_fail = /.*(\[|\<)FAIL(ED)?(\>|\]).*/;
+          var re_log_warning = /.*(\[|\<)WARNING(\>|\]).*/;
+          var re_log_error = /.*(\[|\<)ERROR(\>|\]).*/;
           // Break up the log
           var logSplit = logContents.split('\n');
           fileResults += 'Number of lines: ' + logSplit.length + '<br>';
@@ -97,8 +97,8 @@ app.controller('controller', function ($scope, $http) {
               fileResults += '<br>- ' + hardware + '_' + firmware;
             };
             // Find end of traceback
-            var bcl = re_bcl.exec(logSplit[j]);
-            if (bcl) {
+            var bcl = re_traceback_end.exec(logSplit[j]);
+            if (bcl && traceback) {
               traceback = '';
               fileResults += '<br>- ' + current_error;
               current_error = '';
@@ -107,6 +107,7 @@ app.controller('controller', function ($scope, $http) {
             // Find start of traceback
             if (!traceback) var traceback = re_traceback.exec(logSplit[j]);  // Don't erase traceback until the whole thing has been read
             if (traceback) {
+              // If we are currently in a traceback, append the log line to a string
               if (current_error) current_error += '<br>';  // Add newline between traceback things
               output = logSplit[j].replace(/\</g, '&lt').replace(/\>/g, '&gt');
               output = output.replace('Traceback', '<span style="color: #dd1111">Traceback</span>');
@@ -165,7 +166,7 @@ app.controller('controller', function ($scope, $http) {
             };
           };
           // fileResults += '<br><br><marquee scrollamount="10" direction="right" behavior="alternate" class="noselect"><a><img style="max-height:10px;" src="http://nc45ltgz50q52/lambda.png"></a>UNDER CONSTRUCTION<a><img style="max-height:10px;" src="http://nc45ltgz50q52/lambda.png"></a></marquee>';
-          fileResults += '<br><br><marquee scrollamount="20" direction="right" behavior="alternate" class="noselect"><a><img style="max-height:10px;" src="http://nc45ltgz50q52/lambda.png"></a></marquee>';
+          fileResults += '<br><br><marquee scrollamount="10" direction="right" behavior="alternate" class="noselect"><a><img style="max-height:10px;" src="http://nc45ltgz50q52/lambda.png"></a></marquee>';
           $el.append(fileResults);
           // Debug info
           // for (var key in fileSummary) {

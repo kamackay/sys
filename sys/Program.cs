@@ -155,12 +155,13 @@ namespace sys {
       // Listener for sign-in and sign-off events
       SystemEvents.SessionSwitch += (object sender, SessionSwitchEventArgs args) => {
         switch (args.Reason) {
-          case SessionSwitchReason.SessionLock:
+          case SessionSwitchReason.SessionLock: // Lock the Computer
             isLocked = true;
             break;
-          case SessionSwitchReason.SessionUnlock:
+          case SessionSwitchReason.SessionUnlock:  // Sign In to the Computer
             isLocked = false;
             Toast.show("Welcome Back!", timeout: 5000, animate: false);
+            fixStupidInternetIssue();
             break;
           default:
             return;
