@@ -297,7 +297,7 @@ namespace sys {
                 backgroundColor: Color.Green,
                 click: delegate { Process.Start(folder); },
                 timeout: Time.seconds(10));
-              SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
+              SysSettings.setSetting(SysSettings.lastCmpBuildName, buildName);
             };
 
             string[] buildInfo = buildName.Split('.');
