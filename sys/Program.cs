@@ -277,7 +277,7 @@ namespace sys {
     /// <summary>
     /// Search for a new CMP build
     /// </summary>
-    /// <param name="manual"></param>
+    /// <param name="manual">Whether this was triggered manually</param>
     void searchForCmpBuild(bool manual = false) {
       try {
         string buildsPath = @"\\USRAL1WVFIL01\Shares\USRAL01\Departments\Dept\Engineering\MeterTools\Mtdata\CMP\Atlas\Development";
@@ -311,6 +311,9 @@ namespace sys {
       } catch (Exception e) { handle(e); Toast.show("Error while checking for new CMP build", backgroundColor: Color.Red); }
     }
 
+    /// <summary>
+    /// Initialize settings, and if the value does not exist, give it a default value
+    /// </summary>
     void initializeSettings() {
       try {
         SysSettings.init();
@@ -320,6 +323,7 @@ namespace sys {
         }
       } catch { }
     }
+
     private Dictionary<Keys, bool> keyStatus;
     private Dictionary<Keys, KeyTrackerHandler> keyTracker;
     private void handleGlobalKeydown(Keys key) {

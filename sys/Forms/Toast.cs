@@ -20,25 +20,24 @@ namespace sys {
       Height = 100;
       Width = 200;
       BackColor = backgroundColor;
-      if (backgroundColor.isDark()) ForeColor = Color.White;
-      else ForeColor = Color.Black;
+      ForeColor = backgroundColor.isDark() ? Color.White : Color.Black;
       Rectangle screenSize = getScreenSize();
-      l = new Label();
+      l = new Label() {
+        Left = 20,
+        Top = 20,
+        AutoSize = true,
+        AutoEllipsis = false, 
+        Text = message
+      };
       Left = screenSize.Width;
-      l.Left = 20;
-      l.Top = 20;
-      l.AutoSize = true;
-      l.AutoEllipsis = false;
       Controls.Add(l);
       Cursor = Cursors.Hand;
       TopMost = true;
-      l.Text = message;
       bool open = true;
       try { l.Font = new Font("Hack", 12.5f); } catch { }
       Shown += delegate {
         Height = l.Height + 40;
-        if (l.Width > screenSize.Width / 3)
-          l.Font = new Font(l.Font.Name, 10f);
+        if (l.Width > screenSize.Width / 3) l.Font = new Font(l.Font.Name, 10f);
         Width = l.Width + 40;
         Top = screenSize.Height - (Height + 10);
         Left = screenSize.Width;
