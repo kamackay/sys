@@ -270,7 +270,7 @@ namespace sys {
             }
           } catch (Exception e) { handle(e); }
         }
-        if (manual) Toast.show("No new Comms Builds found");
+        if (manual) Toast.show("No new Comms Builds found", click: delegate { Process.Start(buildsPath); });
       } catch (Exception e) { handle(e); Toast.show("Error while checking for new CMP build", backgroundColor: Color.Red); }
     }
 
