@@ -247,8 +247,16 @@ namespace sys {
         string lastBuild = SysSettings.getSetting(SysSettings.lastCommsBuildName, "");
         foreach (string folder in Directory.EnumerateDirectories(buildsPath)) {
           try {
-            Action onClick = delegate { Process.Start(folder); };
             string buildName = Path.GetFileName(folder);
+            // Execute if a new build is found
+            Action buildFound = delegate {
+              Toast.show(string.Format("New Comms Build {0}", buildName), 
+                backgroundColor: Color.Green, 
+                click: delegate { Process.Start(folder); },
+                timeout: Time.seconds(10));
+              SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
+            };
+
             string[] buildInfo = buildName.Split('.');
             string[] oldBuildInfo = lastBuild.Split('.');
             int oldMajor = int.Parse(oldBuildInfo[0]);
@@ -258,14 +266,12 @@ namespace sys {
               // Same Major Number, check for new minor number
               if (int.Parse(oldBuildInfo[1]) >= int.Parse(buildInfo[1])) continue;
               else {
-                Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
-                SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
+                buildFound.Invoke();
                 return;
               }
             } else {
               // Definately a new build, smaller major number
-              Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
-              SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
+              buildFound.Invoke();
               return;
             }
           } catch (Exception e) { handle(e); }
@@ -284,8 +290,16 @@ namespace sys {
         string lastBuild = SysSettings.getSetting(SysSettings.lastCmpBuildName, "");
         foreach (string folder in Directory.EnumerateDirectories(buildsPath)) {
           try {
-            Action onClick = delegate { Process.Start(folder); };
             string buildName = Path.GetFileName(folder);
+            // Execute if a new build is found
+            Action buildFound = delegate {
+              Toast.show(string.Format("New CMP Build {0}", buildName),
+                backgroundColor: Color.Green,
+                click: delegate { Process.Start(folder); },
+                timeout: Time.seconds(10));
+              SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
+            };
+
             string[] buildInfo = buildName.Split('.');
             string[] oldBuildInfo = lastBuild.Split('.');
             int oldMajor = int.Parse(oldBuildInfo[0]);
@@ -295,14 +309,12 @@ namespace sys {
               // Same Major Number, check for new minor number
               if (int.Parse(oldBuildInfo[1]) >= int.Parse(buildInfo[1])) continue;
               else {
-                Toast.show(string.Format("New CMP Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
-                SysSettings.setSetting(SysSettings.lastCmpBuildName, buildName);
+                buildFound.Invoke();
                 return;
               }
             } else {
               // Definately a new build, smaller major number
-              Toast.show(string.Format("New CMP Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
-              SysSettings.setSetting(SysSettings.lastCmpBuildName, buildName);
+              buildFound.Invoke();
               return;
             }
           } catch (Exception e) { handle(e); }
