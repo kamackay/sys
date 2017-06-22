@@ -250,8 +250,8 @@ namespace sys {
             string buildName = Path.GetFileName(folder);
             // Execute if a new build is found
             Action buildFound = delegate {
-              Toast.show(string.Format("New Comms Build {0}", buildName), 
-                backgroundColor: Color.Green, 
+              Toast.show(string.Format("New Comms Build {0}", buildName),
+                backgroundColor: Color.Green,
                 click: delegate { Process.Start(folder); },
                 timeout: Time.seconds(10));
               SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
