@@ -120,6 +120,7 @@ namespace sys {
         new MenuItem("Fix the stupid internet issue", delegate { fixStupidInternetIssue(); closeMenu(); }),
         new MenuItem("Show Editor", delegate { new TextEditor().show(); closeMenu(); }),
         new MenuItem("Show Info", showInfo),
+        new MenuItem("Check For New Comms Build", delegate { searchForNewBuild(manual:true); }),
         new MenuItem("-"),
         new MenuItem("Settings", delegate { new SettingsForm().Show(); closeMenu(); }),
         new MenuItem("E&xit", delegate { exit(); closeMenu(); })
@@ -142,7 +143,8 @@ namespace sys {
           }
         }, interval: Time.seconds(1)),
         createTimer(delegate { cleanUpDownloads(); }, interval: Time.minutes(1)),
-        createTimer(delegate { if (!isLocked) fixStupidInternetIssue(); }, interval: Time.minutes(10))
+        createTimer(delegate { if (!isLocked) fixStupidInternetIssue(); }, interval: Time.minutes(10)),
+        createTimer(delegate { if (!isLocked) searchForNewBuild(); }, Time.minutes(10))
         // -------------- End of Timers List ------------------
       }) {
         t.Start();
@@ -235,6 +237,33 @@ namespace sys {
           if (didSomething || log) Toast.show("Downloads Cleaned Up", click: openDownloads, timeout: 3000);
         } catch (Exception e) { handle(e); Toast.show("Error while trying to clear your Downloads folder", click: openDownloads); }
       } catch (Exception e) { handle(e); Toast.show("Could not parse your settings. Please verify them", click: delegate { new SettingsForm().Show(); }); }
+    }
+
+    // TODO: Update for CMP
+    void searchForNewBuild(bool manual = false) {
+      try {
+        string buildsPath = @"\\USRAL1WVFIL01\Shares\USRAL01\Departments\Dept\Engineering\MeterTools\Mtdata\Comms\A3\Development";
+        string lastBuild = SysSettings.getSetting(SysSettings.lastCommsBuildName, "");
+        foreach (string folder in Directory.EnumerateDirectories(buildsPath)) {
+          try {
+            string buildName = Path.GetFileName(folder);
+            string[] buildInfo = buildName.Split('.');
+            string[] oldBuildInfo = lastBuild.Split('.');
+            int oldMajor = int.Parse(oldBuildInfo[0]);
+            int newMajor = int.Parse(buildInfo[0]);
+            if (oldMajor < newMajor) continue;
+            if (oldMajor == newMajor) {
+              // Same Major Number, check for new minor number
+            } else {
+              // Definately a new build, smaller major number
+              Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green);
+              SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
+              return;
+            }
+          } catch (Exception e) { handle(e); }
+        }
+        if (manual) Toast.show("No new Comms Builds found");
+      } catch (Exception e) { handle(e); Toast.show("Error while checking for new build", backgroundColor: Color.Red); }
     }
 
     void initializeSettings() {
@@ -456,7 +485,8 @@ namespace sys {
           { openTextEditorOnStartup, "false" },
           { keyPressListenerOn, "true" },
           { showNonRespondingProcesses, "true" },
-          { apmUpgradeInterval, "10" }
+          { apmUpgradeInterval, "10" },
+          { lastCommsBuildName, "248.12" }
         };
       }
 
@@ -467,7 +497,8 @@ namespace sys {
         openTextEditorOnStartup = "OpenTextEditorOnStartup",
         keyPressListenerOn = "KeyPressListenerOn",
         showNonRespondingProcesses = "ShowNonRespondingProcesses",
-        apmUpgradeInterval = "APMUpgradeInterval";
+        apmUpgradeInterval = "APMUpgradeInterval",
+        lastCommsBuildName = "LastCommsBuildName";
 
       private static string settingRoot = @"Software\Keith\Sys\Settings";
 
