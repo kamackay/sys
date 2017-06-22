@@ -254,9 +254,7 @@ namespace sys {
             if (oldMajor < newMajor) continue;
             if (oldMajor == newMajor) {
               // Same Major Number, check for new minor number
-              int oldMinor = int.Parse(oldBuildInfo[1]);
-              int newMinor = int.Parse(buildInfo[1]);
-              if (oldMinor >= newMinor) continue;
+              if (int.Parse(oldBuildInfo[1]) >= int.Parse(buildInfo[1])) continue;
               else {
                 Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green);
                 SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
