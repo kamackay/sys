@@ -68,7 +68,7 @@ namespace sys {
         exit();
       }));
       keyTracker.Add(Keys.LControlKey, new KeyTrackerHandler(delegate {
-        Process.Start("https://google.com");
+        Process.Start(@"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", "https://google.com");
         Toast.show("Click to disable", timeout: Time.seconds(2.5), backgroundColor: Color.Black, animate: false, click: delegate {
           SysSettings.setSetting(SysSettings.keyPressListenerOn, false.ToString());
         });
