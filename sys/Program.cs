@@ -120,7 +120,7 @@ namespace sys {
         new MenuItem("Fix the stupid internet issue", delegate { fixStupidInternetIssue(); closeMenu(); }),
         new MenuItem("Show Editor", delegate { new TextEditor().show(); closeMenu(); }),
         new MenuItem("Show Info", showInfo),
-        new MenuItem("Check For New Comms Build", delegate { searchForNewBuild(manual:true); }),
+        new MenuItem("Check For New Comms Build", delegate { searchForNewCommsBuild(manual:true); }),
         new MenuItem("-"),
         new MenuItem("Settings", delegate { new SettingsForm().Show(); closeMenu(); }),
         new MenuItem("E&xit", delegate { exit(); closeMenu(); })
@@ -144,7 +144,7 @@ namespace sys {
         }, interval: Time.seconds(1)),
         createTimer(delegate { cleanUpDownloads(); }, interval: Time.minutes(1)),
         createTimer(delegate { if (!isLocked) fixStupidInternetIssue(); }, interval: Time.minutes(10)),
-        createTimer(delegate { if (!isLocked) searchForNewBuild(); }, Time.minutes(10))
+        createTimer(delegate { if (!isLocked) searchForNewCommsBuild(); }, Time.minutes(10))
         // -------------- End of Timers List ------------------
       }) {
         t.Start();
@@ -240,7 +240,7 @@ namespace sys {
     }
 
     // TODO: Update for CMP
-    void searchForNewBuild(bool manual = false) {
+    void searchForNewCommsBuild(bool manual = false) {
       try {
         string buildsPath = @"\\USRAL1WVFIL01\Shares\USRAL01\Departments\Dept\Engineering\MeterTools\Mtdata\Comms\A3\Development";
         string lastBuild = SysSettings.getSetting(SysSettings.lastCommsBuildName, "");
