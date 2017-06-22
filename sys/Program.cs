@@ -121,6 +121,7 @@ namespace sys {
         new MenuItem("Show Editor", delegate { new TextEditor().show(); closeMenu(); }),
         new MenuItem("Show Info", showInfo),
         new MenuItem("Check For New Comms Build", delegate { searchForNewCommsBuild(manual:true); }),
+        new MenuItem("Check For New CMP Build", delegate { searchForCmpBuild(manual:true); }),
         new MenuItem("-"),
         new MenuItem("Settings", delegate { new SettingsForm().Show(); closeMenu(); }),
         new MenuItem("E&xit", delegate { exit(); closeMenu(); })
@@ -144,7 +145,8 @@ namespace sys {
         }, interval: Time.seconds(1)),
         createTimer(delegate { cleanUpDownloads(); }, interval: Time.minutes(1)),
         createTimer(delegate { if (!isLocked) fixStupidInternetIssue(); }, interval: Time.minutes(10)),
-        createTimer(delegate { if (!isLocked) searchForNewCommsBuild(); }, Time.minutes(10))
+        createTimer(delegate { if (!isLocked) searchForNewCommsBuild(); }, interval: Time.minutes(5)),
+        createTimer(delegate { if (!isLocked) searchForCmpBuild(); }, interval: Time.minutes(5))
         // -------------- End of Timers List ------------------
       }) {
         t.Start();
@@ -239,13 +241,13 @@ namespace sys {
       } catch (Exception e) { handle(e); Toast.show("Could not parse your settings. Please verify them", click: delegate { new SettingsForm().Show(); }); }
     }
 
-    // TODO: Update for CMP
     void searchForNewCommsBuild(bool manual = false) {
       try {
         string buildsPath = @"\\USRAL1WVFIL01\Shares\USRAL01\Departments\Dept\Engineering\MeterTools\Mtdata\Comms\A3\Development";
         string lastBuild = SysSettings.getSetting(SysSettings.lastCommsBuildName, "");
         foreach (string folder in Directory.EnumerateDirectories(buildsPath)) {
           try {
+            Action onClick = delegate { Process.Start(folder); };
             string buildName = Path.GetFileName(folder);
             string[] buildInfo = buildName.Split('.');
             string[] oldBuildInfo = lastBuild.Split('.');
@@ -256,20 +258,57 @@ namespace sys {
               // Same Major Number, check for new minor number
               if (int.Parse(oldBuildInfo[1]) >= int.Parse(buildInfo[1])) continue;
               else {
-                Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green);
+                Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
                 SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
                 return;
               }
             } else {
               // Definately a new build, smaller major number
-              Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green);
+              Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
               SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
               return;
             }
           } catch (Exception e) { handle(e); }
         }
         if (manual) Toast.show("No new Comms Builds found");
-      } catch (Exception e) { handle(e); Toast.show("Error while checking for new build", backgroundColor: Color.Red); }
+      } catch (Exception e) { handle(e); Toast.show("Error while checking for new CMP build", backgroundColor: Color.Red); }
+    }
+
+    /// <summary>
+    /// Search for a new CMP build
+    /// </summary>
+    /// <param name="manual"></param>
+    void searchForCmpBuild(bool manual = false) {
+      try {
+        string buildsPath = @"\\USRAL1WVFIL01\Shares\USRAL01\Departments\Dept\Engineering\MeterTools\Mtdata\CMP\Atlas\Development";
+        string lastBuild = SysSettings.getSetting(SysSettings.lastCmpBuildName, "");
+        foreach (string folder in Directory.EnumerateDirectories(buildsPath)) {
+          try {
+            Action onClick = delegate { Process.Start(folder); };
+            string buildName = Path.GetFileName(folder);
+            string[] buildInfo = buildName.Split('.');
+            string[] oldBuildInfo = lastBuild.Split('.');
+            int oldMajor = int.Parse(oldBuildInfo[0]);
+            int newMajor = int.Parse(buildInfo[0]);
+            if (oldMajor < newMajor) continue;
+            if (oldMajor == newMajor) {
+              // Same Major Number, check for new minor number
+              if (int.Parse(oldBuildInfo[1]) >= int.Parse(buildInfo[1])) continue;
+              else {
+                Toast.show(string.Format("New CMP Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
+                SysSettings.setSetting(SysSettings.lastCmpBuildName, buildName);
+                return;
+              }
+            } else {
+              // Definately a new build, smaller major number
+              Toast.show(string.Format("New CMP Build {0}", buildName), backgroundColor: Color.Green, click: onClick);
+              SysSettings.setSetting(SysSettings.lastCmpBuildName, buildName);
+              return;
+            }
+          } catch (Exception e) { handle(e); }
+        }
+        if (manual) Toast.show("No new CMP Builds found");
+      } catch (Exception e) { handle(e); Toast.show("Error while checking for new CMP build", backgroundColor: Color.Red); }
     }
 
     void initializeSettings() {
@@ -492,7 +531,8 @@ namespace sys {
           { keyPressListenerOn, "true" },
           { showNonRespondingProcesses, "true" },
           { apmUpgradeInterval, "10" },
-          { lastCommsBuildName, "248.11" }
+          { lastCommsBuildName, "248.11" },
+          { lastCmpBuildName, "255.10"}
         };
       }
 
@@ -504,7 +544,7 @@ namespace sys {
         keyPressListenerOn = "KeyPressListenerOn",
         showNonRespondingProcesses = "ShowNonRespondingProcesses",
         apmUpgradeInterval = "APMUpgradeInterval",
-        lastCommsBuildName = "LastCommsBuildName";
+        lastCommsBuildName = "LastCommsBuildName", lastCmpBuildName = "LastCmpBuild";
 
       private static string settingRoot = @"Software\Keith\Sys\Settings";
 
