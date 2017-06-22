@@ -254,6 +254,14 @@ namespace sys {
             if (oldMajor < newMajor) continue;
             if (oldMajor == newMajor) {
               // Same Major Number, check for new minor number
+              int oldMinor = int.Parse(oldBuildInfo[1]);
+              int newMinor = int.Parse(buildInfo[1]);
+              if (oldMinor >= newMinor) continue;
+              else {
+                Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green);
+                SysSettings.setSetting(SysSettings.lastCommsBuildName, buildName);
+                return;
+              }
             } else {
               // Definately a new build, smaller major number
               Toast.show(string.Format("New Comms Build {0}", buildName), backgroundColor: Color.Green);
@@ -486,7 +494,7 @@ namespace sys {
           { keyPressListenerOn, "true" },
           { showNonRespondingProcesses, "true" },
           { apmUpgradeInterval, "10" },
-          { lastCommsBuildName, "248.12" }
+          { lastCommsBuildName, "248.11" }
         };
       }
 
