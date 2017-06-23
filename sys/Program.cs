@@ -114,7 +114,20 @@ namespace sys {
           ProcessStartInfo psi = new ProcessStartInfo();
           psi.FileName = "APM.cmd";
           psi.Arguments = "update";
-          Process.Start(psi);
+          psi.UseShellExecute = false;
+          psi.RedirectStandardInput = true;
+          Process p = Process.Start(psi);
+          try {
+            using (var processInput = p.StandardInput) {
+              processInput.WriteLine("\n");
+              processInput.Close();
+            }
+            p.WaitForExit();
+            p.Close();
+          } catch(Exception e) {
+            handle(e);
+            Toast.show("Error while interacting with the APM Update Process");
+          }
         }),
         new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); closeMenu(); }),
         new MenuItem("Fix the stupid internet issue", delegate { fixStupidInternetIssue(); closeMenu(); }),
