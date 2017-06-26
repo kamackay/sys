@@ -114,8 +114,8 @@ namespace sys {
           ProcessStartInfo psi = new ProcessStartInfo();
           psi.FileName = "APM.cmd";
           psi.Arguments = "update";
-          psi.UseShellExecute = false;
-          psi.RedirectStandardInput = true;
+          //psi.UseShellExecute = false;
+          //psi.RedirectStandardInput = true;
           Process p = Process.Start(psi);
           try {
             using (var processInput = p.StandardInput) {
@@ -126,18 +126,17 @@ namespace sys {
             p.Close();
           } catch(Exception e) {
             handle(e);
-            Toast.show("Error while interacting with the APM Update Process");
           }
         }),
-        new MenuItem("Clean Up Downloads", delegate { cleanUpDownloads(log:true); closeMenu(); }),
-        new MenuItem("Fix the stupid internet issue", delegate { fixStupidInternetIssue(); closeMenu(); }),
-        new MenuItem("Show Editor", delegate { new TextEditor().show(); closeMenu(); }),
+        new MenuItem("Clean Up Downloads", delegate { closeMenu(); cleanUpDownloads(log:true); }),
+        new MenuItem("Fix the stupid internet issue", delegate { closeMenu(); fixStupidInternetIssue(); }),
+        new MenuItem("Show Editor", delegate { closeMenu(); new TextEditor().show(); }),
         new MenuItem("Show Info", showInfo),
-        new MenuItem("Check For New Comms Build", delegate { searchForNewCommsBuild(manual:true); }),
-        new MenuItem("Check For New CMP Build", delegate { searchForCmpBuild(manual:true); }),
+        new MenuItem("Check For New Comms Build", delegate { closeMenu(); searchForNewCommsBuild(manual:true); }),
+        new MenuItem("Check For New CMP Build", delegate { closeMenu(); searchForCmpBuild(manual:true); }),
         new MenuItem("-"),
-        new MenuItem("Settings", delegate { new SettingsForm().Show(); closeMenu(); }),
-        new MenuItem("E&xit", delegate { exit(); closeMenu(); })
+        new MenuItem("Settings", delegate { closeMenu(); new SettingsForm().Show(); }),
+        new MenuItem("E&xit", delegate { closeMenu(); exit(); })
       });
       trayIcon.MouseDoubleClick += delegate (object o, MouseEventArgs args) {
         if (args.Button == MouseButtons.Left) { new TextEditor().Show(); }
