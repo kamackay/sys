@@ -72,7 +72,7 @@ namespace sys {
         Toast.show("Click to disable", timeout: Time.seconds(2.5), backgroundColor: Color.Black, animate: false, click: delegate {
           SysSettings.setSetting(SysSettings.keyPressListenerOn, false.ToString());
         });
-      }));
+      }, time: Time.seconds(.5)));
       keyTracker.Add(Keys.RControlKey, new KeyTrackerHandler(delegate {
         string num = Microsoft.VisualBasic.Interaction.InputBox("Which VM?", "Which VM?", "1");
         if (!string.IsNullOrEmpty(num) && (num.Length == 1 || num.Length == 2)) {
