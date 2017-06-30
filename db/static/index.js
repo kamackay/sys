@@ -172,6 +172,13 @@ $(document).ready(function () {
     }
   });
   $(window).resize();
+  const searchString = getData('search');
+  if (searchString != null) {
+    $('#searchInput').val(searchString);
+    setTimeout(() => {
+      angular.element(document.body).scope().$apply();
+    }, 1);
+  }
   /**document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -184,6 +191,13 @@ $(document).ready(function () {
           angular.element(document.body).scope().save();
         }
     }
+  });
+  $('#searchInput').keyup(function (e) {
+    setTimeout(() => {
+      const searchVal = $('#searchInput').val();
+      console.log(searchVal);
+      storeData('search', searchVal);
+    }, 1);
   });
 });
 
