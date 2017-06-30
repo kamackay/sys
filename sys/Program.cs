@@ -288,7 +288,9 @@ namespace sys {
             }
           } catch (Exception e) { handle(e); }
         }
-        if (manual) Toast.show("No new Comms Builds found", click: delegate { Process.Start(buildsPath); });
+        if (manual) Toast.show(string.Format("No new Comms Builds found ({0})",
+          SysSettings.getSetting(SysSettings.lastCommsBuildName, "")),
+          click: delegate { Process.Start(buildsPath); });
       } catch (Exception e) { handle(e); Toast.show("Error while checking for new CMP build", backgroundColor: Color.Red); }
     }
 
@@ -331,7 +333,9 @@ namespace sys {
             }
           } catch (Exception e) { handle(e); }
         }
-        if (manual) Toast.show("No new CMP Builds found", click: delegate { Process.Start(buildsPath); });
+        if (manual) Toast.show(string.Format("No new CMP Builds found ({0})",
+          SysSettings.getSetting(SysSettings.lastCmpBuildName, "")),
+          click: delegate { Process.Start(buildsPath); });
       } catch (Exception e) { handle(e); Toast.show("Error while checking for new CMP build", backgroundColor: Color.Red); }
     }
 
