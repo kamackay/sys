@@ -11,6 +11,15 @@ namespace sys {
       new Toast(message, timeout, (Color)backgroundColor, animate: animate, click: click).Show();
     }
 
+    private EventHandler move = delegate (object o, EventArgs args) {
+      Toast t = (Toast)o;
+      Rectangle screenSize = t.getScreenSize();
+      if (t.Left != screenSize.Width - (t.Width + 10))
+        t.Left = screenSize.Width - (t.Width + 10);
+      if (t.Top != screenSize.Height - (t.Height + 10))
+        t.Top = screenSize.Height - (t.Height + 10);
+    };
+
     private Toast(string message, int timeout, Color backgroundColor, bool animate, Action click) {
       components = new Container();
       AutoScaleMode = AutoScaleMode.Font;
@@ -26,7 +35,7 @@ namespace sys {
         Left = 20,
         Top = 20,
         AutoSize = true,
-        AutoEllipsis = false, 
+        AutoEllipsis = false,
         Text = message
       };
       Left = screenSize.Width;
@@ -58,7 +67,13 @@ namespace sys {
                 if (!open) return;
                 this.runOnUiThread(() => { Left = screenSize.Width - (int)((Width + 10) * ((double)i / inc)); });
               }
-            } else this.runOnUiThread(() => { Left = screenSize.Width - (Width + 10); });
+              this.runOnUiThread(() => { Move += move; });
+            } else {
+              this.runOnUiThread(() => {
+                Left = screenSize.Width - (Width + 10);
+                Move += move;
+              });
+            }
           } catch { }
         });
       };
