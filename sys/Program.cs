@@ -53,6 +53,7 @@ namespace sys {
   public class Sys : ApplicationContext {
 
     private NotifyIcon trayIcon;
+    private MenuItem cmpVersionMenuItem;
     private List<Timer> actions;
     private bool isLocked = false;  // Assume that the program initializes while the computer is unlocked
 
@@ -108,6 +109,8 @@ namespace sys {
           typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(trayIcon, null);
         } catch { }
       };
+      cmpVersionMenuItem = new MenuItem(string.Format("Check For New CMP Build ({0})", SysSettings.getSetting(SysSettings.lastCmpBuildName, "?")), 
+        delegate { closeMenu(); searchForCmpBuild(manual: true); });
       trayIcon.ContextMenu.MenuItems.AddRange(new MenuItem[] {
         new MenuItem("Update APM", delegate {
           closeMenu();
@@ -133,7 +136,7 @@ namespace sys {
         new MenuItem("Show Editor", delegate { closeMenu(); new TextEditor().show(); }),
         new MenuItem("Show Info", showInfo),
         new MenuItem("Check For New Comms Build", delegate { closeMenu(); searchForNewCommsBuild(manual:true); }),
-        new MenuItem("Check For New CMP Build", delegate { closeMenu(); searchForCmpBuild(manual:true); }),
+        cmpVersionMenuItem,
         new MenuItem("-"),
         new MenuItem("Settings", delegate { closeMenu(); new SettingsForm().Show(); }),
         new MenuItem("E&xit", delegate { closeMenu(); exit(); })
@@ -312,6 +315,7 @@ namespace sys {
                 click: delegate { Process.Start(folder); },
                 timeout: Time.seconds(10));
               SysSettings.setSetting(SysSettings.lastCmpBuildName, buildName);
+              cmpVersionMenuItem.Text = string.Format("Check For New CMP Build ({0})", SysSettings.getSetting(SysSettings.lastCmpBuildName, "?"));
             };
 
             string[] buildInfo = buildName.Split('.');
