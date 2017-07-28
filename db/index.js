@@ -374,6 +374,10 @@ app.put("/sspec*", function (req, res, next) {
   }
 });
 
+app.get("/maintenance/machines", function(req, res, next){
+  res.json({});
+});
+
 function exitHandler(options, err) {
   connection.destroy();
   log("Exiting");

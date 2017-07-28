@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html ng-app="module">
+
+<head>
+  <!-- Using jQuery, but in protest -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!-- Google Material Font stylesheet -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <!-- Default Bootstrap files -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <!-- Google's Material Icons stuff -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Basic Angular js dependency -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+  <!-- Materialize UI files, to make things prettier -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+  <!-- Materialize Angular plugin -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
+  <meta charset=utf-8 />
+  <!-- Contraband -->
+  <title>Test Machine Maintenance</title>
+  <link rel="icon" href="../icon.ico">
+  <script type="text/javascript" src="./index.js"></script>
+  <link rel="stylesheet" href="./index.css">
+  <style>
+    div.table-over {
+      overflow-x: auto;
+      min-width: 1500px;
+    }
+
+    .noscroll {
+      overflow: hidden;
+    }
+
+    #body table tbody td,
+    #body table thead th {
+      text-align: center;
+      padding-right: 2px;
+      padding-left: 2px;
+    }
+
+    .not-applicable {
+      color: #998888;
+    }
+
+    #body button.btn,
+    #body button.btn * {
+      cursor: pointer;
+    }
+
+    .col-id {
+      width: 3%;
+    }
+
+    .col-name {
+      width: 8%;
+    }
+
+    .col-type {
+      width: 7%;
+    }
+
+    .col-ip {
+      width: 8%;
+    }
+
+    .col-network {
+      width: 7%;
+    }
+
+    .col-netID {
+      width: 4%;
+    }
+
+    .col-location {
+      width: 8%;
+    }
+
+    .col-working {
+      width: 4%;
+    }
+
+    .col-claimed {
+      width: 12%;
+    }
+
+    .col-notes {
+      width: 22%;
+    }
+
+    .col-actions {
+      width: 15%;
+    }
+    /* Make sure all of these add up to 100 */
+
+    .sortorder:after {
+      content: '\25b2';
+    }
+
+    .sortorder.reverse:after {
+      content: '\25bc';
+    }
+
+    #body th.col-sort {
+      cursor: pointer;
+    }
+
+    #body a {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body ng-controller="controller" id="body" ng-focus="focus()">
+  <!-- Navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top noselect" style="background-color:#555555">
+    <div class="container container-fluid">
+      <a href="#" class="navbar-left" style="margin-right:25px;"><img style="max-height:45px;" src="../lambda.png"></a>
+      <div class="navbar-header">
+        <p style="display:inline;font-size:30px;cursor:default;" class="display-text">Test Machine Maintenance</p>
+      </div>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="..\logs\">Log Parser</a></li>
+      </ul>
+      <div class="collapse navbar-collapse">
+        <form class="navbar-form navbar-right" id="navRight">
+          <div class="form-group">
+            <input autofocus type="text" style="color:white;cursor:text;" class="form-control" id="searchInput" ng-model="search.$" placeholder="Search">
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <!-- Actual Page Contents -->
+  <div class="" style="padding-right:50px;padding-left:50px;">
+    <form style="margin-top:100px;">
+      <div class="table-over">
+        <div class="panel panel-default" style="margin-bottom:0px;">
+          <table class="table table-condensed table-striped table-bordered">
+            <thead class="noselect">
+              <tr>
+                <th ng-click="sortBy('id')" class="col-sort col-id">ID
+                  <span class="sortorder" ng-show="sortProperty === 'id'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('name')" class="col-sort col-name">Machine Name
+                  <span class="sortorder" ng-show="sortProperty === 'name'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('type')" class="col-sort col-type">Machine Type
+                  <span class="sortorder" ng-show="sortProperty === 'type'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('ip')" class="col-sort col-ip">IP Address
+                  <span class="sortorder" ng-show="sortProperty === 'ip'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('network')" class="col-sort col-network">Network Type
+                  <span class="sortorder" ng-show="sortProperty === 'network'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('netID')" class="col-sort col-netID">Net ID
+                  <span class="sortorder" ng-show="sortProperty === 'netID'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('location')" class="col-sort col-location">Location
+                  <span class="sortorder" ng-show="sortProperty === 'location'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('working')" class="col-sort col-working">Working
+                  <span class="sortorder" ng-show="sortProperty === 'working'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th ng-click="sortBy('reservedBy')" class="col-sort col-claimed">Claimed By
+                  <span class="sortorder" ng-show="sortProperty === 'reservedBy'" ng-class="{reverse: sortReverse}"></span>
+                </th>
+                <th class="col-notes">Notes</th>
+                <th class="col-actions">Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="table-container">
+          <table class="table table-striped table-hover table-bordered">
+            <tbody class="code-font">
+              <!-- For Each Machine -->
+              <tr ng-repeat="machine in machines | filter:search:strict | orderBy:sortProperty:sortReverse" ng-class="{success:machine.available!=0,warning:machine.available==0&&machine.working!=0,danger:machine.working==0}">
+                <!-- ng-class="{true:'success', false:'warning'}[machine.available != 0]" -->
+                <!-- Machine's ID -->
+                <td class="col-id">
+                  <span ng-show="!machine.edit">{{machine.id}}</span>
+                  <input type="number" ng-show="machine.edit" ng-model="machine.id" ng-change="machine.changed = true" />
+                </td>
+                <!-- Machine Name -->
+                <td class="col-name">
+                  <span ng-show="!machine.edit">{{machine.name}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.name" ng-change="machine.changed = true" />
+                </td>
+                <!-- Machine Type -->
+                <td class="col-type">
+                  <span ng-show="!machine.edit">{{machine.type}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.type" ng-change="machine.changed = true" />
+                </td>
+                <!-- Machine IP Address -->
+                <td class="col-ip">
+                  <span ng-show="!machine.edit">{{machine.ip}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.ip" ng-change="machine.changed = true" />
+                </td>
+                <!-- Network Type -->
+                <td class="col-network">
+                  <span ng-show="!machine.edit && machine.network_type">{{machine.network_type}}</span>
+                  <span ng-show="!machine.edit && !machine.network_type" class="not-applicable">N/A</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.network_type" ng-change="machine.changed = true" />
+                </td>
+                <!-- Network ID -->
+                <td class="col-netID">
+                  <span ng-show="!machine.edit && machine.netID">{{machine.netID}}</span>
+                  <span ng-show="!machine.edit && !machine.netID" class="not-applicable">N/A</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.netID" ng-change="machine.changed = true" />
+                </td>
+                <!-- Machine Location -->
+                <td class="col-location">
+                  <span ng-show="!machine.edit">{{machine.location}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.location" ng-change="machine.changed = true" />
+                </td>
+                <!-- Machine Working -->
+                <td class="col-working">
+                  <span ng-show="true">
+                    <input type="checkbox" id="checkbox{{machine.id}}" ng-checked="machine.working==1" ng-click="machine.working=(machine.working+1)%2;machine.changed=true;"/>
+                    <label for="checkbox{{machine.id}}" tooltipped data-tooltip="Mark {{machine.name}} as {{machine.working==0?'Working':'Not Working'}}"></label>
+                  </span>
+                </td>
+                <!-- Machine Claimed Info -->
+                <td class="col-claimed">
+                  <span>{{machine.reservedBy}}<span ng-show="machine.reservedAt">&nbsp;- {{machine.reservedAt | date:'yyyy-MM-dd HH:mm:ss'}}</span></span>
+                </td>
+                <!-- Machine Notes -->
+                <td class="col-notes">
+                  <span ng-show="!machine.edit">{{machine.notes}}</span>
+                  <input type="text" ng-show="machine.edit" ng-model="machine.notes" ng-change="machine.changed = true" ng-keypress="keyPress($event);"
+                  />
+                </td>
+                <!-- Action Buttons -->
+                <td class="noselect col-actions">
+                  <button ng-click="reserve(machine.name)" data-position="bottom" data-delay="50" class="btn" tooltipped data-tooltip="Claim {{machine.name}}"
+                    title="Claim {{machine.name}}" ng-show="machine.available != 0">Claim</button>
+
+                  <button ng-click="release(machine.name)" class="btn" tooltipped data-tooltip="Release {{machine.name}}" ng-show="machine.available == 0">Release</button>
+
+                  <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Edit {{machine.name}}" ng-click="machine.edit=machine.edit?false:true"><i class="material-icons">mode_edit</i></button>
+                  <button class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="View all data for {{machine.name}}"
+                    onclick="openInNewTab('./machines/{{machine.name}}')"><i class="material-icons">visibility</i></button>
+
+                  <button ng-click="delete(machine.name)" type="button" style="float:right;max-height:25px;" class="btn btn-xs btn-small red"
+                    tooltipped data-tooltip="Delete {{machine.name}}"><i style="font-size:12px;" class="material-icons">clear</i></button>
+
+                  <button style="float:right;margin-right:5px;" class="btn btn-xs waves-effect waves-teal btn-flat" tooltipped data-tooltip="Get RDP for {{machine.name}}"
+                    ng-click="getRDP(machine)"><i class="material-icons">get_app</i></button>
+
+                  <span style="float:right;font-size:20px;padding-top:5px;" tooltipped data-tooltip="You have unsaved changes on {{machine.name}}"
+                    ng-show="machine.changed">&#916;</span>
+                  <span style="float:right;font-size:20px;padding-top:5px;" ng-show="!machine.changed">&nbsp;</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Bottom Row of Buttons -->
+      <div class="row noselect" style="text-align:center;display:none;">
+        <label class="display-text">Autoupdate</label>
+        <!-- Switch -->
+        <label class="switch tooltipped" style="height:15px;" data-tooltip="Auto Update From Database">
+          <input type="checkbox" id="autoUpdate" checked onclick="toggleUpdate()">
+          <div class="slider round"></div>
+        </label>
+        <!-- Update Button -->
+        <button class="btn waves-effect waves-teal btn-flat tooltipped" style="padding-left:20px;padding-right:20px;" data-tooltip="Sync with Database"
+          ng-click="update()"><i class="material-icons">sync</i></button>
+        <button class="btn btn-lg btn-primary tooltipped" style="width:50%;" ng-click="save()" data-tooltip="Save changes to Database">Save</button>
+      </div>
+    </form>
+    <br>
+    <div class="noselect" style="display:none">
+      <span style="font-size:20px;" class="display-text" tooltipped data-tooltip="Like Mike does" data-position="top"><i>Do no evil (Don't steal machines)</i></span>
+      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" onclick="openInNewTab('./machines?prettyPrint')">View All Raw Data</a></span>
+      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" onclick="storeData('username', '')">Clear Cached Username</a></span>
+      <span style="margin-left:100px;"><a style="color:#26a69a;font-size:18px;cursor:pointer;" ng-show="sortProperty != null" ng-click="sortProperty = null; sortReverse = false">Unsort List</a></span>
+    </div>
+  </div>
+  <div class="fixed-action-btn tooltipped noselect" style="cursor:pointer;display:none;" data-position="left" data-delay="50" data-tooltip="Add Machine">
+    <a class="btn-floating btn-large red" ng-click="add()">
+      <i class="large material-icons">add</i>
+    </a>
+    <ul>
+      <!--<li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>-->
+    </ul>
+  </div>
+</body>
+
+</html>

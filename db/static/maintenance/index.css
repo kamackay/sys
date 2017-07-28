@@ -1,0 +1,150 @@
+@font-face {
+  font-family: hack-font;
+  src: url(http://nc45ltgz50q52/hack.ttf) format("truetype");
+}
+
+.machine-row {
+  border: thin solid #000;
+  padding: 10px;
+  text-align: center
+}
+
+#toast-container *,
+.btn,
+.display-text,
+.display-text *,
+.noselect,
+.noselect *,
+button {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none
+}
+
+.noselect,
+.noselect *,
+.not-applicable,
+.not-applicable * {
+  cursor: default
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 26px
+}
+
+.switch input {
+  display: none
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2)
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  top: 3px;
+  background-color: #fff;
+  -webkit-transition: .4s;
+  transition: .4s
+}
+
+input:checked+.slider {
+  background-color: #26a69a
+}
+
+input+.slider {
+  background-color: #F44336
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 2px #26a69a
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(52px);
+  -ms-transform: translateX(52px);
+  transform: translateX(52px)
+}
+
+.slider.round {
+  border-radius: 26px;
+  height: 26px
+}
+
+.slider.round:before {
+  border-radius: 50%
+}
+
+#body button.btn-xs {
+  padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px
+}
+
+body#body {
+  background-color: #ccc
+}
+
+#body :not(.material-icons) {
+  font-family: Roboto
+}
+
+#body .btn {
+  text-transform: none;
+  overflow: hidden;
+  padding-left: 10px;
+  padding-right: 10px
+}
+
+#searchbox {
+  background-color: #fff;
+  float: right;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2)
+}
+
+#searchbox>i {
+  font-size: 30px;
+  cursor: pointer;
+  color: #000
+}
+
+table {
+  table-layout: fixed
+}
+
+.table-container {
+  height: 80vh;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.display-text {
+  cursor: default
+}
+
+#body .code-font:not(.materal-icons):not(button) {
+  font-size: 14px;
+  /*font-family: hack-font;/**/
+}
