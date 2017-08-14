@@ -109,7 +109,7 @@ namespace sys {
           typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(trayIcon, null);
         } catch { }
       };
-      cmpVersionMenuItem = new MenuItem(string.Format("Check For New CMP Build ({0})", SysSettings.getSetting(SysSettings.lastCmpBuildName, "?")), 
+      cmpVersionMenuItem = new MenuItem(string.Format("Check For New CMP Build ({0})", SysSettings.getSetting(SysSettings.lastCmpBuildName, "?")),
         delegate { closeMenu(); searchForCmpBuild(manual: true); });
       trayIcon.ContextMenu.MenuItems.AddRange(new MenuItem[] {
         new MenuItem("Update APM", delegate {
@@ -149,10 +149,24 @@ namespace sys {
         createTimer(delegate {
           try {
             foreach(Process p in Process.GetProcesses()) {
-              if (!p.Responding && bool.Parse(SysSettings.getSetting(SysSettings.showNonRespondingProcesses)))
+              if (!p.Responding && p.ProcessName.Equals("OUTLOOK")) {
+                Toast.show("Outlook is not responding, click here to resart it", animate:false, backgroundColor:Color.Red, click:delegate {
+                  //Restart Outlook
+                  try {
+                    p.Kill();
+                    System.Threading.Thread.Sleep(100);
+                    Process.Start("outlook.exe");
+                  } catch(Exception e) {
+                    Toast.show("Could not restart outlook");
+                    handle(e);
+                  }
+                });
+              }
+              else if (!p.Responding && bool.Parse(SysSettings.getSetting(SysSettings.showNonRespondingProcesses)))
                 Toast.show(string.Format("\"{0}\" is not responding", p.ProcessName), animate: false, click:delegate {
                   Process.Start("procexp"); // Start Process Explorer
                 });
+
             }
           } catch (Exception e) {
             handle(e);
