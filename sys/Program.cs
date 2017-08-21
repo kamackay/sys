@@ -330,6 +330,7 @@ namespace sys {
                 timeout: Time.seconds(10));
               SysSettings.setSetting(SysSettings.lastCmpBuildName, buildName);
               cmpVersionMenuItem.Text = string.Format("Check For New CMP Build ({0})", SysSettings.getSetting(SysSettings.lastCmpBuildName, "?"));
+              Process.Start("svn", "update c:\\MeterDefinitions");
             };
 
             string[] buildInfo = buildName.Split('.');
