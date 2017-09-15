@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="module">
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <!-- Additional files for the Highslide popup effect -->
+  <script src="https://www.highcharts.com/media/com_demo/js/highslide-full.min.js"></script>
+  <script src="https://www.highcharts.com/media/com_demo/js/highslide.config.js" charset="utf-8"></script>
+  <link rel="stylesheet" type="text/css" href="https://www.highcharts.com/media/com_demo/css/highslide.css" />
+  <title>Graphing Helper</title>
+  <link rel="icon" href="../icon.ico">
+  <style>
+    body {
+      background-color: lightgray;
+    }
+
+    #dataElement {
+      margin-top: 20px;
+      width: 100%;
+      min-height: 50vh;
+    }
+
+    #dataElement::before {
+      content: "Data"
+    }
+  </style>
+  <script type="text/javascript" src="./index.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <textarea id="dataElement"></textarea>
+  </div>
+</body>
+
+</html>
