@@ -317,7 +317,7 @@ namespace sys {
     /// <param name="manual">Whether this was triggered manually</param>
     void searchForCmpBuild(bool manual = false) {
       try {
-        string buildsPath = @"\\USRAL1WVFIL01\Shares\USRAL01\Departments\Dept\Engineering\MeterTools\Mtdata\CMP\Atlas\Development";
+        string buildsPath = @"\\USRAL1WVFIL01\Shares\USRAL01\Departments\Dept\Engineering\MeterTools\Mtdata\A4\All\Development";
         string lastBuild = SysSettings.getSetting(SysSettings.lastCmpBuildName, "");
         foreach (string folder in Directory.EnumerateDirectories(buildsPath)) {
           try {
