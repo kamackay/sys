@@ -11,6 +11,5 @@ C:\keith\tools\sys\obj\Debug\sys.exe
 C:\keith\tools\sys\obj\Debug\sys.pdb
 C:\keith\tools\sys\bin\sys.exe
 C:\keith\tools\sys\bin\sys.pdb
-C:\keith\tools\sys\obj\Debug\sys.csprojResolveAssemblyReference.cache
 C:\keith\tools\sys\obj\Debug\sys.Properties.Resources.resources
 C:\keith\tools\sys\obj\Debug\sys.csproj.GenerateResource.Cache

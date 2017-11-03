@@ -69,6 +69,7 @@ namespace sys {
               }
               this.runOnUiThread(() => { Move += move; });
             } else {
+              Thread.Sleep(10);
               this.runOnUiThread(() => {
                 Left = screenSize.Width - (Width + 10);
                 Move += move;

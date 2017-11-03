@@ -195,6 +195,7 @@ namespace sys {
             isLocked = false;
             Toast.show("Welcome Back!", timeout: 5000, animate: false);
             fixStupidInternetIssue();
+            searchForCmpBuild(manual: false);
             break;
           default:
             return;
