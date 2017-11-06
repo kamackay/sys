@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sudoku</title>
+  <style>
+    #board {
+      display: inline-block;
+      font-size: 0px;
+      overflow: hidden;
+    }
+
+    #board-wrapper{
+      width: 100vw;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    body{
+      overflow: hidden;
+    }
+  </style>
+  <script>
+    window.setTimeout(function () {
+      log = console.log;
+      window.boxes = [];
+      window.board = document.getElementById("board");
+      resizeEvent = () => {
+        size = Math.min(window.outerHeight, window.outerWidth) * .85;
+        window.board.style.height = size + "px";
+        window.board.style.width = size + "px";
+        window.board.style.minHeight = size + "px";
+        window.board.style.minWidth = size + "px";
+        window.board.style.maxHeight = size + "px";
+        window.board.style.maxWidth = size + "px";
+        for (var x = 0; x < window.boxes.length; x++) {
+          log("box: ", x)
+          var box = document.getElementById("box" + x);
+          box.style.height = Math.floor(size / 9) - 2 + "px";
+          box.style.width = Math.floor(size / 9) - 2 + "px";
+        }
+      };
+      window.addEventListener("resize", resizeEvent);
+      window.setTimeout(resizeEvent, 25);
+
+      for (var x = 0; x < 9 * 9; x++) {
+        //Add a box to the board
+        var box = document.createElement("div");
+        box.style.border = "thin black solid";
+        box.setAttribute("id", "box" + x);
+        box.style.display = "inline-block";
+        window.boxes.push(box);
+        window.board.appendChild(box);
+      }
+    }, 10);
+  </script>
+</head>
+
+<body>
+  <div id="board-wrapper">
+    <div id="board"></div>
+  </div>
+</body>
+
+</html>
