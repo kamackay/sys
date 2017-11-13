@@ -220,7 +220,7 @@ namespace sys {
         ProcessStartInfo psi = new ProcessStartInfo("iexplore") { WindowStyle = ProcessWindowStyle.Minimized };
         Process p = Process.Start(psi);
         System.Threading.Thread.Sleep(Time.seconds(10));
-        try { p.Kill(); } catch {
+        try { p.CloseMainWindow(); } catch {
           /* Must have already been killed? */
           Toast.show("Failed to kill Internet Explorer");
         }
